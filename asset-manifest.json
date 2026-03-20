@@ -1,18 +1,13 @@
 {
   "files": {
-    "main.css": "/as_immv_dienstl/static/css/main.7eded9c2.css",
-    "main.js": "/as_immv_dienstl/static/js/main.6da86668.js",
-    "static/media/dl2.jpg": "/as_immv_dienstl/static/media/dl2.5317e6e4f1164f9f145c.jpg",
-    "static/media/dl1.jpg": "/as_immv_dienstl/static/media/dl1.95d30ab4d53b7145d163.jpg",
-    "static/media/dl3.jpg": "/as_immv_dienstl/static/media/dl3.b86795b1ccbb1db60fa0.jpg",
-    "static/media/dl4.jpg": "/as_immv_dienstl/static/media/dl4.bf7b9afe80bfde732c31.jpg",
-    "static/media/bim-visual.png": "/as_immv_dienstl/static/media/bim-visual.ba2aa5f47a9acadfb14f.png",
+    "main.css": "/as_immv_dienstl/static/css/main.a4a4283b.css",
+    "main.js": "/as_immv_dienstl/static/js/main.a1f2f00a.js",
     "index.html": "/as_immv_dienstl/index.html",
-    "main.7eded9c2.css.map": "/as_immv_dienstl/static/css/main.7eded9c2.css.map",
-    "main.6da86668.js.map": "/as_immv_dienstl/static/js/main.6da86668.js.map"
+    "main.a4a4283b.css.map": "/as_immv_dienstl/static/css/main.a4a4283b.css.map",
+    "main.a1f2f00a.js.map": "/as_immv_dienstl/static/js/main.a1f2f00a.js.map"
   },
   "entrypoints": [
-    "static/css/main.7eded9c2.css",
-    "static/js/main.6da86668.js"
+    "static/css/main.a4a4283b.css",
+    "static/js/main.a1f2f00a.js"
   ]
 }
