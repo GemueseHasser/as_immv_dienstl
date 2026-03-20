@@ -15,7 +15,7 @@ export default function VerwaltungPage() {
         eyebrow="Immobilienverwaltung"
         title="Immobilienverwaltung mit Überblick, Ruhe und klarer Zuständigkeit."
         text="AS Immobilienverwaltung begleitet Wohn- und Gewerbeimmobilien mit geordneten Abläufen, persönlicher Erreichbarkeit und technischer Übersicht im laufenden Bestand."
-        actions={<button type="button" className="button button-brand" onClick={openContact}>Anfrage zur Verwaltung</button>}
+        actions={<button type="button" className="button button-brand" onClick={openContact}>Anfrage zur Immobilienverwaltung</button>}
         aside={<p>Im Mittelpunkt stehen eine verlässliche Betreuung, kurze Wege und eine strukturierte Abstimmung aller laufenden Themen rund um das Objekt.</p>}
       />
       <HighlightBand items={verwaltungHighlights} />

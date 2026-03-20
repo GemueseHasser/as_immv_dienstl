@@ -66,7 +66,7 @@ export const homeTeasers = [
   {
     tag: 'Kontakt',
     title: 'Direkt erreichbar',
-    text: 'Anliegen zur Verwaltung, zu Außenarbeiten oder zu BIM-gestützter Projektkoordination werden gezielt aufgenommen.',
+    text: 'Anliegen zur Immobilienverwaltung, zu Außenarbeiten oder zu BIM-gestützter Projektkoordination werden gezielt aufgenommen.',
   },
 ];
 
@@ -78,7 +78,7 @@ export const verwaltungHighlights = [
 
 export const verwaltungServices = [
   {
-    tag: 'Verwaltung',
+    tag: 'Immobilienverwaltung',
     title: 'Laufende Objektbetreuung',
     text: 'Geordnete Abläufe, nachvollziehbare Kommunikation und eine verlässliche Betreuung im Alltag von Wohn- und Gewerbeimmobilien.',
   },
