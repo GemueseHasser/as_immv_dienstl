@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PageHero from '../components/PageHero';
 import { company } from '../data/siteContent';
 
 export default function ImpressumPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <PageHero

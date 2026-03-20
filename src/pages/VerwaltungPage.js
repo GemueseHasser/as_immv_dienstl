@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import PageHero from '../components/PageHero';
 import ServiceGrid from '../components/ServiceGrid';
 import HighlightBand from '../components/HighlightBand';
@@ -8,6 +8,10 @@ import { references, verwaltungHighlights, verwaltungServices } from '../data/si
 
 export default function VerwaltungPage() {
   const { openContact } = useContext(ContactModalContext);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
   return (
     <>

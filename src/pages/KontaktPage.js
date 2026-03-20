@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import PageHero from '../components/PageHero';
 import ContactPanel from '../components/ContactPanel';
 import { ContactModalContext } from '../App';
 
 export default function KontaktPage() {
   const { openContact } = useContext(ContactModalContext);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import PageHero from '../components/PageHero';
 import ServiceGrid from '../components/ServiceGrid';
 import ServicesGallery from '../components/ServicesGallery';
@@ -7,6 +7,10 @@ import { dienstleistungsGallery, dienstleistungsServices } from '../data/siteCon
 
 export default function DienstleistungenPage() {
   const { openContact } = useContext(ContactModalContext);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
   return (
     <>

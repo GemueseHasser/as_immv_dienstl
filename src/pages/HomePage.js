@@ -13,6 +13,10 @@ export default function HomePage() {
 
   useEffect(() => () => window.clearTimeout(highlightTimerRef.current), []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleViewAreas = () => {
     areaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setHighlighted(true);

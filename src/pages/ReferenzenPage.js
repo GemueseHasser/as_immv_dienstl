@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import PageHero from '../components/PageHero';
 import ReferenceList from '../components/ReferenceList';
 import { ContactModalContext } from '../App';
@@ -6,6 +6,10 @@ import { references } from '../data/siteContent';
 
 export default function ReferenzenPage() {
   const { openContact } = useContext(ContactModalContext);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
   return (
     <>
