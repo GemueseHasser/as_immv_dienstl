@@ -1,14 +1,65 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import HeroSplit from '../components/HeroSplit';
 import HighlightBand from '../components/HighlightBand';
+import MobileSnapCarousel from '../components/MobileSnapCarousel';
 import ServiceGrid from '../components/ServiceGrid';
-import { homeHighlights, homeTeasers } from '../data/siteContent';
+import { homeHighlights, homeTeasers, strandCards } from '../data/siteContent';
 
 export default function HomePage() {
+  const areaRef = useRef(null);
+  const highlightTimerRef = useRef(null);
+  const [highlighted, setHighlighted] = useState(false);
+
+  useEffect(() => () => window.clearTimeout(highlightTimerRef.current), []);
+
+  const handleViewAreas = () => {
+    areaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setHighlighted(true);
+    window.clearTimeout(highlightTimerRef.current);
+    highlightTimerRef.current = window.setTimeout(() => setHighlighted(false), 2200);
+  };
+
   return (
     <>
-      <HeroSplit />
+      <HeroSplit onViewAreas={handleViewAreas} />
       <HighlightBand items={homeHighlights} />
+
+      <section className="section">
+        <div className="container compact-shell">
+          <div ref={areaRef} className={`home-areas-shell ${highlighted ? 'is-highlighted' : ''}`}>
+            <div className="section-head row-head home-areas-head">
+              <div>
+                <p className="eyebrow">Bereiche</p>
+              </div>
+            </div>
+
+            <MobileSnapCarousel className="home-areas-grid">
+              {strandCards.map((card) => (
+                <article
+                  key={card.id}
+                  className={`split-card split-card-${card.id} home-area-card ${highlighted ? 'pulse-in' : ''}`}
+                >
+                  <div className="split-card-topline">
+                    <p className="eyebrow">{card.eyebrow}</p>
+                  </div>
+                  <h3>{card.title}</h3>
+                  <p>{card.intro}</p>
+                  <ul className="clean-list">
+                    {card.highlights.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                  <NavLink to={card.to} className="button button-light home-area-button">
+                    Bereich öffnen
+                  </NavLink>
+                </article>
+              ))}
+            </MobileSnapCarousel>
+          </div>
+        </div>
+      </section>
+
       <section className="section">
         <div className="container stack-gap compact-shell">
           <div className="section-head row-head">

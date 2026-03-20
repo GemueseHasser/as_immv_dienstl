@@ -4,50 +4,61 @@ export default function ExpandableReferences({ items }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <section className="inline-references soft-card references-emphasis">
-      <div className="inline-references-head">
-        <div>
-          <p className="eyebrow">Referenzen</p>
-          <h3>Referenzen aus dem Verwaltungsumfeld</h3>
-          <p>
-            Ausgewählte Objektbezüge aus Wülfrath und dem regionalen Bestand – direkt innerhalb
-            der Immobilienverwaltung.
-          </p>
-          <div className="reference-hints" aria-hidden="true">
-            {items.slice(0, 2).map((item) => (
-              <span key={item.title} className="reference-hint-chip">{item.title}</span>
+    <section className="inline-references references-showcase">
+      <div className="references-showcase-frame">
+        <div className="inline-references-head references-showcase-head">
+          <div>
+            <p className="eyebrow">Referenzen</p>
+            <h3>Ausgewählte Verwaltungsreferenzen in modernem Look</h3>
+            <p>
+              Der Referenzbereich bleibt bewusst separat und öffnet sich erst auf Wunsch. So bleibt
+              die Seite klar gegliedert und die Projekte erhalten dennoch eine hochwertige Bühne.
+            </p>
+            <div className="reference-hints" aria-hidden="true">
+              {items.map((item) => (
+                <span key={item.title} className="reference-hint-chip">{item.title}</span>
+              ))}
+            </div>
+          </div>
+          <button
+            type="button"
+            className={`button button-light disclosure-button disclosure-button-premium ${open ? 'is-open' : ''}`}
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+          >
+            <span className="disclosure-copy">
+              <strong>{open ? 'Referenzen schließen' : 'Referenzen separat öffnen'}</strong>
+              <small>{open ? 'Ansicht wieder einklappen' : 'Bilder und Objektinfos anzeigen'}</small>
+            </span>
+            <span className="disclosure-icon">▾</span>
+          </button>
+        </div>
+
+        <div className={`references-drawer ${open ? 'is-open' : ''}`}>
+          <div className="references-grid">
+            {items.map((item) => (
+              <article
+                key={item.title}
+                className={`reference-spotlight reference-spotlight-${item.accent || 'default'}`}
+              >
+                <div className="reference-image-wrap">
+                  <img src={item.image} alt={item.title} className="reference-image" />
+                  <div className="reference-image-overlay" />
+                </div>
+                <div className="reference-spotlight-copy">
+                  <div className="reference-spotlight-top">
+                    <div>
+                      <p className="eyebrow">{item.type}</p>
+                      <h4>{item.title}</h4>
+                    </div>
+                  </div>
+                  <p>{item.text}</p>
+                </div>
+              </article>
             ))}
-            <span className="reference-hint-chip subtle">{items.length} Einträge</span>
           </div>
         </div>
-        <button
-          type="button"
-          className={`button button-light disclosure-button disclosure-button-premium ${open ? 'is-open' : ''}`}
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-        >
-          <span className="disclosure-copy">
-            <strong>{open ? 'Referenzen geöffnet' : 'Referenzen aufklappen'}</strong>
-            <small>{open ? 'Einträge ausblenden' : 'Einträge anzeigen'}</small>
-          </span>
-          <span className="disclosure-icon">▾</span>
-        </button>
       </div>
-
-      {open ? (
-        <div className="reference-list reference-list-inline">
-          {items.map((item) => (
-            <article key={item.title} className="reference-row">
-              <div>
-                <p className="eyebrow">{item.type}</p>
-                <h4>{item.title}</h4>
-                <small>{item.meta}</small>
-              </div>
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </div>
-      ) : null}
     </section>
   );
 }
