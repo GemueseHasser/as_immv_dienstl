@@ -1,8 +1,9 @@
 import React from 'react';
+import MobileSnapCarousel from './MobileSnapCarousel';
 
 export default function ServicesGallery({ items }) {
   return (
-    <div className="services-gallery">
+    <MobileSnapCarousel className="services-gallery">
       {items.map((item, index) => (
         <article key={item.title} className={`gallery-card gallery-card-${index + 1}`}>
           <div className="gallery-media-wrap">
@@ -15,6 +16,6 @@ export default function ServicesGallery({ items }) {
           </div>
         </article>
       ))}
-    </div>
+    </MobileSnapCarousel>
   );
 }

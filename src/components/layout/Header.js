@@ -47,7 +47,7 @@ export default function Header({ onOpenContact }) {
           <span />
         </button>
 
-        <nav className={`main-nav ${open ? 'is-open' : ''}`}>
+        <nav className={`main-nav mobile-rail-ready ${open ? 'is-open' : ''}`}>
           <div className="nav-primary nav-primary-premium">
             {navItems.map((item) => (
               <div key={item.label} className="nav-item">

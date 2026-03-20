@@ -15,7 +15,7 @@ export default function Footer() {
             {company.addressLine2}
           </p>
         </div>
-        <div>
+        <div className="footer-column footer-column-areas">
           <h4>Bereiche</h4>
           <div className="footer-links">
             <NavLink to="/">Start</NavLink>
@@ -24,14 +24,14 @@ export default function Footer() {
             <NavLink to="/kontakt">Kontakt</NavLink>
           </div>
         </div>
-        <div>
+        <div className="footer-column footer-column-legal">
           <h4>Rechtliches</h4>
           <div className="footer-links">
             <NavLink to="/impressum">Impressum</NavLink>
             <NavLink to="/datenschutz">Datenschutz</NavLink>
           </div>
         </div>
-        <div>
+        <div className="footer-column footer-column-direct">
           <h4>Direkt</h4>
           <div className="footer-links">
             <a href={`tel:${company.phone.replace(/[^\d+]/g, '')}`}>{company.phone}</a>

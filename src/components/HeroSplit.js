@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ContactModalContext } from '../App';
 import { company, strandCards } from '../data/siteContent';
+import MobileSnapCarousel from './MobileSnapCarousel';
 
 export default function HeroSplit() {
   const { openContact } = useContext(ContactModalContext);
@@ -19,7 +20,7 @@ export default function HeroSplit() {
             Betreuung von Wohn- und Gewerbeimmobilien mit praktischen Leistungen im Außenbereich.
             Wählen Sie den Bereich, der zu Ihrem Anliegen passt.
           </p>
-          <div className="hero-actions">
+          <div className="hero-actions hero-actions-home">
             <NavLink to="/immobilienverwaltung" className="button button-brand">
               Immobilienverwaltung öffnen
             </NavLink>
@@ -30,13 +31,8 @@ export default function HeroSplit() {
               Anfrage stellen
             </button>
           </div>
-          <div className="hero-mini-band">
-            <span>Wülfrath</span>
-            <span>Wohn- und Gewerbeimmobilien</span>
-            <span>Außenflächen &amp; BIM</span>
-          </div>
         </div>
-        <div className="split-grid split-grid-elevated">
+        <MobileSnapCarousel className="split-grid split-grid-elevated">
           {strandCards.map((card) => (
             <article key={card.id} className={`split-card split-card-${card.id}`}>
               <div className="split-card-topline">
@@ -55,7 +51,7 @@ export default function HeroSplit() {
               </NavLink>
             </article>
           ))}
-        </div>
+        </MobileSnapCarousel>
       </div>
     </section>
   );

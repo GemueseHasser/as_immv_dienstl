@@ -1,8 +1,9 @@
 import React from 'react';
+import MobileSnapCarousel from './MobileSnapCarousel';
 
 export default function ServiceGrid({ items }) {
   return (
-    <div className="card-grid">
+    <MobileSnapCarousel className="card-grid">
       {items.map((item) => (
         <article key={item.title} className="soft-card">
           {item.tag ? <p className="eyebrow">{item.tag}</p> : null}
@@ -10,6 +11,6 @@ export default function ServiceGrid({ items }) {
           <p>{item.text}</p>
         </article>
       ))}
-    </div>
+    </MobileSnapCarousel>
   );
 }
