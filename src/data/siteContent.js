@@ -2,6 +2,7 @@ import dl1 from '../assets/dl1.jpg';
 import dl2 from '../assets/dl2.jpg';
 import dl3 from '../assets/dl3.jpg';
 import dl4 from '../assets/dl4.jpg';
+import bimVisual from '../assets/bim-visual.png';
 
 export const company = {
   name: 'AS Immobilienverwaltung & Dienstleistungen',
@@ -120,26 +121,32 @@ export const dienstleistungsGallery = [
   {
     image: dl1,
     category: 'Pflasterung & Konstruktion',
-    title: 'Überdachte Flächen mit präziser Ausführung',
-    text: 'Montage und Ausbau tragender Konstruktionen auf vorbereiteten Pflasterflächen – abgestimmt auf Nutzung, Fläche und dauerhaft belastbare Details.',
+    title: 'Außenflächen mit tragender Stahlkonstruktion',
+    text: 'Pflasterfläche und Tragwerk werden sauber aufeinander abgestimmt, damit belastbare Nutzflächen mit klarer Geometrie und präzisem Anschluss entstehen.',
   },
   {
     image: dl2,
     category: 'Unterbau & Zuwegung',
-    title: 'Sauber vorbereitete Zufahrten und Wege',
-    text: 'Exakt abgezogene Tragschichten und klar gesetzte Kanten bilden die Grundlage für belastbare Zufahrten, Wege und Außenflächen.',
+    title: 'Vorbereitete Zufahrten mit exakter Linienführung',
+    text: 'Tragschichten, Randbereiche und Fluchten werden so vorbereitet, dass eine dauerhaft stabile Zufahrt mit ruhigem Gesamtbild entsteht.',
   },
   {
     image: dl3,
     category: 'Erdarbeiten & Trassen',
-    title: 'Leitungs- und Geländearbeiten im Bestand',
-    text: 'Gezielte Erdarbeiten entlang bestehender Zufahrten und Grundstücksgrenzen – mit Blick auf Nutzung, Bestand und den späteren Oberflächenaufbau.',
+    title: 'Leitungsgräben und Geländeaufbereitung im Bestand',
+    text: 'Erdarbeiten entlang bestehender Wege und Grundstücksgrenzen werden mit Blick auf Nutzung, Zugänglichkeit und den späteren Oberflächenaufbau ausgeführt.',
   },
   {
     image: dl4,
-    category: 'Building Information Modeling (BIM)',
-    title: 'Digitale Koordination mit Bezug zur Ausführung',
-    text: 'BIM unterstützt dort, wo Planung, Bestand und praktische Ausführung zusammengeführt werden sollen – für sauber abgestimmte Abläufe vom Modell bis zur Umsetzung.',
+    category: 'Maschineneinsatz',
+    title: 'Leistungsfähige Technik für präzise Abläufe vor Ort',
+    text: 'Der passende Maschineneinsatz sorgt für effiziente Arbeitsschritte, saubere Abläufe und eine zuverlässige Umsetzung auf dem Grundstück.',
+  },
+  {
+    image: bimVisual,
+    category: 'Building Information Modeling',
+    title: 'BIM als eigenes Planungs- und Koordinationswerkzeug',
+    text: 'Digitale Modelle unterstützen die Abstimmung von Bestand, Planung und Ausführung – besonders dort, wo Flächen, Leitungswege und Bauabläufe präzise zusammengeführt werden müssen.',
   },
 ];
 

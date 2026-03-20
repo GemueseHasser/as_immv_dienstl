@@ -14,7 +14,7 @@ export default function Header({ onOpenContact }) {
         : 'Wülfrath';
 
   const navItems = [
-    { label: 'Start', to: '/' },
+      { label: 'Start', to: '/' },
     { label: 'Immobilienverwaltung', to: '/immobilienverwaltung', emphasis: true },
     { label: 'Dienstleistungen', to: '/dienstleistungen', emphasis: true },
     { label: 'Kontakt', to: '/kontakt' },
@@ -22,6 +22,7 @@ export default function Header({ onOpenContact }) {
 
   return (
     <header className="site-header">
+      <div className="header-aurora" aria-hidden="true" />
       <div className="container header-topline compact-shell">
         <p>{company.owner}</p>
         <a href={`mailto:${company.email}`}>{company.email}</a>
@@ -47,7 +48,7 @@ export default function Header({ onOpenContact }) {
         </button>
 
         <nav className={`main-nav ${open ? 'is-open' : ''}`}>
-          <div className="nav-primary">
+          <div className="nav-primary nav-primary-premium">
             {navItems.map((item) => (
               <div key={item.label} className="nav-item">
                 <NavLink
@@ -61,7 +62,8 @@ export default function Header({ onOpenContact }) {
                   }
                   onClick={() => setOpen(false)}
                 >
-                  {item.label}
+                  <span className="nav-link-label">{item.label}</span>
+                  {item.emphasis ? <span className="nav-link-glow" aria-hidden="true" /> : null}
                 </NavLink>
               </div>
             ))}

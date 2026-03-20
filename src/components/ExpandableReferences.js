@@ -4,7 +4,7 @@ export default function ExpandableReferences({ items }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <section className="inline-references soft-card">
+    <section className="inline-references soft-card references-emphasis">
       <div className="inline-references-head">
         <div>
           <p className="eyebrow">Referenzen</p>
@@ -22,11 +22,14 @@ export default function ExpandableReferences({ items }) {
         </div>
         <button
           type="button"
-          className={`button button-light disclosure-button ${open ? 'is-open' : ''}`}
+          className={`button button-light disclosure-button disclosure-button-premium ${open ? 'is-open' : ''}`}
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
         >
-          <span>{open ? 'Referenzen ausblenden' : 'Referenzen anzeigen'}</span>
+          <span className="disclosure-copy">
+            <strong>{open ? 'Referenzen geöffnet' : 'Referenzen aufklappen'}</strong>
+            <small>{open ? 'Einträge ausblenden' : 'Einträge anzeigen'}</small>
+          </span>
           <span className="disclosure-icon">▾</span>
         </button>
       </div>

@@ -12,10 +12,19 @@ export default function DienstleistungenPage() {
     <>
       <PageHero
         eyebrow="Dienstleistungen"
-        title="Praktische Leistungen mit sauberer Ausführung und klarer Koordination."
+        title="Praktische Leistungen mit präziser Ausführung und digitaler Koordination."
         text="Der Dienstleistungsbereich konzentriert sich auf Erdarbeiten, Pflasterflächen, Zuwegungen, vorbereitende Maßnahmen, passenden Maschineneinsatz und BIM-gestützte Abstimmung bei anspruchsvolleren Abläufen."
         actions={<button type="button" className="button button-brand" onClick={openContact}>Anfrage zu Dienstleistungen</button>}
-        aside={<p>Reale Projektbilder zeigen Leistungen aus dem Objektumfeld – vom Unterbau über Trassen bis zur ausgeführten Fläche und digitalen Koordination.</p>}
+        aside={(
+          <div className="space-panel">
+            <p>Reale Projektbilder zeigen Außenflächen, Trassen, Maschineneinsatz und BIM als eigenständigen Baustein für strukturierte Projektkoordination.</p>
+            <div className="space-panel-orbs" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
+        )}
       />
       <section className="section">
         <div className="container stack-gap compact-shell">

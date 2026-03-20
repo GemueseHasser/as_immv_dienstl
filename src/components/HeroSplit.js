@@ -8,10 +8,12 @@ export default function HeroSplit() {
 
   return (
     <section className="hero hero-split">
+      <div className="hero-orbit hero-orbit-left" aria-hidden="true" />
+      <div className="hero-orbit hero-orbit-right" aria-hidden="true" />
       <div className="container hero-shell compact-shell">
         <div className="hero-copy hero-copy-tight home-intro">
           <p className="eyebrow">{company.name}</p>
-          <h1>Zwei Leistungsbereiche. Ein verlässlicher Ansprechpartner.</h1>
+          <h1>Zwei Leistungsbereiche. Klar geführt. Ruhig gestaltet.</h1>
           <p className="lead">
             In Wülfrath verbindet AS Immobilienverwaltung &amp; Dienstleistungen die strukturierte
             Betreuung von Wohn- und Gewerbeimmobilien mit praktischen Leistungen im Außenbereich.
@@ -27,6 +29,11 @@ export default function HeroSplit() {
             <button type="button" className="button button-ghost" onClick={openContact}>
               Anfrage stellen
             </button>
+          </div>
+          <div className="hero-mini-band">
+            <span>Wülfrath</span>
+            <span>Wohn- und Gewerbeimmobilien</span>
+            <span>Außenflächen &amp; BIM</span>
           </div>
         </div>
         <div className="split-grid split-grid-elevated">
