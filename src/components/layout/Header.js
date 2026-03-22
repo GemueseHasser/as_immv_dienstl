@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { company } from '../../data/siteContent';
+import BrandLogos from '../BrandLogos';
 
 export default function Header({ onOpenContact }) {
   const { pathname } = useLocation();
@@ -59,7 +60,7 @@ export default function Header({ onOpenContact }) {
 
       <div className="container header-bar compact-shell">
         <NavLink to="/" className="brand">
-          <span className="brand-mark">AS</span>
+          <BrandLogos variant="header" />
           <span className="brand-copy">
             <strong>{company.name}</strong>
             <small>{currentLabel}</small>
@@ -90,9 +91,6 @@ export default function Header({ onOpenContact }) {
             <NavLink to="/impressum" className="nav-link subtle">
               Impressum
             </NavLink>
-            <button type="button" className="button button-brand" onClick={onOpenContact}>
-              Anfrage
-            </button>
           </div>
         </nav>
       </div>

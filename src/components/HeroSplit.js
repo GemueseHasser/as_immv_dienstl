@@ -1,10 +1,7 @@
-import React, { useContext } from 'react';
-import { ContactModalContext } from '../App';
+import React from 'react';
 import { company } from '../data/siteContent';
 
 export default function HeroSplit({ onViewAreas }) {
-  const { openContact } = useContext(ContactModalContext);
-
   return (
     <section className="hero hero-split">
       <div className="hero-orbit hero-orbit-left" aria-hidden="true" />
@@ -18,12 +15,9 @@ export default function HeroSplit({ onViewAreas }) {
             Betreuung von Wohn- und Gewerbeimmobilien mit praktischen Leistungen im Außenbereich.
             Entdecken Sie beide Bereiche in einer klaren, modernen Übersicht.
           </p>
-          <div className="hero-actions hero-actions-home">
+          <div className="hero-actions hero-actions-home hero-actions-home-single">
             <button type="button" className="button button-brand" onClick={onViewAreas}>
               Bereiche ansehen
-            </button>
-            <button type="button" className="button button-ghost" onClick={openContact}>
-              Anfrage stellen
             </button>
           </div>
           <div className="hero-inline-note soft-card hero-inline-note-card">
