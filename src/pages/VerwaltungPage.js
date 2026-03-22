@@ -22,9 +22,11 @@ export default function VerwaltungPage() {
       <HighlightBand items={verwaltungHighlights} />
       <section className="section">
         <div className="container stack-gap compact-shell">
-          <div className="section-head">
-            <p className="eyebrow">Leistungsbild</p>
-            <h2>Persönlich organisiert, nachvollziehbar geführt und auf dauerhafte Bestandsqualität ausgerichtet.</h2>
+          <div className="section-head section-head-with-logo">
+            <div>
+              <p className="eyebrow">Leistungsbild</p>
+              <h2>Persönlich organisiert, nachvollziehbar geführt und auf dauerhafte Bestandsqualität ausgerichtet.</h2>
+            </div>
           </div>
           <ServiceGrid items={verwaltungServices} logoType="immobilien" />
           <ExpandableReferences items={references} />

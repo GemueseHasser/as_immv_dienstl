@@ -102,29 +102,21 @@ img { display: block; max-width: 100%; }
   filter: blur(24px);
   pointer-events: none;
 }
-.header-topline {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 8px 0;
-  font-size: 0.84rem;
-}
 .header-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 14px 0 16px;
+  padding: 16px 0 18px;
   position: relative;
 }
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  justify-content: flex-end;
   min-width: 0;
+  margin-left: auto;
 }
-.brand strong { display: block; font-size: 0.98rem; }
-.brand small { font-size: 0.82rem; }
 .main-nav { display: flex; align-items: center; gap: 10px; }
 .brand-logos {
   display: flex;
@@ -134,51 +126,40 @@ img { display: block; max-width: 100%; }
 .brand-logos-header {
   flex-shrink: 0;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-}
-.brand-logo-card {
-  display: inline-flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  padding: 0;
-  min-height: 0;
-  border-radius: 0;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-}
-.brand-logos-header .brand-logo-card {
-  padding: 0;
-  min-height: 0;
+  gap: 8px;
 }
 .brand-logo-image {
   display: block;
-  height: 20px;
+  height: 22px;
   width: auto;
   object-fit: contain;
 }
 .brand-logos-header .brand-logo-image {
-  height: 18px;
+  height: clamp(24px, 2vw, 32px);
+  margin-left: auto;
 }
 .brand-logos-hero {
   align-items: flex-start;
 }
-.brand-logos-hero .brand-logo-card {
-  padding: 0;
-  min-height: 0;
-  border-radius: 0;
-  background: transparent;
-}
 .brand-logos-hero .brand-logo-image {
-  height: clamp(34px, 4.8vw, 48px);
+  height: clamp(40px, 5vw, 56px);
+}
+.brand-logos-section {
+  justify-content: flex-end;
+  align-items: center;
+}
+.brand-logos-section .brand-logo-image {
+  height: clamp(32px, 4vw, 52px);
+  opacity: 0.92;
 }
 .brand-logos-watermark {
   justify-content: flex-end;
 }
 .brand-logos-watermark .brand-logo-image {
-  height: clamp(36px, 4vw, 52px);
-  opacity: 0.12;
+  height: clamp(25px, 2.6vw, 35px);
+  opacity: 0.1;
   transform: translateY(0) scale(1);
   transition: transform 220ms ease, opacity 220ms ease;
 }
@@ -546,6 +527,12 @@ img { display: block; max-width: 100%; }
 .soft-card-with-brand:hover .brand-logos-watermark .brand-logo-image {
   opacity: 0.18;
   transform: translateY(-2px) scale(1.02);
+}
+.section-head-with-logo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
 }
 .soft-card h3 { font-size: 1.26rem; margin-bottom: 12px; }
 .reference-list { display: grid; gap: 14px; }
@@ -1285,10 +1272,6 @@ img { display: block; max-width: 100%; }
     display: none;
   }
 
-  .header-topline {
-    display: none;
-  }
-
   .site-header {
     background: rgba(251, 252, 255, 0.82);
   }
@@ -1297,28 +1280,26 @@ img { display: block; max-width: 100%; }
     justify-content: center;
     gap: 12px;
     padding: 10px 0 8px;
+    overflow: hidden;
+    transition: padding 220ms ease, max-height 220ms ease, opacity 220ms ease;
+    max-height: 120px;
   }
 
   .brand {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-end;
   }
 
-  .brand-copy {
-    min-width: 0;
+  .brand-logos-header .brand-logo-image {
+    height: clamp(26px, 5.4vw, 34px);
   }
 
-  .brand-copy strong {
-    display: block;
-    font-size: 0.96rem;
-    line-height: 1.14;
-  }
-
-  .brand-copy small {
-    display: block;
-    margin-top: 2px;
-    font-size: 0.75rem;
-    line-height: 1.2;
+  .site-header.mobile-brand-hidden .header-bar {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .mobile-floating-nav-wrap {
@@ -1423,6 +1404,14 @@ img { display: block; max-width: 100%; }
 @media (max-width: 720px) {
   .header-bar {
     flex-wrap: nowrap;
+  }
+
+  .section-head-with-logo {
+    align-items: flex-start;
+  }
+
+  .brand-logos-section .brand-logo-image {
+    height: 28px;
   }
 
   .hero {

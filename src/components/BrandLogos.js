@@ -19,9 +19,13 @@ export default function BrandLogos({ variant = 'header', single = null, classNam
   return (
     <div className={[`brand-logos brand-logos-${variant}`, className].filter(Boolean).join(' ')}>
       {logos.map((logo) => (
-        <div key={logo.alt} className="brand-logo-card">
-          <img src={logo.src} alt={logo.alt} className="brand-logo-image" loading="eager" />
-        </div>
+        <img
+          key={logo.alt}
+          src={logo.src}
+          alt={logo.alt}
+          className="brand-logo-image"
+          loading="eager"
+        />
       ))}
     </div>
   );

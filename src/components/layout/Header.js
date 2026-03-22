@@ -1,21 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { company } from '../../data/siteContent';
+import { NavLink } from 'react-router-dom';
 import BrandLogos from '../BrandLogos';
 
-export default function Header({ onOpenContact }) {
-  const { pathname } = useLocation();
+export default function Header() {
   const navRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const currentLabel = pathname.startsWith('/immobilienverwaltung')
-    ? 'Immobilienverwaltung'
-    : pathname.startsWith('/dienstleistungen')
-      ? 'Dienstleistungen'
-      : pathname.startsWith('/kontakt')
-        ? 'Kontakt'
-        : 'Wülfrath';
+  const [mobileBrandHidden, setMobileBrandHidden] = useState(false);
 
   const navItems = [
     { label: 'Start', to: '/' },
@@ -42,7 +33,41 @@ export default function Header({ onOpenContact }) {
       node.removeEventListener('scroll', updateScrollState);
       window.removeEventListener('resize', updateScrollState);
     };
-  }, [pathname]);
+  }, []);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleWindowScroll = () => {
+      const currentScrollY = window.scrollY;
+      const isMobile = window.innerWidth <= 980;
+
+      if (!isMobile) {
+        setMobileBrandHidden(false);
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      const scrollingDown = currentScrollY > lastScrollY;
+      const pastThreshold = currentScrollY > 40;
+
+      if (scrollingDown && pastThreshold) {
+        setMobileBrandHidden(true);
+      } else if (!scrollingDown || currentScrollY <= 8) {
+        setMobileBrandHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleWindowScroll, { passive: true });
+    window.addEventListener('resize', handleWindowScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleWindowScroll);
+      window.removeEventListener('resize', handleWindowScroll);
+    };
+  }, []);
 
   const scrollNav = (direction) => {
     const node = navRef.current;
@@ -51,20 +76,12 @@ export default function Header({ onOpenContact }) {
   };
 
   return (
-    <header className="site-header">
+    <header className={`site-header ${mobileBrandHidden ? 'mobile-brand-hidden' : ''}`}>
       <div className="header-aurora" aria-hidden="true" />
-      <div className="container header-topline compact-shell">
-        <p>{company.owner}</p>
-        <a href={`mailto:${company.email}`}>{company.email}</a>
-      </div>
 
       <div className="container header-bar compact-shell">
-        <NavLink to="/" className="brand">
+        <NavLink to="/" className="brand" aria-label="Zur Startseite">
           <BrandLogos variant="header" />
-          <span className="brand-copy">
-            <strong>{company.name}</strong>
-            <small>{currentLabel}</small>
-          </span>
         </NavLink>
 
         <nav className="main-nav desktop-nav" aria-label="Hauptnavigation">

@@ -29,9 +29,11 @@ export default function DienstleistungenPage() {
       />
       <section className="section">
         <div className="container stack-gap compact-shell">
-          <div className="section-head">
-            <p className="eyebrow">Leistungsfelder</p>
-            <h2>Außenarbeiten, Gelände, Ausführung und Building Information Modeling in einem klar geführten Bereich.</h2>
+          <div className="section-head section-head-with-logo">
+            <div>
+              <p className="eyebrow">Leistungsfelder</p>
+              <h2>Außenarbeiten, Gelände, Ausführung und Building Information Modeling in einem klar geführten Bereich.</h2>
+            </div>
           </div>
           <ServiceGrid items={dienstleistungsServices} logoType="dienstleistungen" />
           <ServicesGallery items={dienstleistungsGallery} />
