@@ -9,11 +9,7 @@ export default function ExpandableReferences({ items }) {
         <div className="inline-references-head references-showcase-head">
           <div>
             <p className="eyebrow">Referenzen</p>
-            <h3>Ausgewählte Verwaltungsreferenzen in modernem Look</h3>
-            <p>
-              Der Referenzbereich bleibt bewusst separat und öffnet sich erst auf Wunsch. So bleibt
-              die Seite klar gegliedert und die Projekte erhalten dennoch eine hochwertige Bühne.
-            </p>
+            <h3>Ausgewählte betreute Immobilien durch die AS-Immobilienverwaltung</h3>
             <div className="reference-hints" aria-hidden="true">
               {items.map((item) => (
                 <span key={item.title} className="reference-hint-chip">{item.title}</span>
@@ -27,7 +23,7 @@ export default function ExpandableReferences({ items }) {
             aria-expanded={open}
           >
             <span className="disclosure-copy">
-              <strong>{open ? 'Referenzen schließen' : 'Referenzen separat öffnen'}</strong>
+              <strong>{open ? 'Referenzen schließen' : 'Referenzen öffnen'}</strong>
               <small>{open ? 'Ansicht wieder einklappen' : 'Bilder und Objektinfos anzeigen'}</small>
             </span>
             <span className="disclosure-icon">▾</span>
