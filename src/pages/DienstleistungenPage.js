@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PageHero from '../components/PageHero';
 import ServiceGrid from '../components/ServiceGrid';
 import InstagramEmbed from '../components/InstagramEmbed';
 import ServicesGallery from '../components/ServicesGallery';
 import { dienstleistungsGallery, dienstleistungsServices } from '../data/siteContent';
+import { ContactModalContext } from '../App';
 
 export default function DienstleistungenPage() {
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+  const { openContact } = useContext(ContactModalContext);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -16,6 +19,15 @@ export default function DienstleistungenPage() {
         title="Praktische Leistungen mit präziser Ausführung und digitaler Koordination."
         text="Der Dienstleistungsbereich konzentriert sich auf Erdarbeiten, Pflasterflächen, Zuwegungen, vorbereitende Maßnahmen, passenden Maschineneinsatz und BIM-gestützte Abstimmung bei anspruchsvolleren Abläufen."
         logoType="dienstleistungen"
+        actions={(
+          <button
+            type="button"
+            className="button button-brand button-brand-strong"
+            onClick={() => openContact({ initialCategory: 'dienstleistungen' })}
+          >
+            Anfrage stellen
+          </button>
+        )}
         aside={(
           <div className="space-panel">
             <div className="space-panel-copy">

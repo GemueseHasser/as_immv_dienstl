@@ -12,12 +12,28 @@ import ContactModal from './components/ContactModal';
 export const ContactModalContext = React.createContext({ openContact: () => {} });
 
 export default function App() {
-  const [contactOpen, setContactOpen] = useState(false);
+  const [contactState, setContactState] = useState({
+    open: false,
+    initialCategory: null,
+    initialService: null,
+  });
+
+  const openContact = (options = {}) => {
+    setContactState({
+      open: true,
+      initialCategory: options.initialCategory ?? null,
+      initialService: options.initialService ?? null,
+    });
+  };
+
+  const closeContact = () => {
+    setContactState((current) => ({ ...current, open: false }));
+  };
 
   return (
-    <ContactModalContext.Provider value={{ openContact: () => setContactOpen(true) }}>
+    <ContactModalContext.Provider value={{ openContact }}>
       <Routes>
-        <Route element={<SiteLayout onOpenContact={() => setContactOpen(true)} />}>
+        <Route element={<SiteLayout onOpenContact={openContact} />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/immobilienverwaltung" element={<VerwaltungPage />} />
           <Route path="/immobilienverwaltung/referenzen" element={<Navigate to="/immobilienverwaltung" replace />} />
@@ -29,7 +45,12 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
-      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+      <ContactModal
+        open={contactState.open}
+        onClose={closeContact}
+        initialCategory={contactState.initialCategory}
+        initialService={contactState.initialService}
+      />
     </ContactModalContext.Provider>
   );
 }
