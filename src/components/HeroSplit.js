@@ -1,5 +1,4 @@
 import React from 'react';
-import { company } from '../data/siteContent';
 
 export default function HeroSplit({ onViewAreas }) {
   return (
@@ -8,7 +7,6 @@ export default function HeroSplit({ onViewAreas }) {
       <div className="hero-orbit hero-orbit-right" aria-hidden="true" />
       <div className="container hero-shell compact-shell">
         <div className="hero-copy hero-copy-tight home-intro home-intro-wide">
-          <p className="eyebrow">{company.name}</p>
           <h1>Zwei Leistungsbereiche. Klar geführt. Ruhig gestaltet.</h1>
           <p className="lead">
             In Wülfrath verbindet AS Immobilienverwaltung &amp; Dienstleistungen die strukturierte

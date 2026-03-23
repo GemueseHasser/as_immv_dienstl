@@ -10,7 +10,6 @@ export default function ImpressumPage() {
   return (
     <>
       <PageHero
-        eyebrow="Impressum"
         title="Rechtliche Angaben"
         text="Bitte prüfe diese Angaben vor Livegang noch einmal rechtlich und ergänze sie bei Bedarf um Register-, Umsatzsteuer- oder Aufsichtsangaben."
       />

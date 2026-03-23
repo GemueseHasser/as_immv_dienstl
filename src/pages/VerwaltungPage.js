@@ -12,7 +12,6 @@ export default function VerwaltungPage() {
   return (
     <>
       <PageHero
-        eyebrow="Immobilienverwaltung"
         title="Immobilienverwaltung mit Überblick, Ruhe und klarer Zuständigkeit."
         text="AS Immobilienverwaltung begleitet Wohn- und Gewerbeimmobilien mit geordneten Abläufen, persönlicher Erreichbarkeit und technischer Übersicht im laufenden Bestand."
         logoType="immobilien"

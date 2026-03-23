@@ -10,7 +10,6 @@ export default function DatenschutzPage() {
   return (
     <>
       <PageHero
-        eyebrow="Datenschutz"
         title="Hinweise zur Datenverarbeitung"
         text="Dieses Muster ist bewusst datensparsam formuliert und sollte vor Veröffentlichung mit den tatsächlich eingesetzten Tools, Formularen und Hosting-Diensten abgeglichen werden."
       />

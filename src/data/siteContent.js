@@ -40,12 +40,6 @@ export const strandCards = [
   },
 ];
 
-export const homeHighlights = [
-  'Persönliche Betreuung von Wohn- und Gewerbeimmobilien in Wülfrath und Umgebung.',
-  'Dienstleistungen für Außenflächen, Erdarbeiten, Pflasterung und koordinierte Ausführung.',
-  'Direkter Kontakt per Telefon, E-Mail oder Anfrageformular – ohne Umwege.',
-];
-
 export const homeTeasers = [
   {
     tag: 'Immobilienverwaltung',
@@ -62,12 +56,6 @@ export const homeTeasers = [
     title: 'Direkt erreichbar',
     text: 'Anliegen zur Immobilienverwaltung, zu Außenarbeiten oder zu BIM-gestützter Projektkoordination werden gezielt aufgenommen.',
   },
-];
-
-export const verwaltungHighlights = [
-  'Betreuung von Wohn- und Gewerbeimmobilien mit klarer Zuständigkeit.',
-  'Kaufmännische, organisatorische und technische Begleitung im laufenden Betrieb.',
-  'Regionaler Bezug mit Referenzen aus Wülfrath innerhalb des Verwaltungsbereichs.',
 ];
 
 export const verwaltungServices = [

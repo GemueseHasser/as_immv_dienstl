@@ -13,7 +13,6 @@ export default function KontaktPage() {
   return (
     <>
       <PageHero
-        eyebrow="Kontakt"
         title="Direkter Kontakt für Immobilienverwaltung, Dienstleistungen und konkrete Vorhaben."
         text="Ob es um die laufende Betreuung einer Immobilie, um Erdarbeiten, um neue Pflasterflächen oder um BIM-gestützte Projektkoordination geht: AS Immobilienverwaltung & Dienstleistungen ist telefonisch, per E-Mail und über das Anfrageformular erreichbar."
         actions={<button type="button" className="button button-brand" onClick={openContact}>Kontaktformular öffnen</button>}

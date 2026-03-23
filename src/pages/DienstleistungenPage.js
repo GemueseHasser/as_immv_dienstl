@@ -12,7 +12,6 @@ export default function DienstleistungenPage() {
   return (
     <>
       <PageHero
-        eyebrow="Dienstleistungen"
         title="Praktische Leistungen mit präziser Ausführung und digitaler Koordination."
         text="Der Dienstleistungsbereich konzentriert sich auf Erdarbeiten, Pflasterflächen, Zuwegungen, vorbereitende Maßnahmen, passenden Maschineneinsatz und BIM-gestützte Abstimmung bei anspruchsvolleren Abläufen."
         logoType="dienstleistungen"
