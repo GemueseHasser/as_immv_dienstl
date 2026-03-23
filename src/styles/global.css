@@ -2953,7 +2953,7 @@ body {
 
   .references-thumbnail-rail-mobile {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
   }
 
@@ -2969,7 +2969,7 @@ body {
   }
 
   .references-thumbnail-rail-mobile .reference-thumbnail-copy small {
-    font-size: 0.44rem;
+    font-size: 0.5rem;
   }
 
   .references-thumbnail-rail-mobile .reference-thumbnail-copy strong {

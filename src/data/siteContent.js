@@ -257,6 +257,6 @@ export const references = [
 
 export const contactHighlights = [
   'Anfragen zur Immobilienverwaltung, zu bestehenden Objekten oder zur laufenden Betreuung werden direkt aufgenommen.',
-  'Dienstleistungsanfragen zu Mietmaschinisten, Maschinen mit Maschinist, 3D-Steuerung, Anbaugeräten oder digitalen Lösungen können gezielt beschrieben werden.',
+  'Dienstleistungsanfragen zu Mietmaschinisten, Maschinen mit Maschinist, 3D-Steuerung, verfügbare Anbaugeräte oder digitalen Lösungen können gezielt beschrieben werden.',
   'Auch Fragen zu Punktwolken, 3D-Scanning und BIM-gestützter Projektkoordination lassen sich über das Anfrageformular oder telefonisch abstimmen.',
 ];
