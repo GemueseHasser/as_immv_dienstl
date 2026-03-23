@@ -9,7 +9,7 @@ const SERVICE_LABELS = {
 
 const CATEGORY_META = {
   immobilienverwaltung: {
-    eyebrow: 'Immobilienservice',
+    eyebrow: 'Immobilienverwaltung',
     title: 'Anfrage zur Immobilienverwaltung',
     description: 'Schildern Sie Ihr Anliegen kurz. Die Anfrage wird direkt an den Bereich Immobilienverwaltung gesendet.',
   },
@@ -187,7 +187,7 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
             </p>
             <div className="inquiry-choice-grid">
               <button type="button" className="inquiry-choice-card" onClick={() => setCategory('immobilienverwaltung')}>
-                <span className="inquiry-choice-eyebrow">Immobilienservice</span>
+                <span className="inquiry-choice-eyebrow">Immobilienverwaltung</span>
                 <strong>Immobilienverwaltung</strong>
                 <p>Für Bestandsbetreuung, Verwaltungsfragen, Abstimmungen und laufende Anliegen rund um die Immobilie.</p>
               </button>
