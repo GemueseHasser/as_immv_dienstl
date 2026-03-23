@@ -3,11 +3,15 @@ import React from 'react';
 export default function HeroSplit({ onViewAreas }) {
   return (
     <section className="hero hero-split hero-home-watermark">
-      <div
+      <div className="hero-background-stage" aria-hidden="true">
+        <div
           className="hero-background-image"
-          style={{backgroundImage: `url(${process.env.PUBLIC_URL}/assets/start-hero.jpg)`}}
-          aria-hidden="true"
-      />
+          style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/start-hero.jpg)` }}
+        />
+        <div className="hero-background-wash hero-background-wash-left" />
+        <div className="hero-background-wash hero-background-wash-right" />
+        <div className="hero-background-grid" />
+      </div>
       <div className="hero-orbit hero-orbit-left" aria-hidden="true" />
       <div className="hero-orbit hero-orbit-right" aria-hidden="true" />
       <div className="container hero-shell compact-shell">

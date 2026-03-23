@@ -7,6 +7,7 @@ export default function Header() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [mobileBrandHidden, setMobileBrandHidden] = useState(false);
+  const lastScrollY = useRef(0);
 
   const navItems = [
     { label: 'Start', to: '/' },
@@ -38,9 +39,20 @@ export default function Header() {
   useEffect(() => {
     const updateBrandVisibility = () => {
       const isMobile = window.innerWidth <= 980;
-      const inHeaderRevealZone = window.scrollY <= 64;
+      const currentScrollY = window.scrollY;
+      const inHeaderRevealZone = currentScrollY <= 72;
+      const scrollingDown = currentScrollY > lastScrollY.current + 3;
+      const scrollingUp = currentScrollY < lastScrollY.current - 3;
 
-      setMobileBrandHidden(isMobile && !inHeaderRevealZone);
+      if (!isMobile || inHeaderRevealZone) {
+        setMobileBrandHidden(false);
+      } else if (scrollingDown) {
+        setMobileBrandHidden(true);
+      } else if (scrollingUp) {
+        setMobileBrandHidden(false);
+      }
+
+      lastScrollY.current = currentScrollY;
     };
 
     updateBrandVisibility();

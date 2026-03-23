@@ -26,7 +26,6 @@ export default function DienstleistungenPage() {
               className="space-panel-instagram"
               title="Instagram Feed von bagger_extreme"
               embedUrl="https://www.instagram.com/bagger_extreme/embed"
-              profileUrl="https://www.instagram.com/bagger_extreme/"
             />
 
             <div className="space-panel-orbs" aria-hidden="true">

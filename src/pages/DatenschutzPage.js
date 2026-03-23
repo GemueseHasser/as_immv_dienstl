@@ -45,9 +45,10 @@ export default function DatenschutzPage() {
           <div>
             <h2>4. Externe Inhalte und Einwilligung</h2>
             <p>
-              Auf der Seite Dienstleistungen kann ein Instagram-Inhalt eingebunden werden. Dieser
-              wird erst nach ausdrücklicher Einwilligung geladen. Mit der Aktivierung können Daten
-              an Instagram bzw. Meta übertragen und Cookies durch den Drittanbieter gesetzt werden.
+              Auf der Website kann auf der Dienstleistungsseite ein Instagram-Inhalt eingebunden
+              werden. Dieser wird erst geladen, nachdem die allgemeine Cookie-Einwilligung für
+              externe Inhalte erteilt wurde. Mit dem Laden können Daten an Instagram bzw. Meta
+              übertragen und Cookies durch den Drittanbieter gesetzt werden.
             </p>
           </div>
           <div>

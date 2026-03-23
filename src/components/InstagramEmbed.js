@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-
-const STORAGE_KEY = 'as-instagram-consent';
+import { hasSiteCookieConsent } from '../utils/consent';
 
 export default function InstagramEmbed({
-  profileUrl,
   embedUrl,
   title,
   className = '',
@@ -11,57 +9,30 @@ export default function InstagramEmbed({
   const [consentGranted, setConsentGranted] = useState(false);
 
   useEffect(() => {
-    try {
-      setConsentGranted(window.localStorage.getItem(STORAGE_KEY) === 'granted');
-    } catch (error) {
-      setConsentGranted(false);
-    }
+    const syncConsent = () => setConsentGranted(hasSiteCookieConsent());
+
+    syncConsent();
+    window.addEventListener('storage', syncConsent);
+    window.addEventListener('as-cookie-consent-changed', syncConsent);
+
+    return () => {
+      window.removeEventListener('storage', syncConsent);
+      window.removeEventListener('as-cookie-consent-changed', syncConsent);
+    };
   }, []);
 
-  const acceptInstagramCookies = () => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, 'granted');
-    } catch (error) {
-      // ignore storage access issues
-    }
-    setConsentGranted(true);
-  };
-
   return (
-    <div className={className}>
+    <div className={['instagram-embed-shell', className].filter(Boolean).join(' ')}>
       {consentGranted ? (
-        <>
-          <iframe
-            title={title}
-            src={embedUrl}
-            loading="lazy"
-            allowTransparency
-          />
-          <p className="embed-privacy-note">
-            Durch das Laden des Instagram-Inhalts können Daten an Meta bzw. Instagram übertragen und Cookies gesetzt werden.
-          </p>
-        </>
+        <iframe
+          title={title}
+          src={embedUrl}
+          loading="lazy"
+          allowTransparency
+        />
       ) : (
-        <div className="embed-consent-card">
-          <p className="embed-consent-eyebrow">Externer Inhalt</p>
-          <h3>Instagram erst nach Einwilligung laden</h3>
-          <p>
-            Zum Anzeigen des eingebetteten Instagram-Profils werden Inhalte von Instagram geladen. Dabei können Cookies gesetzt
-            und personenbezogene Daten an Drittanbieter übertragen werden.
-          </p>
-          <div className="embed-consent-actions">
-            <button type="button" className="button button-brand" onClick={acceptInstagramCookies}>
-              Instagram laden
-            </button>
-            <a
-              className="button button-secondary"
-              href={profileUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Profil direkt öffnen
-            </a>
-          </div>
+        <div className="instagram-embed-placeholder">
+          <p>Instagram wird nach allgemeiner Cookie-Einwilligung geladen.</p>
         </div>
       )}
     </div>
