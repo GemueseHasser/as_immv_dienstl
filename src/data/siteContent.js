@@ -161,9 +161,9 @@ export const dienstleistungsGallery = [
   },
   {
     image: publicAsset('/assets/dl5.jpg'),
-    category: 'Präzision im Graben',
-    title: 'Minibagger für enge Arbeitsräume und sensible Leitungsbereiche',
-    text: 'Kompakte Maschinen eignen sich für präzise Arbeiten in begrenzten Bereichen und ergänzen den Maschinenpark für unterschiedlichste Anforderungen.',
+    category: 'Verschiedene Anwendungsfälle',
+    title: 'Die Maschinen können auf vielfältige Weise eingesetzt werden',
+    text: 'Die Maschinen lassen sich vielseitig einsetzen und bieten flexible Lösungen für unterschiedlichste Anforderungen. Durch ihre Anpassungsfähigkeit eignen sie sich sowohl für standardisierte Abläufe als auch für individuelle Projekte.',
     size: 'tall',
   },
   {
