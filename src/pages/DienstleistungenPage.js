@@ -50,8 +50,8 @@ export default function DienstleistungenPage() {
           </div>
         )}
       />
-      <section className="section">
-        <div className="container stack-gap compact-shell">
+      <section className="section dienstleistungen-content-section">
+        <div className="container stack-gap compact-shell dienstleistungen-stack">
           <div className="section-head section-head-with-logo">
             <div>
               <p className="eyebrow">Leistungsfelder</p>

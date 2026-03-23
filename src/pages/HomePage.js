@@ -27,7 +27,7 @@ export default function HomePage() {
     <>
       <HeroSplit onViewAreas={handleViewAreas} />
 
-      <section className="section">
+      <section className="section home-areas-section">
         <div className="container compact-shell">
           <div ref={areaRef} className={`home-areas-shell ${highlighted ? 'is-highlighted' : ''}`}>
             <div className="section-head row-head home-areas-head">
@@ -57,7 +57,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section home-profile-section">
         <div className="container stack-gap compact-shell">
           <div className="section-head row-head">
             <div>

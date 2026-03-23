@@ -1099,6 +1099,12 @@ img { display: block; max-width: 100%; }
 
   .site-main { padding-bottom: 132px; }
   .section { padding-top: 28px; }
+  .home-areas-section { padding-top: 36px; }
+  .home-profile-section { padding-top: 44px; }
+  .verwaltung-content-section,
+  .dienstleistungen-content-section { padding-top: 40px; }
+  .verwaltung-stack,
+  .dienstleistungen-stack { gap: 32px; }
   .lead { font-size: 1rem; }
   .brand { gap: 12px; }
   .brand strong { font-size: 0.92rem; }

@@ -29,8 +29,8 @@ export default function VerwaltungPage() {
         )}
         aside={<p>Im Mittelpunkt stehen eine verlässliche Betreuung, kurze Wege und eine strukturierte Abstimmung aller laufenden Themen rund um das Objekt.</p>}
       />
-      <section className="section">
-        <div className="container stack-gap compact-shell">
+      <section className="section verwaltung-content-section">
+        <div className="container stack-gap compact-shell verwaltung-stack">
           <div className="section-head section-head-with-logo">
             <div>
               <p className="eyebrow">Leistungsbild</p>
