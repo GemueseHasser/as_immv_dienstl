@@ -40,15 +40,17 @@ export default function Header() {
     const updateBrandVisibility = () => {
       const isMobile = window.innerWidth <= 980;
       const currentScrollY = window.scrollY;
-      const inHeaderRevealZone = currentScrollY <= 72;
-      const scrollingDown = currentScrollY > lastScrollY.current + 3;
-      const scrollingUp = currentScrollY < lastScrollY.current - 3;
+      const revealZone = 118;
+      const hideZone = 150;
+      const inHeaderRevealZone = currentScrollY <= revealZone;
+      const scrollingDown = currentScrollY > lastScrollY.current + 4;
+      const scrollingUp = currentScrollY < lastScrollY.current - 4;
 
       if (!isMobile || inHeaderRevealZone) {
         setMobileBrandHidden(false);
-      } else if (scrollingDown) {
+      } else if (scrollingDown && currentScrollY > hideZone) {
         setMobileBrandHidden(true);
-      } else if (scrollingUp) {
+      } else if (scrollingUp && currentScrollY <= revealZone) {
         setMobileBrandHidden(false);
       }
 

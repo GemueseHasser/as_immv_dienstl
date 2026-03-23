@@ -11,6 +11,7 @@ export default function HeroSplit({ onViewAreas }) {
         <div className="hero-background-wash hero-background-wash-left" />
         <div className="hero-background-wash hero-background-wash-right" />
         <div className="hero-background-grid" />
+        <div className="hero-background-soft-edge" />
       </div>
       <div className="hero-orbit hero-orbit-left" aria-hidden="true" />
       <div className="hero-orbit hero-orbit-right" aria-hidden="true" />
