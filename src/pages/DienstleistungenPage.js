@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PageHero from '../components/PageHero';
 import ServiceGrid from '../components/ServiceGrid';
+import InstagramEmbed from '../components/InstagramEmbed';
 import ServicesGallery from '../components/ServicesGallery';
 import { dienstleistungsGallery, dienstleistungsServices } from '../data/siteContent';
 
@@ -17,7 +18,17 @@ export default function DienstleistungenPage() {
         logoType="dienstleistungen"
         aside={(
           <div className="space-panel">
-            <p>Reale Projektbilder zeigen Außenflächen, Trassen, Maschineneinsatz und BIM als eigenständigen Baustein für strukturierte Projektkoordination.</p>
+            <div className="space-panel-copy">
+              <p>Reale Projektbilder zeigen Außenflächen, Trassen, Maschineneinsatz und BIM als eigenständigen Baustein für strukturierte Projektkoordination.</p>
+            </div>
+
+            <InstagramEmbed
+              className="space-panel-instagram"
+              title="Instagram Feed von bagger_extreme"
+              embedUrl="https://www.instagram.com/bagger_extreme/embed"
+              profileUrl="https://www.instagram.com/bagger_extreme/"
+            />
+
             <div className="space-panel-orbs" aria-hidden="true">
               <span />
               <span />

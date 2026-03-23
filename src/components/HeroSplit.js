@@ -2,7 +2,12 @@ import React from 'react';
 
 export default function HeroSplit({ onViewAreas }) {
   return (
-    <section className="hero hero-split">
+    <section className="hero hero-split hero-home-watermark">
+      <div
+          className="hero-background-image"
+          style={{backgroundImage: `url(${process.env.PUBLIC_URL}/assets/start-hero.jpg)`}}
+          aria-hidden="true"
+      />
       <div className="hero-orbit hero-orbit-left" aria-hidden="true" />
       <div className="hero-orbit hero-orbit-right" aria-hidden="true" />
       <div className="container hero-shell compact-shell">

@@ -43,7 +43,15 @@ export default function DatenschutzPage() {
             </p>
           </div>
           <div>
-            <h2>4. Rechte der betroffenen Personen</h2>
+            <h2>4. Externe Inhalte und Einwilligung</h2>
+            <p>
+              Auf der Seite Dienstleistungen kann ein Instagram-Inhalt eingebunden werden. Dieser
+              wird erst nach ausdrücklicher Einwilligung geladen. Mit der Aktivierung können Daten
+              an Instagram bzw. Meta übertragen und Cookies durch den Drittanbieter gesetzt werden.
+            </p>
+          </div>
+          <div>
+            <h2>5. Rechte der betroffenen Personen</h2>
             <p>
               Betroffene Personen haben im Rahmen der gesetzlichen Vorgaben das Recht auf
               Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Beschwerde bei

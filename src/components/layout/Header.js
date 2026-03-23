@@ -61,9 +61,10 @@ export default function Header() {
 
   return (
     <header className={`site-header ${mobileBrandHidden ? 'mobile-brand-hidden' : ''}`}>
-      <div className="header-aurora" aria-hidden="true" />
+      <div className="mobile-header-top">
+        <div className="header-aurora" aria-hidden="true" />
 
-      <div className="container header-bar compact-shell">
+        <div className="container header-bar compact-shell">
         <NavLink to="/" className="brand" aria-label="Zur Startseite">
           <BrandLogos variant="header" />
         </NavLink>
@@ -94,6 +95,7 @@ export default function Header() {
             </NavLink>
           </div>
         </nav>
+        </div>
       </div>
 
       <div className="mobile-floating-nav-wrap">
