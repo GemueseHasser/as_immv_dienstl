@@ -175,9 +175,9 @@ export const dienstleistungsGallery = [
   },
   {
     image: publicAsset('/assets/gewerke-unterstuetzen.jpg'),
-    category: 'Gewerkeübergreifende Unterstützung',
-    title: 'Maschinen als Unterstützung für andere Arbeitsbereiche',
-    text: 'Ob Montage, Transport, Pflege oder Vorbereitung: Der Maschinenpark kann gezielt dort unterstützen, wo klassische Lösungen an Grenzen stoßen.',
+    category: 'Baustellenlogistik',
+    title: 'Maschinen als Unterstützung logistische Aufgaben',
+    text: 'Durch den gezielten Einsatz von verschiedensten Maschinen - individuell abgestimmt - können komplexe logistische Aufgaben effizient umgesetzt werden.',
     size: 'wide',
   },
   {
