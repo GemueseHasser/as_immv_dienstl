@@ -8,11 +8,9 @@ export default function Footer() {
       <div className="container footer-grid compact-shell">
         <div>
           <p className="eyebrow">AS Immobilienverwaltung &amp; Dienstleistungen</p>
-          <h3>{company.owner}</h3>
+          <h3>Direkter Kontakt</h3>
           <p>
-            {company.addressLine1}
-            <br />
-            {company.addressLine2}
+            Telefonisch, per E-Mail oder über die Website.
           </p>
         </div>
         <div className="footer-column footer-column-areas">

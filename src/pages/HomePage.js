@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import HeroSplit from '../components/HeroSplit';
-import HighlightBand from '../components/HighlightBand';
 import MobileSnapCarousel from '../components/MobileSnapCarousel';
 import ServiceGrid from '../components/ServiceGrid';
-import { homeHighlights, homeTeasers, strandCards } from '../data/siteContent';
+import { homeTeasers, strandCards } from '../data/siteContent';
 
 export default function HomePage() {
   const areaRef = useRef(null);
@@ -27,7 +26,6 @@ export default function HomePage() {
   return (
     <>
       <HeroSplit onViewAreas={handleViewAreas} />
-      <HighlightBand items={homeHighlights} />
 
       <section className="section">
         <div className="container compact-shell">
@@ -49,11 +47,6 @@ export default function HomePage() {
                   </div>
                   <h3>{card.title}</h3>
                   <p>{card.intro}</p>
-                  <ul className="clean-list">
-                    {card.highlights.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
                   <NavLink to={card.to} className="button button-light home-area-button">
                     Bereich öffnen
                   </NavLink>

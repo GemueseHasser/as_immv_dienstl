@@ -36,36 +36,20 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const handleWindowScroll = () => {
-      const currentScrollY = window.scrollY;
+    const updateBrandVisibility = () => {
       const isMobile = window.innerWidth <= 980;
+      const inHeaderRevealZone = window.scrollY <= 64;
 
-      if (!isMobile) {
-        setMobileBrandHidden(false);
-        lastScrollY = currentScrollY;
-        return;
-      }
-
-      const scrollingDown = currentScrollY > lastScrollY;
-      const pastThreshold = currentScrollY > 40;
-
-      if (scrollingDown && pastThreshold) {
-        setMobileBrandHidden(true);
-      } else if (!scrollingDown || currentScrollY <= 8) {
-        setMobileBrandHidden(false);
-      }
-
-      lastScrollY = currentScrollY;
+      setMobileBrandHidden(isMobile && !inHeaderRevealZone);
     };
 
-    window.addEventListener('scroll', handleWindowScroll, { passive: true });
-    window.addEventListener('resize', handleWindowScroll);
+    updateBrandVisibility();
+    window.addEventListener('scroll', updateBrandVisibility, { passive: true });
+    window.addEventListener('resize', updateBrandVisibility);
 
     return () => {
-      window.removeEventListener('scroll', handleWindowScroll);
-      window.removeEventListener('resize', handleWindowScroll);
+      window.removeEventListener('scroll', updateBrandVisibility);
+      window.removeEventListener('resize', updateBrandVisibility);
     };
   }, []);
 

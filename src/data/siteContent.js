@@ -7,7 +7,7 @@ export const company = {
   addressLine2: '42489 Wülfrath',
   phone: '0 21 02 / 70 63 62',
   fax: '0 21 02 / 70 63 58',
-  email: 'a.striemer@as-immobilienverwaltung.de',
+  email: 'info@as-immobilienverwaltung.de',
   website: 'www.as-immobilienverwaltung.de',
 };
 

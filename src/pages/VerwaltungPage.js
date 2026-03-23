@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import PageHero from '../components/PageHero';
 import ServiceGrid from '../components/ServiceGrid';
-import HighlightBand from '../components/HighlightBand';
 import ExpandableReferences from '../components/ExpandableReferences';
-import { references, verwaltungHighlights, verwaltungServices } from '../data/siteContent';
+import { references, verwaltungServices } from '../data/siteContent';
 
 export default function VerwaltungPage() {
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -19,7 +18,6 @@ export default function VerwaltungPage() {
         logoType="immobilien"
         aside={<p>Im Mittelpunkt stehen eine verlässliche Betreuung, kurze Wege und eine strukturierte Abstimmung aller laufenden Themen rund um das Objekt.</p>}
       />
-      <HighlightBand items={verwaltungHighlights} />
       <section className="section">
         <div className="container stack-gap compact-shell">
           <div className="section-head section-head-with-logo">
