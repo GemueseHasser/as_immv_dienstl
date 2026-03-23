@@ -28,33 +28,33 @@ export const strandCards = [
   {
     id: 'dienstleistungen',
     eyebrow: 'Dienstleistungen',
-    title: 'Praktische Leistungen rund um Fläche, Gelände und Zugang',
+    title: 'Maschinist, Maschine und digitale Lösungen aus einer Hand',
     intro:
-      'Der Dienstleistungsbereich bündelt Erdarbeiten, Pflasterung, vorbereitende Maßnahmen, passenden Maschineneinsatz und auf Wunsch digitale Koordination über Building Information Modeling.',
+      'Der Dienstleistungsbereich bündelt Mietmaschinisten, Maschinenverleih mit Maschinist, 3D-gesteuerten Maschineneinsatz mit verschiedensten Anbaugeräten sowie digitale Lösungen wie digitlae Geländemodelle (DGM), Punktwolken, 3D-Scanning und BIM-Unterstützung.',
     to: '/dienstleistungen',
     highlights: [
-      'Zuwegungen, Zufahrten und belastbare Außenflächen',
-      'Erdarbeiten, Trassen und vorbereitende Geländeaufbereitung',
-      'BIM-gestützte Abstimmung von Planung und Ausführung',
+      'Mietmaschinist einzeln oder Maschine inklusive Maschinist',
+      '3D-Steuerung, Tiltrotatoren und passende Anbaugeräte',
+      'Lösungen über den Tellerrand hinaus für komplexe Einsätze',
     ],
   },
 ];
 
 export const homeTeasers = [
   {
-    tag: 'Immobilienverwaltung',
-    title: 'Verlässlich geführt',
-    text: 'Betreuung von Beständen mit geordneten Abläufen, technischer Übersicht und persönlicher Erreichbarkeit.',
+    tag: 'Erfahrung',
+    title: 'Über 25 Jahre Praxis',
+    text: 'AS Immobilienverwaltung & Dienstleistungen verbindet langjährige Erfahrung mit routinierter Ausführung, sauberer Organisation und einem sicheren Blick für praktikable Lösungen.',
+  },
+  {
+    tag: 'Zertifizierung',
+    title: 'IHK Düsseldorf zertifiziert',
+    text: 'Die fachliche Qualifikation ist durch die IHK Düsseldorf zertifiziert und unterstreicht den Anspruch an verlässliche Betreuung, strukturierte Abläufe und nachvollziehbare Qualität.',
   },
   {
     tag: 'Dienstleistungen',
-    title: 'Sauber ausgeführt',
-    text: 'Arbeiten an Fläche und Gelände mit Erfahrung, Maschinenunterstützung und einem klaren Blick für dauerhafte Ergebnisse.',
-  },
-  {
-    tag: 'Kontakt',
-    title: 'Direkt erreichbar',
-    text: 'Anliegen zur Immobilienverwaltung, zu Außenarbeiten oder zu BIM-gestützter Projektkoordination werden gezielt aufgenommen.',
+    title: 'Technik, Mensch und digitale Prozesse',
+    text: 'Vom Mietmaschinisten über 3D-gesteuerte Maschinen bis zu Punktwolken, 3D-Scanning und BIM werden analoge und digitale Leistungen gezielt zusammengeführt.',
   },
 ];
 
@@ -78,58 +78,129 @@ export const verwaltungServices = [
 
 export const dienstleistungsServices = [
   {
-    tag: 'Flächenbau',
-    title: 'Pflaster- und Zuwegungsarbeiten',
-    text: 'Herstellung und Überarbeitung von Zufahrten, Wegen, Stellflächen und belastbaren Außenbereichen mit sauberem Aufbau und klarer Linienführung.',
+    tag: 'Mietmaschinist',
+    title: 'Maschinist als eigenständige Dienstleistung',
+    text: 'Ein erfahrener Mietmaschinist kann gezielt für laufende Baustellen oder spezielle Aufgaben gebucht werden – flexibel, effizient und passend zum vorhandenen Maschinenpark.',
   },
   {
-    tag: 'Gelände',
-    title: 'Erdarbeiten und Trassen',
-    text: 'Aushub, Leitungswege und vorbereitende Arbeiten im Bestand – abgestimmt auf Gelände, Nutzung und den weiteren Ausbau.',
+    tag: 'Maschinenverleih mit Maschinist',
+    title: 'Maschine inklusive Bediener',
+    text: 'Alternativ stehen Maschinen wie Radlader, Unimog, Mobil- und Minibagger inklusive Maschinist zur Verfügung, damit Einsätze sicher, wirtschaftlich und ohne zusätzlichen Abstimmungsaufwand umgesetzt werden können.',
   },
   {
-    tag: 'Maschineneinsatz',
-    title: 'Ausführung mit passender Technik',
-    text: 'Effiziente Abläufe vor Ort durch geeignete Maschinen, präzise Arbeitsschritte und eine robuste Umsetzung auf dem Grundstück.',
+    tag: '3D-Steuerung & DGM',
+    title: 'Digitale Geländemodelle direkt in der Ausführung',
+    text: 'Die Mietmaschinen verfügen über 3D-Steuerung und verarbeiten digitale Geländemodelle (DGM), damit Höhen, Flächen und Bewegungen präzise und nachvollziehbar umgesetzt werden.',
   },
   {
-    tag: 'BIM',
-    title: 'Building Information Modeling',
-    text: 'Digitale Koordination von Bestand, Planung und Ausführung, wenn Projekte eine strukturierte Abstimmung von Flächen, Trassen oder Bauabläufen erfordern.',
+    tag: 'Anbaugeräte & Tiltrotatoren',
+    title: 'Für jede Anforderung passend ausgestattet',
+    text: 'Über die 3D-Steuerung hinaus stehen Mobil- und Minibagger mit Tiltrotatoren sowie vielseitigen Anbaugeräten bereit – vom Anbauverdichter bis zur Heckenschere.',
+  },
+  {
+    tag: 'Digitale Lösungen',
+    title: 'Punktwolken, 3D-Scanning und BIM-Unterstützung',
+    text: 'Digitale Lösungen wie Punktwolken oder 3D-Scanning werden ebenso angeboten wie die Unterstützung von BIM-Projekten, wenn Planung, Bestand und Ausführung sauber zusammengeführt werden sollen.',
+  },
+  {
+    tag: 'Lösungsansätze',
+    title: 'Über den Tellerrand hinaus gedacht',
+    text: 'Nicht nur Erd- oder Tiefbauleistungen stehen im Fokus: Für komplexe Aufgaben werden unkonventionelle Lösungsansätze entwickelt, bei denen Maschinen auch andere Gewerke wirksam unterstützen.',
   },
 ];
 
 export const dienstleistungsGallery = [
   {
-    image: publicAsset('/assets/dl1.jpg'),
-    category: 'Pflasterung & Konstruktion',
-    title: 'Außenflächen mit tragender Stahlkonstruktion',
-    text: 'Pflasterfläche und Tragwerk werden sauber aufeinander abgestimmt, damit belastbare Nutzflächen mit klarer Geometrie und präzisem Anschluss entstehen.',
+    image: publicAsset('/assets/3d-steuerung.jpg'),
+    category: '3D-Steuerung & DGM',
+    title: 'Digitale Geländemodelle direkt im Bagger verarbeitet',
+    text: 'Die 3D-Steuerung unterstützt eine präzise Ausführung auf Grundlage digitaler Geländemodelle und schafft saubere Abläufe zwischen Planung und Baustelle.',
+    size: 'wide',
   },
   {
-    image: publicAsset('/assets/dl2.jpg'),
-    category: 'Unterbau & Zuwegung',
-    title: 'Vorbereitete Zufahrten mit exakter Linienführung',
-    text: 'Tragschichten, Randbereiche und Fluchten werden so vorbereitet, dass eine dauerhaft stabile Zufahrt mit ruhigem Gesamtbild entsteht.',
+    image: publicAsset('/assets/anbaugeraete.jpg'),
+    category: 'Anbaugeräte',
+    title: 'Vielfältige Ausstattung für spezielle Anforderungen',
+    text: 'Anbaugeräte erweitern das Einsatzspektrum deutlich und schaffen flexible Lösungen für Verdichtung, Greifen, Stemmen oder Sonderaufgaben.',
+    size: 'standard',
   },
   {
-    image: publicAsset('/assets/dl3.jpg'),
-    category: 'Erdarbeiten & Trassen',
-    title: 'Leitungsgräben und Geländeaufbereitung im Bestand',
-    text: 'Erdarbeiten entlang bestehender Wege und Grundstücksgrenzen werden mit Blick auf Nutzung, Zugänglichkeit und den späteren Oberflächenaufbau ausgeführt.',
+    image: publicAsset('/assets/heckenschere.jpg'),
+    category: 'Pflege & Rückschnitt',
+    title: 'Heckenschere für den Mobilbagger im praktischen Einsatz',
+    text: 'Auch außerhalb klassischer Erdarbeiten können Maschinen andere Gewerke unterstützen und Arbeiten an schwer zugänglichen Bereichen effizient übernehmen.',
+    size: 'tall',
   },
   {
-    image: publicAsset('/assets/dl4.jpg'),
+    image: publicAsset('/assets/g1.jpg'),
+    category: 'Unzugängliche Stellen & Präzision',
+    title: 'Arbeiten in engen und verwinkelten Bereichen mit passender Technik',
+    text: 'Durch genau auf die Anforderungen abgestimmten Maschineneinsatz können auch in engen und verwinkelten Bereichen präzise Arbeiten erfolgen.',
+    size: 'standard',
+  },
+  {
+    image: publicAsset('/assets/g2.jpg'),
+    category: 'Ganzjährig einsatzbereit',
+    title: 'Robuste Technik auch bei widrigen Bedingungen',
+    text: 'Verlässlicher Maschineneinsatz ist nicht auf Schönwetterlagen beschränkt und kann auch unter schwierigen Witterungsbedingungen planbar umgesetzt werden.',
+    size: 'standard',
+  },
+  {
+    image: publicAsset('/assets/g3.jpg'),
     category: 'Maschineneinsatz',
-    title: 'Leistungsfähige Technik für präzise Abläufe vor Ort',
-    text: 'Der passende Maschineneinsatz sorgt für effiziente Arbeitsschritte, saubere Abläufe und eine zuverlässige Umsetzung auf dem Grundstück.',
+    title: 'Großflächige Entfernung von Pflanzen',
+    text: 'Um beispielsweise das Entfernen von vielen Pflanzen zu erleichtern, können Maschinen mit Fingerspitzengefühl eingesetzt werden.',
+    size: 'standard',
+  },
+  {
+    image: publicAsset('/assets/g4.jpg'),
+    category: 'Präzision & Kontrolle',
+    title: 'Maschinenverleih mit Maschinist als eingespielte Einheit',
+    text: 'Auch bei sperrigen Bauteilen und engen Bereichen kann maximale Genauigkeit gewährleistet werden - zusätzlich noch durch den Einsatz von moderner 3D-Steuerung.',
+    size: 'standard',
+  },
+  {
+    image: publicAsset('/assets/g5.jpg'),
+    category: 'Präzision im Graben',
+    title: 'Minibagger für enge Arbeitsräume und sensible Leitungsbereiche',
+    text: 'Kompakte Maschinen eignen sich für präzise Arbeiten in begrenzten Bereichen und ergänzen den Maschinenpark für unterschiedlichste Anforderungen.',
+    size: 'tall',
+  },
+  {
+    image: publicAsset('/assets/g6.jpg'),
+    category: 'Maschinenübergreifender Einsatz',
+    title: 'Verschiedene Maschinen werden kombiniert, um ein optimales Ergebnis zu erzielen',
+    text: 'Durch das Zusammenspiel von mehreren Maschinen kann ein optimales, schnelles und zugleich wirtschaftliches Ergebnis garantiert werden.',
+    size: 'standard',
+  },
+  {
+    image: publicAsset('/assets/gewerke-unterstuetzen.jpg'),
+    category: 'Gewerkeübergreifende Unterstützung',
+    title: 'Maschinen als Unterstützung für andere Arbeitsbereiche',
+    text: 'Ob Montage, Transport, Pflege oder Vorbereitung: Der Maschinenpark kann gezielt dort unterstützen, wo klassische Lösungen an Grenzen stoßen.',
+    size: 'wide',
+  },
+  {
+    image: publicAsset('/assets/unkonventionell.jpg'),
+    category: 'Unkonventionelle Ansätze',
+    title: 'Für komplexe Probleme werden neue Wege gefunden',
+    text: 'Nicht jede Aufgabe passt in ein Standardschema – deshalb werden individuelle und über den Tellerrand hinaus gedachte Lösungsansätze entwickelt.',
+    size: 'standard',
+  },
+  {
+    image: publicAsset('/assets/grillen.jpg'),
+    category: 'Spaß an der Arbeit',
+    title: 'Grillabend in der Baggerschaufel',
+    text: 'Durch den Spaß an der Arbeit bleiben sowohl Kreativität als auch Professionalität erhalten.',
+    size: 'standard',
   },
   {
     image: publicAsset('/assets/bim-visual.png'),
-    category: 'Building Information Modeling',
-    title: 'BIM als eigenes Planungs- und Koordinationswerkzeug',
-    text: 'Digitale Modelle unterstützen die Abstimmung von Bestand, Planung und Ausführung – besonders dort, wo Flächen, Leitungswege und Bauabläufe präzise zusammengeführt werden müssen.',
-  },
+    category: 'BIM-Projekt',
+    title: 'Durch BIM-Projekte Genauigkeit garantiert',
+    text: 'Der Einsatz von BIM (Building Information Modeling) bringt vor allem einen großen Vorteil: alles wird digital geplant, abgestimmt und kontrolliert – bevor gebaut wird. Dadurch entstehen weniger Fehler, mehr Effizienz und bessere Ergebnisse.',
+    size: 'standard',
+  }
 ];
 
 export const references = [
@@ -151,6 +222,6 @@ export const references = [
 
 export const contactHighlights = [
   'Anfragen zur Immobilienverwaltung, zu bestehenden Objekten oder zur laufenden Betreuung werden direkt aufgenommen.',
-  'Dienstleistungsanfragen zu Erdarbeiten, Pflasterflächen, Zuwegungen oder Außenanlagen können gezielt beschrieben werden.',
-  'Auch Fragen zur BIM-gestützten Projektkoordination lassen sich über das Anfrageformular oder telefonisch abstimmen.',
+  'Dienstleistungsanfragen zu Mietmaschinisten, Maschinen mit Maschinist, 3D-Steuerung, Anbaugeräten oder digitalen Lösungen können gezielt beschrieben werden.',
+  'Auch Fragen zu Punktwolken, 3D-Scanning und BIM-gestützter Projektkoordination lassen sich über das Anfrageformular oder telefonisch abstimmen.',
 ];

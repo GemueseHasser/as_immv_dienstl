@@ -3,11 +3,14 @@ import MobileSnapCarousel from './MobileSnapCarousel';
 
 export default function ServicesGallery({ items }) {
   return (
-    <MobileSnapCarousel className="services-gallery">
+    <MobileSnapCarousel className="services-gallery services-gallery-mosaic">
       {items.map((item, index) => (
-        <article key={item.title} className={`gallery-card gallery-card-${index + 1}`}>
+        <article
+          key={`${item.title}-${index}`}
+          className={`gallery-card gallery-card-${index + 1} ${item.size ? `gallery-card-${item.size}` : ''}`}
+        >
           <div className="gallery-media-wrap">
-            <img src={item.image} alt={item.title} />
+            <img src={item.image} alt={item.alt || item.title} />
           </div>
           <div className="gallery-copy">
             <p className="eyebrow">{item.category}</p>

@@ -17,11 +17,11 @@ export default function HeroSplit({ onViewAreas }) {
       <div className="hero-orbit hero-orbit-right" aria-hidden="true" />
       <div className="container hero-shell compact-shell">
         <div className="hero-copy hero-copy-tight home-intro home-intro-wide">
-          <h1>Zwei Leistungsbereiche. Klar geführt. Ruhig gestaltet.</h1>
+          <h1>Von der Verwaltung bis zur Umsetzung – wir kümmern uns</h1>
           <p className="lead">
-            In Wülfrath verbindet AS Immobilienverwaltung &amp; Dienstleistungen die strukturierte
-            Betreuung von Wohn- und Gewerbeimmobilien mit praktischen Leistungen im Außenbereich.
-            Entdecken Sie beide Bereiche in einer klaren, modernen Übersicht.
+            AS Immobilienverwaltung &amp; Dienstleistungen steht für langjährige Praxis,
+            strukturierte Ausführung und fachlich abgesicherte Qualität in Betreuung von Wohn- und Gewerbeimmobilien,
+            Maschineneinsatz und digitalen Projektlösungen für anspruchsvolle Aufgaben.
           </p>
           <div className="hero-actions hero-actions-home hero-actions-home-single">
             <button type="button" className="button button-brand" onClick={onViewAreas}>
@@ -29,12 +29,14 @@ export default function HeroSplit({ onViewAreas }) {
             </button>
           </div>
           <div className="hero-inline-note soft-card hero-inline-note-card">
-            <p className="eyebrow">Übersicht</p>
-            <h3>Immobilienverwaltung und Dienstleistungen auf einen Blick</h3>
-            <p>
-              Scrollen Sie direkt zu den beiden Bereichen und wählen Sie anschließend den passenden
-              Schwerpunkt für Ihr Anliegen.
-            </p>
+            <div>
+              <p className="eyebrow">Übersicht</p>
+              <h3>Immobilienverwaltung und Dienstleistungen auf einen Blick</h3>
+              <p>
+                Über 25 Jahre Erfahrung und durch die IHK Düsseldorf zertifiziert. Scrollen Sie direkt zu den beiden
+                Bereichen und wählen Sie anschließend den passenden Schwerpunkt für Ihr Anliegen.
+              </p>
+            </div>
           </div>
         </div>
       </div>

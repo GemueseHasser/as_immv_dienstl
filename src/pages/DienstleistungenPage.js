@@ -16,8 +16,8 @@ export default function DienstleistungenPage() {
   return (
     <>
       <PageHero
-        title="Praktische Leistungen mit präziser Ausführung und digitaler Koordination."
-        text="Der Dienstleistungsbereich konzentriert sich auf Erdarbeiten, Pflasterflächen, Zuwegungen, vorbereitende Maßnahmen, passenden Maschineneinsatz und BIM-gestützte Abstimmung bei anspruchsvolleren Abläufen."
+        title="Mietmaschinist, Maschine und digitale Lösungen für anspruchsvolle Einsätze."
+        text="Gebucht werden kann entweder ein Mietmaschinist als eigenständige Dienstleistung oder ein Maschinist inklusive Maschine. Ergänzt wird das Angebot durch 3D-gesteuerten Maschineneinsatz mit Tiltrotatoren und verschiedensten Anbaugeräten sowie digitale Lösungen wie digitale Geländemodelle (DGM), Punktwolken, 3D-Scanning und BIM-Unterstützung."
         logoType="dienstleistungen"
         actions={(
           <button
@@ -31,7 +31,9 @@ export default function DienstleistungenPage() {
         aside={(
           <div className="space-panel">
             <div className="space-panel-copy">
-              <p>Reale Projektbilder zeigen Außenflächen, Trassen, Maschineneinsatz und BIM als eigenständigen Baustein für strukturierte Projektkoordination.</p>
+              <p>
+                Auf dem Instagram-Account werden regelmäßig aktuelle Projekte vorgestellt.
+              </p>
             </div>
 
             <InstagramEmbed
@@ -53,10 +55,17 @@ export default function DienstleistungenPage() {
           <div className="section-head section-head-with-logo">
             <div>
               <p className="eyebrow">Leistungsfelder</p>
-              <h2>Außenarbeiten, Gelände, Ausführung und Building Information Modeling in einem klar geführten Bereich.</h2>
+              <h2>Maschineneinsatz, Anbaugeräte und digitale Unterstützung in einem klar geführten Bereich.</h2>
             </div>
           </div>
           <ServiceGrid items={dienstleistungsServices} logoType="dienstleistungen" />
+
+          <div className="section-head row-head">
+            <div>
+              <p className="eyebrow">Bildergalerie</p>
+              <h2>Einblick in Projekte und Möglichkeiten.</h2>
+            </div>
+          </div>
           <ServicesGallery items={dienstleistungsGallery} />
         </div>
       </section>
