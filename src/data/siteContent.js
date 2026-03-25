@@ -52,9 +52,9 @@ export const homeTeasers = [
     text: 'Die fachliche Qualifikation ist durch die IHK Düsseldorf zertifiziert und unterstreicht den Anspruch an verlässliche Betreuung, strukturierte Abläufe und nachvollziehbare Qualität.',
   },
   {
-    tag: 'Dienstleistungen',
-    title: 'Technik, Mensch und digitale Prozesse',
-    text: 'Vom Mietmaschinisten über 3D-gesteuerte Maschinen bis zu Punktwolken, 3D-Scanning und BIM werden analoge und digitale Leistungen gezielt zusammengeführt.',
+    tag: 'Ganzheitliche Lösungen',
+    title: 'Immobilienverwaltung und Dienstleistungen im Einklang',
+    text: 'Wir verbinden kaufmännische Verwaltung mit operativer Umsetzung vor Ort. Von der Betreuung Ihrer Immobilie bis zum Einsatz moderner Technologien wie 3D-Scanning und BIM greifen analoge und digitale Leistungen nahtlos ineinander.',
   },
 ];
 
