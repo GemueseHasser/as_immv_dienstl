@@ -15,6 +15,7 @@ export default function VerwaltungPage() {
   return (
     <>
       <PageHero
+        className="verwaltung-hero"
         title="Immobilienverwaltung mit Überblick, Ruhe und klarer Zuständigkeit."
         text="AS Immobilienverwaltung begleitet Wohn- und Gewerbeimmobilien mit geordneten Abläufen, persönlicher Erreichbarkeit und technischer Übersicht im laufenden Bestand."
         logoType="immobilien"
@@ -27,7 +28,15 @@ export default function VerwaltungPage() {
             Anfrage stellen
           </button>
         )}
-        aside={<p>Im Mittelpunkt stehen eine verlässliche Betreuung, kurze Wege und eine strukturierte Abstimmung aller laufenden Themen rund um das Objekt.</p>}
+        aside={(
+          <div className="page-hero-media-card">
+            <img
+              src={`${process.env.PUBLIC_URL}/assets/immobilienverwaltung-digital-hero.png`}
+              alt="Digitale Immobilienverwaltung mit Laptop, Rechner und Schlüsseln"
+              className="page-hero-media"
+            />
+          </div>
+        )}
       />
       <section className="section verwaltung-content-section">
         <div className="container stack-gap compact-shell verwaltung-stack">

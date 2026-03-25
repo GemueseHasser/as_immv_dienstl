@@ -1,9 +1,9 @@
 import React from 'react';
 import BrandLogos from './BrandLogos';
 
-export default function PageHero({ eyebrow, title, text, aside, actions, logoType }) {
+export default function PageHero({ eyebrow, title, text, aside, actions, logoType, className = '' }) {
   return (
-    <section className="page-hero">
+    <section className={`page-hero ${className}`.trim()}>
       <div className="container page-hero-grid compact-shell">
         <div>
           <p className="eyebrow">{eyebrow}</p>
