@@ -763,9 +763,9 @@ img { display: block; max-width: 100%; }
   overflow: hidden;
 }
 .soft-card-brand-mark {
-  position: relative;
-  justify-self: end;
-  margin: -2px 0 2px;
+  position: absolute;
+  bottom: 10px;
+  right: 18px;
   z-index: 0;
   pointer-events: none;
 }
