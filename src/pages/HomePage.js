@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import HeroSplit from '../components/HeroSplit';
 import MobileSnapCarousel from '../components/MobileSnapCarousel';
 import ServiceGrid from '../components/ServiceGrid';
+import BrandLogos from '../components/BrandLogos';
 import { homeTeasers, strandCards } from '../data/siteContent';
 
 export default function HomePage() {
@@ -42,8 +43,13 @@ export default function HomePage() {
                   key={card.id}
                   className={`split-card split-card-${card.id} home-area-card ${highlighted ? 'pulse-in' : ''}`}
                 >
-                  <div className="split-card-topline">
+                  <div className="split-card-topline home-area-card-topline">
                     <p className="eyebrow">{card.eyebrow}</p>
+                    <BrandLogos
+                      variant="area-card"
+                      single={card.id === 'verwaltung' ? 'immobilien' : 'dienstleistungen'}
+                      className="home-area-card-logo"
+                    />
                   </div>
                   <h3>{card.title}</h3>
                   <p>{card.intro}</p>
