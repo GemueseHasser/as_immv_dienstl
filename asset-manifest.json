@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/as_immv_dienstl/static/css/main.2fc4d065.css",
-    "main.js": "/as_immv_dienstl/static/js/main.57bd54ae.js",
+    "main.css": "/as_immv_dienstl/static/css/main.f6816ce7.css",
+    "main.js": "/as_immv_dienstl/static/js/main.bace31a7.js",
     "index.html": "/as_immv_dienstl/index.html",
-    "main.2fc4d065.css.map": "/as_immv_dienstl/static/css/main.2fc4d065.css.map",
-    "main.57bd54ae.js.map": "/as_immv_dienstl/static/js/main.57bd54ae.js.map"
+    "main.f6816ce7.css.map": "/as_immv_dienstl/static/css/main.f6816ce7.css.map",
+    "main.bace31a7.js.map": "/as_immv_dienstl/static/js/main.bace31a7.js.map"
   },
   "entrypoints": [
-    "static/css/main.2fc4d065.css",
-    "static/js/main.57bd54ae.js"
+    "static/css/main.f6816ce7.css",
+    "static/js/main.bace31a7.js"
   ]
 }
