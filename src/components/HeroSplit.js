@@ -6,7 +6,7 @@ export default function HeroSplit({ onViewAreas }) {
       <div className="hero-background-stage" aria-hidden="true">
         <div
           className="hero-background-image"
-          style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/start-hero.jpg)` }}
+          style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/start-hero.png)` }}
         />
         <div className="hero-background-wash hero-background-wash-left" />
         <div className="hero-background-wash hero-background-wash-right" />
