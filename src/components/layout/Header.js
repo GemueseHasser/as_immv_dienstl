@@ -6,8 +6,7 @@ export default function Header() {
   const navRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [mobileBrandHidden, setMobileBrandHidden] = useState(false);
-  const lastScrollY = useRef(0);
+  const [mobileBrandProgress, setMobileBrandProgress] = useState(0);
 
   const navItems = [
     { label: 'Start', to: '/' },
@@ -39,22 +38,20 @@ export default function Header() {
   useEffect(() => {
     const updateBrandVisibility = () => {
       const isMobile = window.innerWidth <= 980;
-      const currentScrollY = window.scrollY;
-      const revealZone = 118;
-      const hideZone = 150;
-      const inHeaderRevealZone = currentScrollY <= revealZone;
-      const scrollingDown = currentScrollY > lastScrollY.current + 4;
-      const scrollingUp = currentScrollY < lastScrollY.current - 4;
 
-      if (!isMobile || inHeaderRevealZone) {
-        setMobileBrandHidden(false);
-      } else if (scrollingDown && currentScrollY > hideZone) {
-        setMobileBrandHidden(true);
-      } else if (scrollingUp && currentScrollY <= revealZone) {
-        setMobileBrandHidden(false);
+      if (!isMobile) {
+        setMobileBrandProgress(0);
+        return;
       }
 
-      lastScrollY.current = currentScrollY;
+      const currentScrollY = window.scrollY;
+      const startFade = 36;
+      const endFade = 198;
+      const rawProgress = (currentScrollY - startFade) / (endFade - startFade);
+      const clampedProgress = Math.max(0, Math.min(1, rawProgress));
+      const easedProgress = clampedProgress * clampedProgress * (3 - 2 * clampedProgress);
+
+      setMobileBrandProgress(easedProgress);
     };
 
     updateBrandVisibility();
@@ -74,7 +71,10 @@ export default function Header() {
   };
 
   return (
-    <header className={`site-header ${mobileBrandHidden ? 'mobile-brand-hidden' : ''}`}>
+    <header
+      className="site-header"
+      style={{ '--mobile-brand-progress': mobileBrandProgress }}
+    >
       <div className="mobile-header-top">
         <div className="header-aurora" aria-hidden="true" />
 
