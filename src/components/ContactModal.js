@@ -175,8 +175,16 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
         </div>
 
         <div className="contact-progress" aria-hidden="true">
-          <span className={!category ? 'is-active' : 'is-complete'} />
-          <span className={category && (category !== 'dienstleistungen' || serviceType) ? 'is-active' : ''} />
+          <span className={step === 'category' ? 'is-active' : 'is-complete'} />
+          <span
+              className={
+                step === 'service'
+                    ? 'is-active'
+                    : step === 'form' || step === 'success'
+                        ? 'is-complete'
+                        : ''
+              }
+          />
           <span className={step === 'form' || step === 'success' ? 'is-active' : ''} />
         </div>
 
