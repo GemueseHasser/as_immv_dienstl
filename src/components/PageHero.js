@@ -6,7 +6,7 @@ export default function PageHero({ eyebrow, title, text, aside, actions, logoTyp
     <section className={`page-hero ${className}`.trim()}>
       <div className="container page-hero-grid compact-shell">
         <div>
-          <p className="eyebrow">{eyebrow}</p>
+          {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
           {logoType ? <BrandLogos variant="hero" single={logoType} className="page-hero-logo" /> : null}
           <h1>{title}</h1>
           <p className="lead">{text}</p>

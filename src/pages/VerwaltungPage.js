@@ -1,7 +1,9 @@
 import React, { useContext, useEffect } from 'react';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import PageHero from '../components/PageHero';
 import ServiceGrid from '../components/ServiceGrid';
 import ExpandableReferences from '../components/ExpandableReferences';
+import { PremiumButton } from '../components/ui';
 import { references, verwaltungServices } from '../data/siteContent';
 import { ContactModalContext } from '../App';
 
@@ -20,13 +22,13 @@ export default function VerwaltungPage() {
         text="AS Immobilienverwaltung begleitet Wohn- und Gewerbeimmobilien mit geordneten Abläufen, persönlicher Erreichbarkeit und technischer Übersicht im laufenden Bestand."
         logoType="immobilien"
         actions={(
-          <button
+          <PremiumButton
             type="button"
-            className="button button-brand button-brand-strong"
+            endIcon={<SendRoundedIcon />}
             onClick={() => openContact({ initialCategory: 'immobilienverwaltung' })}
           >
             Anfrage stellen
-          </button>
+          </PremiumButton>
         )}
         aside={(
           <div className="page-hero-media-card">

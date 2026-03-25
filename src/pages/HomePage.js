@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import EastRoundedIcon from '@mui/icons-material/EastRounded';
 import { NavLink } from 'react-router-dom';
 import HeroSplit from '../components/HeroSplit';
 import MobileSnapCarousel from '../components/MobileSnapCarousel';
 import ServiceGrid from '../components/ServiceGrid';
 import BrandLogos from '../components/BrandLogos';
+import { PremiumButton } from '../components/ui';
 import { homeTeasers, strandCards } from '../data/siteContent';
 
 export default function HomePage() {
@@ -12,10 +14,7 @@ export default function HomePage() {
   const [highlighted, setHighlighted] = useState(false);
 
   useEffect(() => () => window.clearTimeout(highlightTimerRef.current), []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleViewAreas = () => {
     areaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -53,9 +52,9 @@ export default function HomePage() {
                   </div>
                   <h3>{card.title}</h3>
                   <p>{card.intro}</p>
-                  <NavLink to={card.to} className="button button-light home-area-button">
+                  <PremiumButton component={NavLink} to={card.to} variant="outlined" endIcon={<EastRoundedIcon />} className="home-area-button">
                     Bereich öffnen
-                  </NavLink>
+                  </PremiumButton>
                 </article>
               ))}
             </MobileSnapCarousel>

@@ -1,8 +1,10 @@
 import React, { useContext, useEffect } from 'react';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import PageHero from '../components/PageHero';
 import ServiceGrid from '../components/ServiceGrid';
 import InstagramEmbed from '../components/InstagramEmbed';
 import ServicesGallery from '../components/ServicesGallery';
+import { PremiumButton } from '../components/ui';
 import { dienstleistungsGallery, dienstleistungsServices } from '../data/siteContent';
 import { ContactModalContext } from '../App';
 
@@ -20,13 +22,13 @@ export default function DienstleistungenPage() {
         text="Gebucht werden kann entweder ein Mietmaschinist als eigenständige Dienstleistung oder ein Maschinist inklusive Maschine. Ergänzt wird das Angebot durch 3D-gesteuerten Maschineneinsatz mit Tiltrotatoren und verschiedensten Anbaugeräten sowie digitale Lösungen wie digitale Geländemodelle (DGM), Punktwolken, 3D-Scanning und BIM-Unterstützung."
         logoType="dienstleistungen"
         actions={(
-          <button
+          <PremiumButton
             type="button"
-            className="button button-brand button-brand-strong"
+            endIcon={<SendRoundedIcon />}
             onClick={() => openContact({ initialCategory: 'dienstleistungen' })}
           >
             Anfrage stellen
-          </button>
+          </PremiumButton>
         )}
         aside={(
           <div className="space-panel">

@@ -1,4 +1,7 @@
 import React from 'react';
+import SouthRoundedIcon from '@mui/icons-material/SouthRounded';
+import WorkspacePremiumRoundedIcon from '@mui/icons-material/WorkspacePremiumRounded';
+import { PremiumButton } from './ui';
 
 export default function HeroSplit({ onViewAreas }) {
   return (
@@ -24,11 +27,11 @@ export default function HeroSplit({ onViewAreas }) {
             Maschineneinsatz und digitalen Projektlösungen für anspruchsvolle Aufgaben.
           </p>
           <div className="hero-actions hero-actions-home hero-actions-home-single">
-            <button type="button" className="button button-brand" onClick={onViewAreas}>
+            <PremiumButton type="button" startIcon={<SouthRoundedIcon />} onClick={onViewAreas}>
               Bereiche ansehen
-            </button>
+            </PremiumButton>
           </div>
-          <div className="hero-inline-note soft-card hero-inline-note-card">
+          <div className="hero-inline-note soft-card hero-inline-note-card hero-inline-note-card-enhanced">
             <div>
               <p className="eyebrow">Übersicht</p>
               <h3>Immobilienverwaltung und Dienstleistungen auf einen Blick</h3>
@@ -36,6 +39,9 @@ export default function HeroSplit({ onViewAreas }) {
                 Über 25 Jahre Erfahrung und durch die IHK Düsseldorf zertifiziert. Scrollen Sie direkt zu den beiden
                 Bereichen und wählen Sie anschließend den passenden Schwerpunkt für Ihr Anliegen.
               </p>
+            </div>
+            <div className="hero-inline-note-badge" aria-hidden="true">
+              <WorkspacePremiumRoundedIcon />
             </div>
           </div>
         </div>

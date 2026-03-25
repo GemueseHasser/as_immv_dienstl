@@ -1,4 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
+import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import { IconButton } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import BrandLogos from '../BrandLogos';
 
@@ -9,26 +17,23 @@ export default function Header() {
   const [mobileBrandProgress, setMobileBrandProgress] = useState(0);
 
   const navItems = [
-    { label: 'Start', to: '/' },
-    { label: 'Immobilienverwaltung', to: '/immobilienverwaltung', emphasis: true },
-    { label: 'Dienstleistungen', to: '/dienstleistungen', emphasis: true },
-    { label: 'Kontakt', to: '/kontakt' },
+    { label: 'Start', to: '/', icon: <HomeRoundedIcon fontSize="small" /> },
+    { label: 'Immobilienverwaltung', to: '/immobilienverwaltung', emphasis: true, icon: <ApartmentRoundedIcon fontSize="small" /> },
+    { label: 'Dienstleistungen', to: '/dienstleistungen', emphasis: true, icon: <ConstructionRoundedIcon fontSize="small" /> },
+    { label: 'Kontakt', to: '/kontakt', icon: <MailOutlineRoundedIcon fontSize="small" /> },
   ];
 
   useEffect(() => {
     const node = navRef.current;
     if (!node) return undefined;
-
     const updateScrollState = () => {
       const maxScrollLeft = node.scrollWidth - node.clientWidth;
       setCanScrollLeft(node.scrollLeft > 6);
       setCanScrollRight(maxScrollLeft - node.scrollLeft > 6);
     };
-
     updateScrollState();
     node.addEventListener('scroll', updateScrollState, { passive: true });
     window.addEventListener('resize', updateScrollState);
-
     return () => {
       node.removeEventListener('scroll', updateScrollState);
       window.removeEventListener('resize', updateScrollState);
@@ -38,26 +43,21 @@ export default function Header() {
   useEffect(() => {
     const updateBrandVisibility = () => {
       const isMobile = window.innerWidth <= 980;
-
       if (!isMobile) {
         setMobileBrandProgress(0);
         return;
       }
-
       const currentScrollY = window.scrollY;
       const startFade = 36;
       const endFade = 198;
       const rawProgress = (currentScrollY - startFade) / (endFade - startFade);
       const clampedProgress = Math.max(0, Math.min(1, rawProgress));
       const easedProgress = clampedProgress * clampedProgress * (3 - 2 * clampedProgress);
-
       setMobileBrandProgress(easedProgress);
     };
-
     updateBrandVisibility();
     window.addEventListener('scroll', updateBrandVisibility, { passive: true });
     window.addEventListener('resize', updateBrandVisibility);
-
     return () => {
       window.removeEventListener('scroll', updateBrandVisibility);
       window.removeEventListener('resize', updateBrandVisibility);
@@ -71,57 +71,51 @@ export default function Header() {
   };
 
   return (
-    <header
-      className="site-header"
-      style={{ '--mobile-brand-progress': mobileBrandProgress }}
-    >
+    <header className="site-header" style={{ '--mobile-brand-progress': mobileBrandProgress }}>
       <div className="mobile-header-top">
         <div className="header-aurora" aria-hidden="true" />
-
         <div className="container header-bar compact-shell">
-        <NavLink to="/" className="brand" aria-label="Zur Startseite">
-          <BrandLogos variant="header" />
-        </NavLink>
+          <NavLink to="/" className="brand" aria-label="Zur Startseite">
+            <BrandLogos variant="header" />
+          </NavLink>
 
-        <nav className="main-nav desktop-nav" aria-label="Hauptnavigation">
-          <div className="nav-primary nav-primary-premium">
-            {navItems.map((item) => (
-              <div key={item.label} className="nav-item">
-                <NavLink
-                  to={item.to}
-                  className={({ isActive }) =>
-                    [
-                      'nav-link',
-                      item.emphasis ? 'nav-link-area' : '',
-                      isActive ? 'active' : '',
-                    ].filter(Boolean).join(' ')
-                  }
-                >
-                  <span className="nav-link-label">{item.label}</span>
-                  {item.emphasis ? <span className="nav-link-glow" aria-hidden="true" /> : null}
-                </NavLink>
-              </div>
-            ))}
-          </div>
-          <div className="nav-cta-group">
-            <NavLink to="/impressum" className="nav-link subtle">
-              Impressum
-            </NavLink>
-          </div>
-        </nav>
+          <nav className="main-nav desktop-nav" aria-label="Hauptnavigation">
+            <div className="nav-primary nav-primary-premium">
+              {navItems.map((item) => (
+                <div key={item.label} className="nav-item">
+                  <NavLink
+                    to={item.to}
+                    className={({ isActive }) =>
+                      ['nav-link', item.emphasis ? 'nav-link-area' : '', isActive ? 'active' : ''].filter(Boolean).join(' ')
+                    }
+                  >
+                    <span className="nav-link-icon">{item.icon}</span>
+                    <span className="nav-link-label">{item.label}</span>
+                    {item.emphasis ? <span className="nav-link-glow" aria-hidden="true" /> : null}
+                  </NavLink>
+                </div>
+              ))}
+            </div>
+            <div className="nav-cta-group">
+              <NavLink to="/impressum" className="nav-link subtle">
+                <span className="nav-link-icon"><DescriptionRoundedIcon fontSize="small" /></span>
+                <span className="nav-link-label">Impressum</span>
+              </NavLink>
+            </div>
+          </nav>
         </div>
       </div>
 
       <div className="mobile-floating-nav-wrap">
         <div className="container compact-shell mobile-floating-nav-shell">
-          <button
-            type="button"
+          <IconButton
             className={`mobile-nav-arrow mobile-nav-arrow-left ${canScrollLeft ? 'is-visible' : 'is-hidden'}`}
             onClick={() => scrollNav('left')}
             aria-label="Navigation nach links scrollen"
+            size="small"
           >
-            <span aria-hidden="true">‹</span>
-          </button>
+            <ChevronLeftRoundedIcon />
+          </IconButton>
 
           <nav ref={navRef} className="mobile-floating-nav" aria-label="Mobile Navigation">
             {navItems.map((item) => (
@@ -129,26 +123,23 @@ export default function Header() {
                 key={item.label}
                 to={item.to}
                 className={({ isActive }) =>
-                  [
-                    'mobile-floating-link',
-                    item.emphasis ? 'is-emphasis' : '',
-                    isActive ? 'active' : '',
-                  ].filter(Boolean).join(' ')
+                  ['mobile-floating-link', item.emphasis ? 'is-emphasis' : '', isActive ? 'active' : ''].filter(Boolean).join(' ')
                 }
               >
+                <span className="mobile-floating-link-icon">{item.icon}</span>
                 {item.label}
               </NavLink>
             ))}
           </nav>
 
-          <button
-            type="button"
+          <IconButton
             className={`mobile-nav-arrow mobile-nav-arrow-right ${canScrollRight ? 'is-visible' : 'is-hidden'}`}
             onClick={() => scrollNav('right')}
             aria-label="Navigation nach rechts scrollen"
+            size="small"
           >
-            <span aria-hidden="true">›</span>
-          </button>
+            <ChevronRightRoundedIcon />
+          </IconButton>
         </div>
       </div>
     </header>

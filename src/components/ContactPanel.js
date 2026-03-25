@@ -1,11 +1,17 @@
 import React from 'react';
+import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import PhoneRoundedIcon from '@mui/icons-material/PhoneRounded';
+import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
+import { Paper } from '@mui/material';
 import { company, contactHighlights } from '../data/siteContent';
 
 export default function ContactPanel() {
   return (
     <section className="section">
       <div className="container contact-grid compact-shell">
-        <article className="contact-card primary">
+        <Paper component="article" elevation={0} className="contact-card primary contact-card-enhanced">
           <p className="eyebrow">AS Immobilienverwaltung &amp; Dienstleistungen</p>
           <h2>Ihr Ansprechpartner in Wülfrath für Bestandsbetreuung und Leistungen rund um Fläche und Gelände.</h2>
           <p>
@@ -13,26 +19,22 @@ export default function ContactPanel() {
             Verwaltungsfragen, technische Themen, Außenarbeiten und projektbezogene Abstimmungen
             ohne Umwege besprechen.
           </p>
-          <div className="contact-stack">
-            <a href={`tel:${company.phone.replace(/[^\d+]/g, '')}`}>{company.phone}</a>
-            <a href={`mailto:${company.email}`}>{company.email}</a>
-            <p>
-              {company.addressLine1}
-              <br />
-              {company.addressLine2}
-            </p>
-            <p>Fax: {company.fax}</p>
+          <div className="contact-stack contact-stack-enhanced">
+            <a href={`tel:${company.phone.replace(/[^\d+]/g, '')}`}><PhoneRoundedIcon fontSize="small" /> {company.phone}</a>
+            <a href={`mailto:${company.email}`}><EmailRoundedIcon fontSize="small" /> {company.email}</a>
+            <p><LocationOnRoundedIcon fontSize="small" /> {company.addressLine1}<br />{company.addressLine2}</p>
+            <p><ApartmentRoundedIcon fontSize="small" /> Fax: {company.fax}</p>
           </div>
-        </article>
-        <article className="contact-card">
+        </Paper>
+        <Paper component="article" elevation={0} className="contact-card contact-card-enhanced">
           <p className="eyebrow">Anliegen</p>
           <h3>Wobei AS Immobilienverwaltung &amp; Dienstleistungen direkt unterstützen kann</h3>
-          <ul className="clean-list compact">
+          <ul className="clean-list compact enhanced-list">
             {contactHighlights.map((item) => (
-              <li key={item}>{item}</li>
+              <li key={item}><TaskAltRoundedIcon fontSize="small" /> <span>{item}</span></li>
             ))}
           </ul>
-        </article>
+        </Paper>
       </div>
     </section>
   );

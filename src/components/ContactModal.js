@@ -1,4 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
+import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import {
+  Alert,
+  Box,
+  Checkbox,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  LinearProgress,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { PremiumButton } from './ui';
 
 const SERVICE_LABELS = {
   immobilienverwaltung: 'Immobilienverwaltung',
@@ -20,19 +39,16 @@ const CATEGORY_META = {
   },
 };
 
-const initialForm = {
-  email: '',
-  message: '',
-  consent: false,
-  website: '',
-};
+const initialForm = { email: '', message: '', consent: false, website: '' };
 
-function CheckIcon() {
+function ChoiceCard({ eyebrow, title, text, dark = false, icon, onClick }) {
   return (
-    <svg viewBox="0 0 80 80" aria-hidden="true" className="contact-success-check">
-      <circle cx="40" cy="40" r="36" fill="none" />
-      <path d="M24 41.5 35.2 52.7 57 31" fill="none" />
-    </svg>
+    <button type="button" className={`inquiry-choice-card ${dark ? 'inquiry-choice-card-dark' : ''}`} onClick={onClick}>
+      <span className="inquiry-choice-icon" aria-hidden="true">{icon}</span>
+      <span className="inquiry-choice-eyebrow">{eyebrow}</span>
+      <strong>{title}</strong>
+      <p>{text}</p>
+    </button>
   );
 }
 
@@ -45,19 +61,6 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitState, setSubmitState] = useState('idle');
   const [submitMessage, setSubmitMessage] = useState('');
-
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') onClose();
-    };
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [open, onClose]);
 
   useEffect(() => {
     if (!open) return;
@@ -89,40 +92,24 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
     const nextErrors = {};
     const email = formData.email.trim();
     const message = formData.message.trim();
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      nextErrors.email = 'Bitte eine gültige E-Mail-Adresse eingeben.';
-    }
-
-    if (message.length < 10) {
-      nextErrors.message = 'Bitte eine Nachricht mit mindestens 10 Zeichen eingeben.';
-    }
-
-    if (!formData.consent) {
-      nextErrors.consent = 'Bitte die Datenschutzerklärung bestätigen.';
-    }
-
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = 'Bitte eine gültige E-Mail-Adresse eingeben.';
+    if (message.length < 10) nextErrors.message = 'Bitte eine Nachricht mit mindestens 10 Zeichen eingeben.';
+    if (!formData.consent) nextErrors.consent = 'Bitte die Datenschutzerklärung bestätigen.';
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (!validate()) return;
-
     setIsSubmitting(true);
     setSubmitMessage('');
-
     try {
       const type = category === 'immobilienverwaltung' ? 'Immobilienverwaltung' : 'Dienstleistungen';
       const service = category === 'dienstleistungen' ? detailLabel : '';
-
       const response = await fetch(`${process.env.PUBLIC_URL || ''}/api/contact.php`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: formData.email.trim(),
           message: formData.message.trim(),
@@ -133,16 +120,11 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
           startedAt,
         }),
       });
-
       const payload = await response.json().catch(() => ({ ok: false, message: 'Antwort konnte nicht verarbeitet werden.' }));
-
       if (!response.ok || !payload.ok) {
-        if (payload.errors) {
-          setErrors(payload.errors);
-        }
+        if (payload.errors) setErrors(payload.errors);
         throw new Error(payload.message || 'Die Anfrage konnte nicht versendet werden.');
       }
-
       setSubmitState('success');
       setSubmitMessage(payload.message || 'Anfrage erfolgreich versendet.');
     } catch (error) {
@@ -153,40 +135,39 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
     }
   };
 
-  if (!open) return null;
-
   return (
-    <div className="modal-backdrop contact-flow-backdrop" onClick={onClose} role="presentation">
-      <div
-        className={`modal-panel contact-flow-modal step-${step}`}
-        onClick={(event) => event.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="contact-modal-title"
-      >
-        <div className="modal-head contact-flow-head">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
+      PaperProps={{
+        className: `modal-panel contact-flow-modal step-${step}`,
+        sx: {
+          borderRadius: '30px',
+          overflow: 'hidden',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.96), rgba(249,246,240,0.94))',
+          border: '1px solid rgba(35,39,43,0.08)',
+          boxShadow: '0 38px 90px rgba(17,20,24,0.18)',
+        },
+      }}
+      BackdropProps={{ className: 'modal-backdrop contact-flow-backdrop' }}
+    >
+      <DialogTitle className="modal-head contact-flow-head" id="contact-modal-title">
+        <div className="contact-flow-head-inner">
+          <div className="contact-progress" aria-hidden="true">
+            <span className={step === 'category' ? 'is-active' : 'is-complete'} />
+            <span className={step === 'service' ? 'is-active' : step === 'form' || step === 'success' ? 'is-complete' : ''} />
+            <span className={step === 'form' || step === 'success' ? 'is-active' : ''} />
+          </div>
+          {isSubmitting ? <LinearProgress className="contact-submit-progress" sx={{ borderRadius: 999 }} /> : null}
           <div>
             <p className="eyebrow">Digitale Anfrage</p>
-            <h2 id="contact-modal-title">Anfrage stellen</h2>
+            <h2>Anfrage stellen</h2>
           </div>
-          <button type="button" className="modal-close" onClick={onClose} aria-label="Schließen">
-            ×
-          </button>
         </div>
-
-        <div className="contact-progress" aria-hidden="true">
-          <span className={step === 'category' ? 'is-active' : 'is-complete'} />
-          <span
-              className={
-                step === 'service'
-                    ? 'is-active'
-                    : step === 'form' || step === 'success'
-                        ? 'is-complete'
-                        : ''
-              }
-          />
-          <span className={step === 'form' || step === 'success' ? 'is-active' : ''} />
-        </div>
+      </DialogTitle>
+      <DialogContent sx={{ px: { xs: 2, sm: 3 }, pb: 3 }}>
 
         {step === 'category' ? (
           <div className="contact-flow-stage">
@@ -194,41 +175,49 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
               Wählen Sie zuerst aus, ob Ihre Anfrage die Immobilienverwaltung oder den Dienstleistungsbereich betrifft.
             </p>
             <div className="inquiry-choice-grid">
-              <button type="button" className="inquiry-choice-card" onClick={() => setCategory('immobilienverwaltung')}>
-                <span className="inquiry-choice-eyebrow">Immobilienverwaltung</span>
-                <strong>Immobilienverwaltung</strong>
-                <p>Für Bestandsbetreuung, Verwaltungsfragen, Abstimmungen und laufende Anliegen rund um die Immobilie.</p>
-              </button>
-              <button type="button" className="inquiry-choice-card inquiry-choice-card-dark" onClick={() => setCategory('dienstleistungen')}>
-                <span className="inquiry-choice-eyebrow">Dienstleistungen</span>
-                <strong>Dienstleistungsanfrage</strong>
-                <p>Für Einsätze vor Ort, Maschinenleistungen und praktische Ausführung rund um Fläche, Gelände und Zugang.</p>
-              </button>
+              <ChoiceCard
+                eyebrow="Immobilienverwaltung"
+                title="Immobilienverwaltung"
+                text="Für Bestandsbetreuung, Verwaltungsfragen, Abstimmungen und laufende Anliegen rund um die Immobilie."
+                icon={<ApartmentRoundedIcon />}
+                onClick={() => setCategory('immobilienverwaltung')}
+              />
+              <ChoiceCard
+                eyebrow="Dienstleistungen"
+                title="Dienstleistungsanfrage"
+                text="Für Einsätze vor Ort, Maschinenleistungen und praktische Ausführung rund um Fläche, Gelände und Zugang."
+                icon={<ConstructionRoundedIcon />}
+                dark
+                onClick={() => setCategory('dienstleistungen')}
+              />
             </div>
           </div>
         ) : null}
 
         {step === 'service' ? (
           <div className="contact-flow-stage">
-            <p className="modal-copy">
-              Entscheiden Sie kurz, welche Art von Dienstleistungsanfrage Sie senden möchten.
-            </p>
+            <p className="modal-copy">Entscheiden Sie kurz, welche Art von Dienstleistungsanfrage Sie senden möchten.</p>
             <div className="inquiry-choice-grid inquiry-choice-grid-single">
-              <button type="button" className="inquiry-choice-card inquiry-choice-card-dark" onClick={() => setServiceType('mietmaschinist')}>
-                <span className="inquiry-choice-eyebrow">Dienstleister buchen</span>
-                <strong>Mietmaschinist</strong>
-                <p>Für Einsätze, bei denen ein Maschinist als Dienstleister benötigt wird.</p>
-              </button>
-              <button type="button" className="inquiry-choice-card" onClick={() => setServiceType('maschinenverleih')}>
-                <span className="inquiry-choice-eyebrow">Maschineneinsatz</span>
-                <strong>Maschinenverleih mit Maschinist</strong>
-                <p>Für die Anfrage eines Maschinenverleihs inklusive passender Bedienung vor Ort.</p>
-              </button>
+              <ChoiceCard
+                eyebrow="Dienstleister buchen"
+                title="Mietmaschinist"
+                text="Für Einsätze, bei denen ein Maschinist als Dienstleister benötigt wird."
+                icon={<BuildCircleRoundedIcon />}
+                dark
+                onClick={() => setServiceType('mietmaschinist')}
+              />
+              <ChoiceCard
+                eyebrow="Maschineneinsatz"
+                title="Maschinenverleih mit Maschinist"
+                text="Für die Anfrage eines Maschinenverleihs inklusive passender Bedienung vor Ort."
+                icon={<ConstructionRoundedIcon />}
+                onClick={() => setServiceType('maschinenverleih')}
+              />
             </div>
             <div className="form-actions inquiry-actions-left">
-              <button type="button" className="button button-light" onClick={() => setCategory(null)}>
+              <PremiumButton type="button" variant="outlined" startIcon={<KeyboardBackspaceRoundedIcon />} onClick={() => setCategory(null)}>
                 Zurück
-              </button>
+              </PremiumButton>
             </div>
           </div>
         ) : null}
@@ -244,97 +233,89 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
               <div className="contact-flow-badge">{detailLabel}</div>
             </div>
 
-            <form className="contact-form contact-form-modern" onSubmit={handleSubmit}>
-              <label>
-                <span>E-Mail-Adresse</span>
-                <input
+            <Box component="form" className="contact-form contact-form-modern" onSubmit={handleSubmit}>
+              <Stack spacing={2.2}>
+                <TextField
                   type="email"
                   name="email"
+                  label="E-Mail-Adresse"
                   placeholder="ihre@email.de"
                   value={formData.email}
                   onChange={(event) => setField('email', event.target.value)}
-                  required
+                  error={Boolean(errors.email)}
+                  helperText={errors.email || ' '}
+                  fullWidth
                 />
-                {errors.email ? <small className="form-error">{errors.email}</small> : null}
-              </label>
-
-              <label>
-                <span>Nachricht</span>
-                <textarea
+                <TextField
                   name="message"
-                  rows="7"
+                  label="Nachricht"
+                  rows={3}
+                  multiline
                   placeholder="Beschreiben Sie kurz Ihr Anliegen, das Objekt oder den gewünschten Einsatz."
                   value={formData.message}
                   onChange={(event) => setField('message', event.target.value)}
-                  required
+                  error={Boolean(errors.message)}
+                  helperText={errors.message || ' '}
+                  fullWidth
                 />
-                {errors.message ? <small className="form-error">{errors.message}</small> : null}
-              </label>
-
-              <label className="checkbox-field sr-honeypot" aria-hidden="true">
-                <span>Website</span>
-                <input
+                <TextField
                   type="text"
                   name="website"
-                  tabIndex="-1"
+                  label="Website"
+                  tabIndex={-1}
                   autoComplete="off"
                   value={formData.website}
                   onChange={(event) => setField('website', event.target.value)}
+                  className="sr-honeypot"
+                  sx={{ display: 'none' }}
                 />
-              </label>
-
-              <label className="checkbox-field consent-field">
-                <input
-                  type="checkbox"
-                  checked={formData.consent}
-                  onChange={(event) => setField('consent', event.target.checked)}
-                />
-                <span>Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Anfrage zu.</span>
-              </label>
-              {errors.consent ? <small className="form-error">{errors.consent}</small> : null}
-              {submitState === 'error' && submitMessage ? <div className="form-submit-error">{submitMessage}</div> : null}
-
-              <div className="form-actions">
-                <button
-                  type="button"
-                  className="button button-light"
-                  onClick={() => {
-                    if (category === 'dienstleistungen' && serviceType) {
-                      setServiceType(null);
-                    } else {
-                      setCategory(null);
-                    }
-                  }}
-                >
-                  Zurück
-                </button>
-                <button type="submit" className="button button-brand button-brand-strong" disabled={isSubmitting}>
-                  {isSubmitting ? 'Wird gesendet…' : 'Anfrage senden'}
-                </button>
-              </div>
-            </form>
+                <div className="consent-wrap">
+                  <Box className="consent-field" onClick={() => setField('consent', !formData.consent)} role="checkbox" aria-checked={formData.consent} tabIndex={0} onKeyDown={(event) => { if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); setField('consent', !formData.consent); } }}>
+                    <Checkbox
+                      checked={formData.consent}
+                      onChange={(event) => setField('consent', event.target.checked)}
+                      onClick={(event) => event.stopPropagation()}
+                      sx={{ p: '4px 8px 4px 0', alignSelf: 'flex-start' }}
+                    />
+                    <Typography component="span" className="consent-label">
+                      Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Anfrage zu.
+                    </Typography>
+                  </Box>
+                  {errors.consent ? <Typography className="form-error" component="small">{errors.consent}</Typography> : null}
+                </div>
+                {submitState === 'error' && submitMessage ? <Alert severity="error">{submitMessage}</Alert> : null}
+                <div className="form-actions">
+                  <PremiumButton
+                    type="button"
+                    variant="outlined"
+                    startIcon={<KeyboardBackspaceRoundedIcon />}
+                    onClick={() => {
+                      if (category === 'dienstleistungen' && serviceType) setServiceType(null);
+                      else setCategory(null);
+                    }}
+                  >
+                    Zurück
+                  </PremiumButton>
+                  <PremiumButton type="submit" endIcon={<SendRoundedIcon />} disabled={isSubmitting}>
+                    {isSubmitting ? 'Wird gesendet…' : 'Anfrage senden'}
+                  </PremiumButton>
+                </div>
+              </Stack>
+            </Box>
           </div>
         ) : null}
 
         {step === 'success' ? (
           <div className="contact-success-state" role="status" aria-live="polite">
-            <div className="contact-success-burst" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </div>
-            <CheckIcon />
+            <div className="contact-success-burst" aria-hidden="true"><span /><span /><span /></div>
+            <CheckCircleRoundedIcon className="contact-success-icon" />
             <p className="eyebrow">Erfolgreich versendet</p>
             <h3>Ihre Anfrage ist unterwegs.</h3>
-            <p>
-              {submitMessage || 'Vielen Dank. Ihre Anfrage wurde erfolgreich übermittelt und landet direkt im passenden Bereich.'}
-            </p>
-            <button type="button" className="button button-brand button-brand-strong" onClick={onClose}>
-              Fenster schließen
-            </button>
+            <p>{submitMessage || 'Vielen Dank. Ihre Anfrage wurde erfolgreich übermittelt und landet direkt im passenden Bereich.'}</p>
+            <PremiumButton type="button" onClick={onClose}>Fenster schließen</PremiumButton>
           </div>
         ) : null}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
