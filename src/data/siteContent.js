@@ -215,7 +215,7 @@ export const references = [
     accent: 'cool',
   },
   {
-    title: 'Göthestraße - Bovensiepen, Wülfrath',
+    title: 'Goethestraße - Bovensiepen, Wülfrath',
     image: publicAsset('/assets/references/bovensiepen-goethestrasse.png'),
     accent: 'cool',
   },
