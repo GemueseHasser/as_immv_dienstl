@@ -1,0 +1,8 @@
+services:
+  frontend:
+    build:
+      context: .
+    container_name: as_immv_dienstl_frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
