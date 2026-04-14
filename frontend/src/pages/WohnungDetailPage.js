@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
-import { Alert, CircularProgress, Stack, TextField } from '@mui/material';
-import { Link as RouterLink, useLocation, useNavigate, useParams } from 'react-router-dom';
+import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
+import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
+import { Alert, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { apiFetch, assetUrl } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
 import { PremiumButton } from '../components/ui';
@@ -10,35 +12,35 @@ export default function WohnungDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [apartment, setApartment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [feedback, setFeedback] = useState({ error: '', success: '' });
-  const [activeImage, setActiveImage] = useState('');
+  const [contactOpen, setContactOpen] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
     apiFetch(`/apartments/${slug}`)
       .then((payload) => {
-        const apartmentPayload = payload.apartment;
-        setApartment(apartmentPayload);
-        const gallery = [apartmentPayload.titleImage, ...(apartmentPayload.images || []).map((image) => image.imageUrl)]
-          .filter(Boolean)
-          .filter((image, index, array) => array.indexOf(image) === index);
-        setActiveImage(gallery[0] || '');
+        setApartment(payload.apartment);
+        setSlideIndex(0);
       })
       .catch((err) => setFeedback({ error: err.message, success: '' }))
       .finally(() => setLoading(false));
   }, [slug]);
 
-  const galleryImages = useMemo(() => {
+  const slideshowImages = useMemo(() => {
     if (!apartment) return [];
-    return [apartment.titleImage, ...(apartment.images || []).map((image) => image.imageUrl)]
-      .filter(Boolean)
+    return (apartment.images || [])
+      .map((image) => image.imageUrl)
+      .filter((imageUrl) => imageUrl && imageUrl !== apartment.titleImage)
       .filter((image, index, array) => array.indexOf(image) === index);
   }, [apartment]);
+
+  const activeSlide = slideshowImages[slideIndex] || '';
 
   const handleMessage = async (event) => {
     event.preventDefault();
@@ -49,10 +51,19 @@ export default function WohnungDetailPage() {
         body: JSON.stringify({ message }),
       });
       setMessage('');
+      setContactOpen(false);
       setFeedback({ error: '', success: 'Nachricht erfolgreich versendet.' });
     } catch (err) {
       setFeedback({ error: err.message, success: '' });
     }
+  };
+
+  const showPreviousSlide = () => {
+    setSlideIndex((current) => (current - 1 + slideshowImages.length) % slideshowImages.length);
+  };
+
+  const showNextSlide = () => {
+    setSlideIndex((current) => (current + 1) % slideshowImages.length);
   };
 
   if (loading) {
@@ -65,75 +76,106 @@ export default function WohnungDetailPage() {
 
   return (
     <section className="section">
-      <div className="container compact-shell wohnung-detail-layout">
-        <div className="wohnung-detail-copy stack-gap">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Wohnungsanzeige</p>
-              <h1>{apartment.title}</h1>
-            </div>
+      <div className="container compact-shell stack-gap">
+        <div className="wohnung-detail-top">
+          <div className="wohnung-detail-top-image-card">
+            <img className="wohnung-detail-title-image" src={assetUrl(apartment.titleImage)} alt={apartment.title} />
           </div>
-          <p className="lead">{apartment.shortDescription}</p>
-          <p>{apartment.fullDescription || apartment.shortDescription}</p>
-          <div className="wohnungen-cta-row">
-            {apartment.exchangeUrl ? (
-              <PremiumButton component="a" href={apartment.exchangeUrl} target="_blank" rel="noreferrer" endIcon={<OpenInNewRoundedIcon />}>
-                Externes Exposé öffnen
-              </PremiumButton>
-            ) : null}
-            {isAdmin ? <PremiumButton component={RouterLink} to={`/admin/wohnungen/${apartment.id}`} variant="outlined">Anzeige verwalten</PremiumButton> : null}
-          </div>
-          {feedback.error ? <Alert severity="error">{feedback.error}</Alert> : null}
-          {feedback.success ? <Alert severity="success">{feedback.success}</Alert> : null}
-
-          <div className="wohnung-messages-card">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Nachricht senden</p>
-                <h2>Kontakt zur Anzeige</h2>
-              </div>
+          <div className="wohnung-detail-top-copy admin-card">
+            <p className="eyebrow">Wohnungsanzeige</p>
+            <h1>{apartment.title}</h1>
+            <p className="lead">{apartment.shortDescription}</p>
+            <div className="wohnungen-cta-row">
+              {apartment.exchangeUrl ? (
+                <PremiumButton component="a" href={apartment.exchangeUrl} target="_blank" rel="noreferrer" endIcon={<OpenInNewRoundedIcon />}>
+                  Externes Exposé öffnen
+                </PremiumButton>
+              ) : null}
+              {isAuthenticated ? (
+                <PremiumButton variant="outlined" onClick={() => setContactOpen(true)}>Anfrage senden</PremiumButton>
+              ) : (
+                <PremiumButton variant="outlined" onClick={() => navigate('/anmelden', { state: { from: location.pathname } })}>Anfrage senden</PremiumButton>
+              )}
             </div>
-            {isAuthenticated ? (
-              <>
-                <p>Ihre Nachricht wird direkt an die hinterlegte Immobilienverwaltungs-Adresse gesendet und der Wohnung eindeutig zugeordnet.</p>
-                <form className="wohnung-message-form" onSubmit={handleMessage}>
-                  <TextField
-                    multiline
-                    minRows={4}
-                    label="Nachricht verfassen"
-                    value={message}
-                    onChange={(event) => setMessage(event.target.value)}
-                    fullWidth
-                  />
-                  <PremiumButton type="submit">Nachricht senden</PremiumButton>
-                </form>
-              </>
-            ) : (
-              <Alert severity="info" action={<PremiumButton size="small" onClick={() => navigate('/anmelden', { state: { from: location.pathname } })}>Anmelden</PremiumButton>}>
-                Bitte melden Sie sich an, um eine Nachricht zu dieser Wohnung zu senden.
-              </Alert>
-            )}
+            {feedback.error ? <Alert severity="error">{feedback.error}</Alert> : null}
+            {feedback.success ? <Alert severity="success">{feedback.success}</Alert> : null}
           </div>
         </div>
-        <aside className="wohnung-gallery-card">
-          <img className="wohnung-hero-image" src={assetUrl(activeImage || apartment.titleImage)} alt={apartment.title} />
-          {galleryImages.length > 1 ? (
-            <div className="wohnung-gallery-grid">
-              {galleryImages.map((imageUrl, index) => (
-                <button
-                  type="button"
-                  key={`${imageUrl}-${index}`}
-                  className={`wohnung-gallery-thumb ${imageUrl === (activeImage || apartment.titleImage) ? 'is-active' : ''}`}
-                  onClick={() => setActiveImage(imageUrl)}
-                  aria-label={`Bild ${index + 1} groß anzeigen`}
-                >
-                  <img src={assetUrl(imageUrl)} alt={`${apartment.title} ${index + 1}`} />
-                </button>
-              ))}
+
+        <div className="wohnung-detail-content-grid">
+          <div className="admin-card wohnung-detail-description-column stack-gap">
+            <div>
+              <p className="eyebrow">Kurzbeschreibung</p>
+              <p>{apartment.shortDescription}</p>
             </div>
-          ) : null}
-        </aside>
+            <div>
+              <p className="eyebrow">Beschreibung</p>
+              <div
+                className="rich-content-display"
+                dangerouslySetInnerHTML={{ __html: apartment.fullDescription || `<p>${apartment.shortDescription}</p>` }}
+              />
+            </div>
+          </div>
+
+          <aside className="wohnung-slideshow-card">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Weitere Bilder</p>
+                <h2>Slideshow</h2>
+              </div>
+            </div>
+            {activeSlide ? (
+              <>
+                <div className="wohnung-slideshow-stage">
+                  <button type="button" className="wohnung-slide-nav wohnung-slide-nav-left" onClick={showPreviousSlide} aria-label="Vorheriges Bild">
+                    <NavigateBeforeRoundedIcon />
+                  </button>
+                  <img className="wohnung-slideshow-image" src={assetUrl(activeSlide)} alt={`${apartment.title} Zusatzbild`} />
+                  <button type="button" className="wohnung-slide-nav wohnung-slide-nav-right" onClick={showNextSlide} aria-label="Nächstes Bild">
+                    <NavigateNextRoundedIcon />
+                  </button>
+                </div>
+                <div className="wohnung-slideshow-thumbs">
+                  {slideshowImages.map((imageUrl, index) => (
+                    <button
+                      key={`${imageUrl}-${index}`}
+                      type="button"
+                      className={`wohnung-gallery-thumb ${imageUrl === activeSlide ? 'is-active' : ''}`}
+                      onClick={() => setSlideIndex(index)}
+                    >
+                      <img src={assetUrl(imageUrl)} alt={`${apartment.title} Vorschau ${index + 1}`} />
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="wohnungen-empty">Zu dieser Anzeige wurden keine weiteren Bilder hinterlegt.</div>
+            )}
+          </aside>
+        </div>
       </div>
+
+      <Dialog open={contactOpen} onClose={() => setContactOpen(false)} fullWidth maxWidth="sm">
+        <DialogTitle>Anfrage senden</DialogTitle>
+        <DialogContent>
+          <form className="wohnung-message-form" onSubmit={handleMessage} id="apartment-message-form">
+            <TextField
+              multiline
+              minRows={6}
+              label="Nachricht verfassen"
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              fullWidth
+              required
+              sx={{ mt: 1 }}
+            />
+          </form>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          <PremiumButton variant="outlined" onClick={() => setContactOpen(false)}>Abbrechen</PremiumButton>
+          <PremiumButton type="submit" form="apartment-message-form">Anfrage senden</PremiumButton>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 }

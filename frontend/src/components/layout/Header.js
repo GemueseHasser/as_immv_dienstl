@@ -71,7 +71,6 @@ export default function Header() {
         setMobileBrandProgress(0);
         return;
       }
-
       const currentScrollY = window.scrollY;
       const startFade = 36;
       const endFade = 198;

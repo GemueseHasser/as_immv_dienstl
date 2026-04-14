@@ -3895,3 +3895,171 @@ body {
     right: auto;
   }
 }
+
+.stack-gap-tight {
+  gap: 16px;
+}
+
+.rich-editor-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.rich-editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rich-editor-content {
+  min-height: 260px;
+  padding: 18px 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(35,39,43,0.12);
+  background: rgba(255,255,255,0.95);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+  outline: none;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.rich-editor-content h1,
+.rich-editor-content h2,
+.rich-editor-content h3,
+.rich-content-display h1,
+.rich-content-display h2,
+.rich-content-display h3 {
+  margin: 0 0 14px;
+}
+
+.rich-editor-content p,
+.rich-content-display p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.rich-editor-content ul,
+.rich-editor-content ol,
+.rich-content-display ul,
+.rich-content-display ol {
+  padding-left: 22px;
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.rich-editor-content li,
+.rich-content-display li {
+  margin-bottom: 8px;
+}
+
+.rich-content-display {
+  color: var(--text);
+}
+
+.wohnung-detail-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.wohnung-detail-top-image-card,
+.wohnung-slideshow-card {
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(35,39,43,0.08);
+  box-shadow: var(--shadow-soft);
+  border-radius: 28px;
+  padding: 24px;
+}
+
+.wohnung-detail-title-image {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  border-radius: 22px;
+}
+
+.wohnung-detail-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.wohnung-detail-description-column {
+  min-height: 100%;
+}
+
+.wohnung-slideshow-stage {
+  position: relative;
+}
+
+.wohnung-slideshow-image {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  border-radius: 22px;
+}
+
+.wohnung-slide-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 14px 30px rgba(17,20,24,0.14);
+  z-index: 2;
+}
+
+.wohnung-slide-nav-left {
+  left: 14px;
+}
+
+.wohnung-slide-nav-right {
+  right: 14px;
+}
+
+.wohnung-slideshow-thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(86px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.admin-image-grid-fixed {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-image-grid-fixed .admin-image-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+@media (max-width: 1100px) {
+  .admin-image-grid-fixed {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 960px) {
+  .wohnung-detail-top,
+  .wohnung-detail-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-image-grid-fixed {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .admin-image-grid-fixed {
+    grid-template-columns: 1fr;
+  }
+}

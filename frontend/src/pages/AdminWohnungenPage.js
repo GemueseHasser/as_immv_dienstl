@@ -7,17 +7,16 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import {
   Alert,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControlLabel,
   TextField,
 } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { apiFetch, assetUrl } from '../api/client';
+import RichTextEditor from '../components/RichTextEditor';
 import { PremiumButton } from '../components/ui';
 
 const initialForm = {
@@ -64,12 +63,14 @@ function ApartmentForm({ editing, form, setForm, uploading, onUpload, onRemoveIm
       <form className="admin-form" onSubmit={onSubmit}>
         <TextField label="Titel" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} fullWidth required />
         <TextField label="Subtitel / Kurzbeschreibung" value={form.shortDescription} onChange={(e) => setForm({ ...form, shortDescription: e.target.value })} multiline minRows={3} fullWidth required />
-        <TextField label="Ausführliche Beschreibung" value={form.fullDescription} onChange={(e) => setForm({ ...form, fullDescription: e.target.value })} multiline minRows={5} fullWidth />
+        <div className="stack-gap stack-gap-tight">
+          <div>
+            <p className="eyebrow">Beschreibung</p>
+            <h3 style={{ marginBottom: 12 }}>Ausführliche Beschreibung</h3>
+            <RichTextEditor value={form.fullDescription} onChange={(html) => setForm({ ...form, fullDescription: html })} />
+          </div>
+        </div>
         <TextField label="Link zur Immobilienbörse" value={form.exchangeUrl} onChange={(e) => setForm({ ...form, exchangeUrl: e.target.value })} fullWidth />
-        <FormControlLabel
-          control={<Checkbox checked={form.isPublished} onChange={(e) => setForm({ ...form, isPublished: e.target.checked })} />}
-          label="Anzeige veröffentlichen"
-        />
         <div className="wohnungen-cta-row">
           <PremiumButton component="label" variant="outlined" startIcon={<UploadRoundedIcon />} disabled={uploading}>
             Bilder hochladen
@@ -79,7 +80,7 @@ function ApartmentForm({ editing, form, setForm, uploading, onUpload, onRemoveIm
         </div>
 
         {form.images.length ? (
-          <div className="admin-image-grid">
+          <div className="admin-image-grid admin-image-grid-fixed">
             {form.images.map((imageUrl, index) => (
               <article key={`${imageUrl}-${index}`} className={`admin-image-card ${form.titleImage === imageUrl ? 'is-title' : ''}`}>
                 <img src={assetUrl(imageUrl)} alt={`Upload ${index + 1}`} />
@@ -107,6 +108,7 @@ function ApartmentForm({ editing, form, setForm, uploading, onUpload, onRemoveIm
 
 export default function AdminWohnungenPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const [apartments, setApartments] = useState([]);
   const [form, setForm] = useState(initialForm);
@@ -115,10 +117,10 @@ export default function AdminWohnungenPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   const mode = useMemo(() => {
-    if (id === 'neu') return 'create';
+    if (location.pathname.endsWith('/neu')) return 'create';
     if (id) return 'edit';
     return 'list';
-  }, [id]);
+  }, [id, location.pathname]);
 
   const editing = mode === 'edit';
   const isFormMode = mode === 'create' || mode === 'edit';
@@ -142,7 +144,7 @@ export default function AdminWohnungenPage() {
         fullDescription: payload.apartment.fullDescription || '',
         exchangeUrl: payload.apartment.exchangeUrl || '',
         titleImage: payload.apartment.titleImage,
-        isPublished: payload.apartment.isPublished,
+        isPublished: true,
         images: payload.apartment.images.map((item) => item.imageUrl),
       });
       setStatus((current) => ({ ...current, error: '' }));
@@ -158,10 +160,6 @@ export default function AdminWohnungenPage() {
   useEffect(() => {
     if (mode === 'edit' && id) {
       loadApartmentIntoForm(id);
-      return;
-    }
-    if (mode === 'create') {
-      setForm(initialForm);
       return;
     }
     setForm(initialForm);
@@ -227,7 +225,13 @@ export default function AdminWohnungenPage() {
     try {
       const method = editing ? 'PUT' : 'POST';
       const url = editing ? `/admin/apartments/${form.id}` : '/admin/apartments';
-      await apiFetch(url, { method, body: JSON.stringify(form) });
+      await apiFetch(url, {
+        method,
+        body: JSON.stringify({
+          ...form,
+          isPublished: true,
+        }),
+      });
       await loadApartments();
       setStatus({ error: '', success: editing ? 'Anzeige aktualisiert.' : 'Anzeige erstellt.' });
       setForm(initialForm);
