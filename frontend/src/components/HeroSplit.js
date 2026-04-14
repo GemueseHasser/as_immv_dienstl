@@ -1,6 +1,6 @@
 import React from 'react';
 import SouthRoundedIcon from '@mui/icons-material/SouthRounded';
-import WorkspacePremiumRoundedIcon from '@mui/icons-material/WorkspacePremiumRounded';
+import StarsIcon from '@mui/icons-material/Stars';
 import { PremiumButton } from './ui';
 
 export default function HeroSplit({ onViewAreas }) {
@@ -41,7 +41,7 @@ export default function HeroSplit({ onViewAreas }) {
               </p>
             </div>
             <div className="hero-inline-note-badge" aria-hidden="true">
-              <WorkspacePremiumRoundedIcon />
+              <StarsIcon />
             </div>
           </div>
         </div>

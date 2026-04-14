@@ -3,7 +3,7 @@ import FormatBoldRoundedIcon from '@mui/icons-material/FormatBoldRounded';
 import FormatItalicRoundedIcon from '@mui/icons-material/FormatItalicRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import FormatListNumberedRoundedIcon from '@mui/icons-material/FormatListNumberedRounded';
-import TitleRoundedIcon from '@mui/icons-material/TitleRounded';
+import FormatSizeRoundedIcon from '@mui/icons-material/FormatSizeRounded';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { PremiumButton } from './ui';
 
@@ -34,7 +34,7 @@ export default function RichTextEditor({ value, onChange }) {
   return (
     <div className="rich-editor-shell">
       <div className="rich-editor-toolbar">
-        <ToolbarButton icon={<TitleRoundedIcon />} label="Überschrift" onClick={() => apply('formatBlock', 'h3')} />
+        <ToolbarButton icon={<FormatSizeRoundedIcon />} label="Überschrift" onClick={() => apply('formatBlock', 'h3')} />
         <ToolbarButton icon={<FormatBoldRoundedIcon />} label="Fett" onClick={() => apply('bold')} />
         <ToolbarButton icon={<FormatItalicRoundedIcon />} label="Kursiv" onClick={() => apply('italic')} />
         <ToolbarButton icon={<FormatListBulletedRoundedIcon />} label="Liste" onClick={() => apply('insertUnorderedList')} />

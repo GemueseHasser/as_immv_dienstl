@@ -3,7 +3,7 @@ import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 import PhoneRoundedIcon from '@mui/icons-material/PhoneRounded';
-import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
+import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
 import { Paper } from '@mui/material';
 import { company, contactHighlights } from '../data/siteContent';
 
@@ -31,7 +31,7 @@ export default function ContactPanel() {
           <h3>Wobei AS Immobilienverwaltung &amp; Dienstleistungen direkt unterstützen kann</h3>
           <ul className="clean-list compact enhanced-list">
             {contactHighlights.map((item) => (
-              <li key={item}><TaskAltRoundedIcon fontSize="small" /> <span>{item}</span></li>
+              <li key={item}><AddTaskRoundedIcon fontSize="small" /> <span>{item}</span></li>
             ))}
           </ul>
         </Paper>

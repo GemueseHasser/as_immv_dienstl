@@ -20,14 +20,18 @@ public class MailService {
     }
 
     public void send(String subject, String text) {
-        if (!StringUtils.hasText(properties.getContactReceiverEmail()) || !StringUtils.hasText(properties.getMailFrom())) {
+        sendTo(properties.getContactReceiverEmail(), subject, text);
+    }
+
+    public void sendTo(String recipient, String subject, String text) {
+        if (!StringUtils.hasText(recipient) || !StringUtils.hasText(properties.getMailFrom())) {
             log.warn("Mail-Konfiguration unvollständig; E-Mail wird nicht versendet. Betreff: {}", subject);
             return;
         }
         try {
             SimpleMailMessage msg = new SimpleMailMessage();
             msg.setFrom(properties.getMailFrom());
-            msg.setTo(properties.getContactReceiverEmail());
+            msg.setTo(recipient);
             msg.setSubject(subject);
             msg.setText(text);
             mailSender.send(msg);

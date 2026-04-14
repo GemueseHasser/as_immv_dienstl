@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
+import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
@@ -72,7 +72,7 @@ function ApartmentForm({ editing, form, setForm, uploading, onUpload, onRemoveIm
         </div>
         <TextField label="Link zur Immobilienbörse" value={form.exchangeUrl} onChange={(e) => setForm({ ...form, exchangeUrl: e.target.value })} fullWidth />
         <div className="wohnungen-cta-row">
-          <PremiumButton component="label" variant="outlined" startIcon={<UploadRoundedIcon />} disabled={uploading}>
+          <PremiumButton component="label" variant="outlined" startIcon={<CloudUploadRoundedIcon />} disabled={uploading}>
             Bilder hochladen
             <input type="file" accept="image/*" hidden multiple onChange={onUpload} />
           </PremiumButton>

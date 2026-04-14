@@ -1,7 +1,7 @@
 import React from 'react';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import HandymanRoundedIcon from '@mui/icons-material/HandymanRounded';
-import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
+import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
 import { Paper } from '@mui/material';
 import MobileSnapCarousel from './MobileSnapCarousel';
 import BrandLogos from './BrandLogos';
@@ -11,7 +11,7 @@ const pickIcon = (tag = '') => {
   const value = tag.toLowerCase();
   if (value.includes('immobil')) return <ApartmentRoundedIcon />;
   if (value.includes('miet') || value.includes('maschinen') || value.includes('anbau') || value.includes('digital')) return <HandymanRoundedIcon />;
-  return <TaskAltRoundedIcon />;
+  return <AddTaskRoundedIcon />;
 };
 
 export default function ServiceGrid({ items, logoType = null, variant = "default" }) {

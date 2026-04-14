@@ -30,11 +30,13 @@ function getFirstName(name = '') {
 
 export default function Header() {
   const navRef = useRef(null);
-  const menuRef = useRef(null);
+  const desktopMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [mobileBrandProgress, setMobileBrandProgress] = useState(0);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [desktopUserMenuOpen, setDesktopUserMenuOpen] = useState(false);
+  const [mobileUserMenuOpen, setMobileUserMenuOpen] = useState(false);
   const { user, isAdmin, isAuthenticated, logout } = useAuth();
 
   const navItems = [
@@ -89,15 +91,19 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    if (!userMenuOpen) return undefined;
+    if (!desktopUserMenuOpen && !mobileUserMenuOpen) return undefined;
     const handlePointerDown = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setUserMenuOpen(false);
+      const insideDesktopMenu = desktopMenuRef.current?.contains(event.target);
+      const insideMobileMenu = mobileMenuRef.current?.contains(event.target);
+      if (!insideDesktopMenu && !insideMobileMenu) {
+        setDesktopUserMenuOpen(false);
+        setMobileUserMenuOpen(false);
       }
     };
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
-        setUserMenuOpen(false);
+        setDesktopUserMenuOpen(false);
+        setMobileUserMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handlePointerDown);
@@ -106,7 +112,7 @@ export default function Header() {
       document.removeEventListener('mousedown', handlePointerDown);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [userMenuOpen]);
+  }, [desktopUserMenuOpen, mobileUserMenuOpen]);
 
   const scrollNav = (direction) => {
     const node = navRef.current;
@@ -122,6 +128,43 @@ export default function Header() {
           <NavLink to="/" className="brand header-brand" aria-label="Zur Startseite">
             <BrandLogos variant="header" />
           </NavLink>
+
+          <div className="mobile-header-user" aria-label="Benutzeraktionen mobil">
+            {isAuthenticated ? (
+              <div className={`user-menu mobile-user-menu ${mobileUserMenuOpen ? 'is-open' : ''}`} ref={mobileMenuRef}>
+                <button
+                  type="button"
+                  className="user-menu-trigger mobile-user-menu-trigger"
+                  onClick={() => { setDesktopUserMenuOpen(false); setMobileUserMenuOpen((current) => !current); }}
+                  aria-haspopup="menu"
+                  aria-expanded={mobileUserMenuOpen}
+                >
+                  <span className="user-avatar">{initials || 'U'}</span>
+                  <span className="user-menu-copy">
+                    <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
+                  </span>
+                  <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
+                </button>
+                <div className="user-menu-dropdown mobile-user-menu-dropdown" role="menu" aria-label="Benutzermenü mobil">
+                  {isAdmin ? (
+                    <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
+                      <DashboardRoundedIcon fontSize="small" />
+                      <span>Admin-Bereich</span>
+                    </NavLink>
+                  ) : null}
+                  <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setMobileUserMenuOpen(false); logout(); }}>
+                    <LogoutRoundedIcon fontSize="small" />
+                    <span>Ausloggen</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <NavLink to="/anmelden" className="nav-link subtle mobile-login-link">
+                <span className="nav-link-icon"><LoginRoundedIcon fontSize="small" /></span>
+                <span className="nav-link-label">Login</span>
+              </NavLink>
+            )}
+          </div>
 
           <nav className="main-nav desktop-nav" aria-label="Hauptnavigation">
             <div className="nav-primary nav-primary-premium">
@@ -143,17 +186,15 @@ export default function Header() {
             <div className="nav-cta-group nav-cta-group-compact">
               {isAuthenticated ? (
                 <div
-                  className={`user-menu ${userMenuOpen ? 'is-open' : ''}`}
-                  ref={menuRef}
-                  onMouseEnter={() => setUserMenuOpen(true)}
-                  onMouseLeave={() => setUserMenuOpen(false)}
+                  className={`user-menu ${desktopUserMenuOpen ? 'is-open' : ''}`}
+                  ref={desktopMenuRef}
                 >
                   <button
                     type="button"
                     className="user-menu-trigger"
-                    onClick={() => setUserMenuOpen((current) => !current)}
+                    onClick={() => { setMobileUserMenuOpen(false); setDesktopUserMenuOpen((current) => !current); }}
                     aria-haspopup="menu"
-                    aria-expanded={userMenuOpen}
+                    aria-expanded={desktopUserMenuOpen}
                   >
                     <span className="user-avatar">{initials || 'U'}</span>
                     <span className="user-menu-copy">
@@ -163,12 +204,12 @@ export default function Header() {
                   </button>
                   <div className="user-menu-dropdown" role="menu" aria-label="Benutzermenü">
                     {isAdmin ? (
-                      <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setUserMenuOpen(false)}>
+                      <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
                         <DashboardRoundedIcon fontSize="small" />
                         <span>Admin-Bereich</span>
                       </NavLink>
                     ) : null}
-                    <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setUserMenuOpen(false); logout(); }}>
+                    <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setDesktopUserMenuOpen(false); logout(); }}>
                       <LogoutRoundedIcon fontSize="small" />
                       <span>Ausloggen</span>
                     </button>
@@ -210,6 +251,7 @@ export default function Header() {
               </NavLink>
             ))}
           </nav>
+
 
           <IconButton
             className={`mobile-nav-arrow mobile-nav-arrow-right ${canScrollRight ? 'is-visible' : 'is-hidden'}`}

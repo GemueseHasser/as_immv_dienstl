@@ -17,6 +17,16 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified = false;
+    @Column(name = "verification_token", unique = true)
+    private String verificationToken;
+    @Column(name = "verification_token_expires_at")
+    private LocalDateTime verificationTokenExpiresAt;
+    @Column(name = "reset_password_token", unique = true)
+    private String resetPasswordToken;
+    @Column(name = "reset_password_token_expires_at")
+    private LocalDateTime resetPasswordTokenExpiresAt;
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private LocalDateTime createdAt;
     public Long getId() { return id; }
@@ -29,5 +39,15 @@ public class User {
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+    public boolean isEmailVerified() { return emailVerified; }
+    public void setEmailVerified(boolean emailVerified) { this.emailVerified = emailVerified; }
+    public String getVerificationToken() { return verificationToken; }
+    public void setVerificationToken(String verificationToken) { this.verificationToken = verificationToken; }
+    public LocalDateTime getVerificationTokenExpiresAt() { return verificationTokenExpiresAt; }
+    public void setVerificationTokenExpiresAt(LocalDateTime verificationTokenExpiresAt) { this.verificationTokenExpiresAt = verificationTokenExpiresAt; }
+    public String getResetPasswordToken() { return resetPasswordToken; }
+    public void setResetPasswordToken(String resetPasswordToken) { this.resetPasswordToken = resetPasswordToken; }
+    public LocalDateTime getResetPasswordTokenExpiresAt() { return resetPasswordTokenExpiresAt; }
+    public void setResetPasswordTokenExpiresAt(LocalDateTime resetPasswordTokenExpiresAt) { this.resetPasswordTokenExpiresAt = resetPasswordTokenExpiresAt; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 }

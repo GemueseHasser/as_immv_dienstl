@@ -28,6 +28,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEmail(properties.getAdminEmail().toLowerCase());
             admin.setPasswordHash(passwordEncoder.encode(properties.getAdminPassword()));
             admin.setRole(Role.ADMIN);
+            admin.setEmailVerified(true);
             return userRepository.save(admin);
         });
     }

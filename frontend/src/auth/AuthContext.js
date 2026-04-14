@@ -37,13 +37,24 @@ export function AuthProvider({ children }) {
       return payload.user;
     },
     async register(name, email, password) {
-      const payload = await apiFetch('/auth/register', {
+      clearSession();
+      setUser(null);
+      return apiFetch('/auth/register', {
         method: 'POST',
         body: JSON.stringify({ name, email, password }),
       });
-      setSession(payload.token, payload.user);
-      setUser(payload.user);
-      return payload.user;
+    },
+    async forgotPassword(email) {
+      return apiFetch('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      });
+    },
+    async resetPassword(token, password) {
+      return apiFetch('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ token, password }),
+      });
     },
     logout() {
       clearSession();
