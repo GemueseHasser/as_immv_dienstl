@@ -20,8 +20,8 @@ export default function WohnungenPage() {
   return (
     <>
       <PageHero
-        title="Wohnungsangebote in der Immobilienverwaltung"
-        text="Hier finden Sie alle aktuell verfügbaren Wohnungsangebote von AS Immobilienverwaltung & Dienstleistungen direkt im Bereich Immobilienverwaltung."
+        title="Wohnungsangebote"
+        text="Hier finden Sie alle aktuell verfügbaren Wohnungsangebote von AS Immobilienverwaltung."
         logoType="immobilien"
       />
       <section className="section">

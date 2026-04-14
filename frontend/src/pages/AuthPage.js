@@ -128,7 +128,7 @@ export default function AuthPage() {
                 ? 'Legen Sie hier ein neues Passwort für Ihr Benutzerkonto fest.'
                 : view === 'forgot'
                   ? 'Geben Sie Ihre E-Mail-Adresse ein. Falls ein Konto existiert, erhalten Sie einen Link zum Zurücksetzen.'
-                  : 'Angemeldete Nutzer können Nachrichten zu Wohnungsanzeigen verfassen. Admins verwalten zusätzlich alle Inserate.'}
+                  : 'Angemeldete Nutzer können Nachrichten zu Wohnungsanzeigen verfassen.'}
           </p>
 
           {user && !isResetMode && !isVerifyMode ? (
