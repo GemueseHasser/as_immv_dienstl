@@ -119,10 +119,6 @@ export default function Header() {
                   <span className="nav-link-label">Login</span>
                 </NavLink>
               )}
-              <NavLink to="/impressum" className="nav-link subtle">
-                <span className="nav-link-icon"><DescriptionRoundedIcon fontSize="small" /></span>
-                <span className="nav-link-label">Impressum</span>
-              </NavLink>
             </div>
           </nav>
         </div>
