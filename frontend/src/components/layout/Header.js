@@ -188,11 +188,19 @@ export default function Header() {
                 <div
                   className={`user-menu ${desktopUserMenuOpen ? 'is-open' : ''}`}
                   ref={desktopMenuRef}
+                  onMouseEnter={() => {
+                    setMobileUserMenuOpen(false);
+                    setDesktopUserMenuOpen(true);
+                  }}
+                  onMouseLeave={() => setDesktopUserMenuOpen(false)}
                 >
                   <button
                     type="button"
                     className="user-menu-trigger"
-                    onClick={() => { setMobileUserMenuOpen(false); setDesktopUserMenuOpen((current) => !current); }}
+                    onClick={() => {
+                      setMobileUserMenuOpen(false);
+                      setDesktopUserMenuOpen((current) => !current);
+                    }}
                     aria-haspopup="menu"
                     aria-expanded={desktopUserMenuOpen}
                   >

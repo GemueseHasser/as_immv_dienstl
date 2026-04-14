@@ -1157,7 +1157,7 @@ img { display: block; max-width: 100%; }
   }
   .hero {
     padding-top: 28px;
-    overflow: hidden;
+    overflow: visible;
   }
   .hero-background-image {
     inset: 0 -4% 0;
@@ -3917,7 +3917,8 @@ body {
 }
 
 .user-menu.is-open .user-menu-dropdown,
-.user-menu:focus-within .user-menu-dropdown {
+.user-menu:focus-within .user-menu-dropdown,
+.user-menu:hover .user-menu-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
