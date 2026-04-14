@@ -59,6 +59,7 @@ export default function App() {
             <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboardPage /></ProtectedRoute>} />
             <Route path="/admin/benutzer" element={<ProtectedRoute adminOnly><AdminUsersPage /></ProtectedRoute>} />
             <Route path="/admin/wohnungen" element={<ProtectedRoute adminOnly><AdminWohnungenPage /></ProtectedRoute>} />
+            <Route path="/admin/wohnungen/neu" element={<ProtectedRoute adminOnly><AdminWohnungenPage /></ProtectedRoute>} />
             <Route path="/admin/wohnungen/:id" element={<ProtectedRoute adminOnly><AdminWohnungenPage /></ProtectedRoute>} />
             <Route path="/dienstleistungen" element={<DienstleistungenPage />} />
             <Route path="/kontakt" element={<KontaktPage />} />

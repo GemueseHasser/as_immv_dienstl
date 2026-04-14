@@ -3,8 +3,19 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
-import { Alert, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import {
+  Alert,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+  TextField,
+} from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiFetch, assetUrl } from '../api/client';
 import { PremiumButton } from '../components/ui';
@@ -38,6 +49,62 @@ function ApartmentPreviewCard({ apartment, onEdit, onDelete }) {
   );
 }
 
+function ApartmentForm({ editing, form, setForm, uploading, onUpload, onRemoveImage, onSubmit, onCancel }) {
+  return (
+    <div className="admin-card stack-gap">
+      <div className="admin-row-head">
+        <div>
+          <p className="eyebrow">{editing ? 'Bearbeiten' : 'Neu anlegen'}</p>
+          <h2>{editing ? 'Anzeige bearbeiten' : 'Neue Anzeige erstellen'}</h2>
+        </div>
+        <PremiumButton type="button" variant="outlined" startIcon={<ArrowBackRoundedIcon />} onClick={onCancel}>
+          Zur Übersicht
+        </PremiumButton>
+      </div>
+      <form className="admin-form" onSubmit={onSubmit}>
+        <TextField label="Titel" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} fullWidth required />
+        <TextField label="Subtitel / Kurzbeschreibung" value={form.shortDescription} onChange={(e) => setForm({ ...form, shortDescription: e.target.value })} multiline minRows={3} fullWidth required />
+        <TextField label="Ausführliche Beschreibung" value={form.fullDescription} onChange={(e) => setForm({ ...form, fullDescription: e.target.value })} multiline minRows={5} fullWidth />
+        <TextField label="Link zur Immobilienbörse" value={form.exchangeUrl} onChange={(e) => setForm({ ...form, exchangeUrl: e.target.value })} fullWidth />
+        <FormControlLabel
+          control={<Checkbox checked={form.isPublished} onChange={(e) => setForm({ ...form, isPublished: e.target.checked })} />}
+          label="Anzeige veröffentlichen"
+        />
+        <div className="wohnungen-cta-row">
+          <PremiumButton component="label" variant="outlined" startIcon={<UploadRoundedIcon />} disabled={uploading}>
+            Bilder hochladen
+            <input type="file" accept="image/*" hidden multiple onChange={onUpload} />
+          </PremiumButton>
+          <PremiumButton type="submit">{editing ? 'Änderungen speichern' : 'Anzeige anlegen'}</PremiumButton>
+        </div>
+
+        {form.images.length ? (
+          <div className="admin-image-grid">
+            {form.images.map((imageUrl, index) => (
+              <article key={`${imageUrl}-${index}`} className={`admin-image-card ${form.titleImage === imageUrl ? 'is-title' : ''}`}>
+                <img src={assetUrl(imageUrl)} alt={`Upload ${index + 1}`} />
+                <div className="admin-image-actions">
+                  <PremiumButton
+                    variant={form.titleImage === imageUrl ? 'contained' : 'outlined'}
+                    startIcon={<StarRoundedIcon />}
+                    type="button"
+                    onClick={() => setForm((current) => ({ ...current, titleImage: imageUrl }))}
+                  >
+                    {form.titleImage === imageUrl ? 'Titelbild' : 'Als Titelbild setzen'}
+                  </PremiumButton>
+                  <PremiumButton type="button" variant="outlined" onClick={() => onRemoveImage(imageUrl)}>Entfernen</PremiumButton>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="wohnungen-empty">Noch keine Bilder hochgeladen.</div>
+        )}
+      </form>
+    </div>
+  );
+}
+
 export default function AdminWohnungenPage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -45,6 +112,16 @@ export default function AdminWohnungenPage() {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState({ error: '', success: '' });
   const [uploading, setUploading] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  const mode = useMemo(() => {
+    if (id === 'neu') return 'create';
+    if (id) return 'edit';
+    return 'list';
+  }, [id]);
+
+  const editing = mode === 'edit';
+  const isFormMode = mode === 'create' || mode === 'edit';
 
   const loadApartments = async () => {
     try {
@@ -68,7 +145,7 @@ export default function AdminWohnungenPage() {
         isPublished: payload.apartment.isPublished,
         images: payload.apartment.images.map((item) => item.imageUrl),
       });
-      setStatus({ error: '', success: 'Anzeige geladen.' });
+      setStatus((current) => ({ ...current, error: '' }));
     } catch (err) {
       setStatus({ error: err.message, success: '' });
     }
@@ -79,14 +156,16 @@ export default function AdminWohnungenPage() {
   }, []);
 
   useEffect(() => {
-    if (id) {
+    if (mode === 'edit' && id) {
       loadApartmentIntoForm(id);
-    } else {
-      setForm(initialForm);
+      return;
     }
-  }, [id]);
-
-  const editing = useMemo(() => Boolean(form.id), [form.id]);
+    if (mode === 'create') {
+      setForm(initialForm);
+      return;
+    }
+    setForm(initialForm);
+  }, [mode, id]);
 
   const handleFileUpload = async (event) => {
     const files = Array.from(event.target.files || []);
@@ -115,14 +194,16 @@ export default function AdminWohnungenPage() {
     }
   };
 
-  const handleDelete = async (apartmentId) => {
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await apiFetch(`/admin/apartments/${apartmentId}`, { method: 'DELETE' });
-      if (form.id === apartmentId) {
+      await apiFetch(`/admin/apartments/${deleteTarget.id}`, { method: 'DELETE' });
+      if (form.id === deleteTarget.id) {
         setForm(initialForm);
-        navigate('/admin/wohnungen');
       }
+      setDeleteTarget(null);
       await loadApartments();
+      navigate('/admin/wohnungen');
       setStatus({ error: '', success: 'Anzeige wurde gelöscht.' });
     } catch (err) {
       setStatus({ error: err.message, success: '' });
@@ -146,10 +227,11 @@ export default function AdminWohnungenPage() {
     try {
       const method = editing ? 'PUT' : 'POST';
       const url = editing ? `/admin/apartments/${form.id}` : '/admin/apartments';
-      const payload = await apiFetch(url, { method, body: JSON.stringify(form) });
+      await apiFetch(url, { method, body: JSON.stringify(form) });
       await loadApartments();
       setStatus({ error: '', success: editing ? 'Anzeige aktualisiert.' : 'Anzeige erstellt.' });
-      navigate(`/admin/wohnungen/${payload.apartment.id}`, { replace: true });
+      setForm(initialForm);
+      navigate('/admin/wohnungen', { replace: true });
     } catch (err) {
       setStatus({ error: err.message, success: '' });
     }
@@ -161,81 +243,62 @@ export default function AdminWohnungenPage() {
         <div className="admin-card">
           <p className="eyebrow">Admin</p>
           <h1>Wohnungsanzeigen</h1>
-          <p>Erstellen Sie neue Anzeigen oder bearbeiten Sie bestehende Inserate. Titelbild, Beschreibung, Galerie und Veröffentlichungsstatus werden hier gepflegt.</p>
+          <p>
+            In der Übersicht werden alle bestehenden Inserate angezeigt. Neue Anzeigen und Bearbeitungen öffnen sich jeweils in einem eigenen Bereich.
+          </p>
         </div>
 
-        <div className="admin-card stack-gap">
-          <div className="admin-row-head">
-            <div>
-              <p className="eyebrow">Bearbeiten</p>
-              <h2>{editing ? 'Anzeige bearbeiten' : 'Neue Anzeige erstellen'}</h2>
-            </div>
-            <PremiumButton type="button" variant="outlined" startIcon={<AddRoundedIcon />} onClick={() => navigate('/admin/wohnungen')}>
-              Neue Anzeige
-            </PremiumButton>
-          </div>
-          {status.error ? <Alert severity="error">{status.error}</Alert> : null}
-          {status.success ? <Alert severity="success">{status.success}</Alert> : null}
-          <form className="admin-form" onSubmit={handleSubmit}>
-            <TextField label="Titel" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} fullWidth />
-            <TextField label="Subtitel / Kurzbeschreibung" value={form.shortDescription} onChange={(e) => setForm({ ...form, shortDescription: e.target.value })} multiline minRows={3} fullWidth />
-            <TextField label="Ausführliche Beschreibung" value={form.fullDescription} onChange={(e) => setForm({ ...form, fullDescription: e.target.value })} multiline minRows={5} fullWidth />
-            <TextField label="Link zur Immobilienbörse" value={form.exchangeUrl} onChange={(e) => setForm({ ...form, exchangeUrl: e.target.value })} fullWidth />
-            <FormControlLabel
-              control={<Checkbox checked={form.isPublished} onChange={(e) => setForm({ ...form, isPublished: e.target.checked })} />}
-              label="Anzeige veröffentlichen"
-            />
-            <div className="wohnungen-cta-row">
-              <PremiumButton component="label" variant="outlined" startIcon={<UploadRoundedIcon />} disabled={uploading}>
-                Bilder hochladen
-                <input type="file" accept="image/*" hidden multiple onChange={handleFileUpload} />
-              </PremiumButton>
-              <PremiumButton type="submit">{editing ? 'Änderungen speichern' : 'Anzeige anlegen'}</PremiumButton>
-            </div>
+        {status.error ? <Alert severity="error">{status.error}</Alert> : null}
+        {status.success ? <Alert severity="success">{status.success}</Alert> : null}
 
-            {form.images.length ? (
-              <div className="admin-image-grid">
-                {form.images.map((imageUrl, index) => (
-                  <article key={`${imageUrl}-${index}`} className={`admin-image-card ${form.titleImage === imageUrl ? 'is-title' : ''}`}>
-                    <img src={assetUrl(imageUrl)} alt={`Upload ${index + 1}`} />
-                    <div className="admin-image-actions">
-                      <PremiumButton
-                        variant={form.titleImage === imageUrl ? 'contained' : 'outlined'}
-                        startIcon={<StarRoundedIcon />}
-                        type="button" onClick={() => setForm((current) => ({ ...current, titleImage: imageUrl }))}
-                      >
-                        {form.titleImage === imageUrl ? 'Titelbild' : 'Als Titelbild setzen'}
-                      </PremiumButton>
-                      <PremiumButton type="button" variant="outlined" onClick={() => handleImageRemove(imageUrl)}>Entfernen</PremiumButton>
-                    </div>
-                  </article>
-                ))}
+        {isFormMode ? (
+          <ApartmentForm
+            editing={editing}
+            form={form}
+            setForm={setForm}
+            uploading={uploading}
+            onUpload={handleFileUpload}
+            onRemoveImage={handleImageRemove}
+            onSubmit={handleSubmit}
+            onCancel={() => navigate('/admin/wohnungen')}
+          />
+        ) : (
+          <div className="admin-card stack-gap">
+            <div className="admin-row-head">
+              <div>
+                <p className="eyebrow">Bestehende Anzeigen</p>
+                <h2>Inserate</h2>
               </div>
-            ) : (
-              <div className="wohnungen-empty">Noch keine Bilder hochgeladen.</div>
-            )}
-          </form>
-        </div>
-
-        <div className="admin-card stack-gap">
-          <div className="admin-row-head">
-            <div>
-              <p className="eyebrow">Bestehende Anzeigen</p>
-              <h2>Inserate</h2>
+              <PremiumButton type="button" startIcon={<AddRoundedIcon />} onClick={() => navigate('/admin/wohnungen/neu')}>
+                Neue Anzeige anlegen
+              </PremiumButton>
+            </div>
+            <div className="admin-apartment-list admin-apartment-list-clean">
+              {apartments.length ? apartments.map((apartment) => (
+                <ApartmentPreviewCard
+                  key={apartment.id}
+                  apartment={apartment}
+                  onEdit={() => navigate(`/admin/wohnungen/${apartment.id}`)}
+                  onDelete={() => setDeleteTarget(apartment)}
+                />
+              )) : <div className="wohnungen-empty">Noch keine Wohnungsanzeigen vorhanden.</div>}
             </div>
           </div>
-          <div className="admin-apartment-list admin-apartment-list-clean">
-            {apartments.map((apartment) => (
-              <ApartmentPreviewCard
-                key={apartment.id}
-                apartment={apartment}
-                onEdit={() => navigate(`/admin/wohnungen/${apartment.id}`)}
-                onDelete={() => handleDelete(apartment.id)}
-              />
-            ))}
-          </div>
-        </div>
+        )}
       </div>
+
+      <Dialog open={Boolean(deleteTarget)} onClose={() => setDeleteTarget(null)}>
+        <DialogTitle>Anzeige löschen?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {deleteTarget ? `Möchten Sie die Anzeige „${deleteTarget.title}“ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.` : ''}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <PremiumButton variant="outlined" onClick={() => setDeleteTarget(null)}>Abbrechen</PremiumButton>
+          <PremiumButton onClick={confirmDelete}>Löschen</PremiumButton>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 }

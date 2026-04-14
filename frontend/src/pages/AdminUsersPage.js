@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import { Alert } from '@mui/material';
+import {
+  Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import { apiFetch } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
 import { PremiumButton } from '../components/ui';
@@ -9,6 +16,7 @@ export default function AdminUsersPage() {
   const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [status, setStatus] = useState({ error: '', success: '' });
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const loadUsers = async () => {
     try {
@@ -23,9 +31,11 @@ export default function AdminUsersPage() {
     loadUsers();
   }, []);
 
-  const handleDelete = async (userId) => {
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await apiFetch(`/admin/users/${userId}`, { method: 'DELETE' });
+      await apiFetch(`/admin/users/${deleteTarget.id}`, { method: 'DELETE' });
+      setDeleteTarget(null);
       await loadUsers();
       setStatus({ error: '', success: 'Benutzer wurde gelöscht.' });
     } catch (err) {
@@ -55,7 +65,7 @@ export default function AdminUsersPage() {
                 {user?.id === entry.id ? (
                   <PremiumButton variant="outlined" disabled>Aktueller Admin</PremiumButton>
                 ) : (
-                  <PremiumButton variant="outlined" startIcon={<DeleteRoundedIcon />} onClick={() => handleDelete(entry.id)}>
+                  <PremiumButton variant="outlined" startIcon={<DeleteRoundedIcon />} onClick={() => setDeleteTarget(entry)}>
                     Löschen
                   </PremiumButton>
                 )}
@@ -64,6 +74,19 @@ export default function AdminUsersPage() {
           ))}
         </div>
       </div>
+
+      <Dialog open={Boolean(deleteTarget)} onClose={() => setDeleteTarget(null)}>
+        <DialogTitle>Benutzer löschen?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {deleteTarget ? `Möchten Sie den Benutzer „${deleteTarget.name}“ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.` : ''}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <PremiumButton variant="outlined" onClick={() => setDeleteTarget(null)}>Abbrechen</PremiumButton>
+          <PremiumButton onClick={handleDelete}>Löschen</PremiumButton>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 }

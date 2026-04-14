@@ -6,11 +6,13 @@ import { assetUrl } from '../../api/client';
 
 export default function WohnungCard({ apartment }) {
   return (
-    <article className="wohnung-card">
+    <article className="wohnung-card wohnung-card-horizontal">
       <img className="wohnung-card-image" src={assetUrl(apartment.titleImage)} alt={apartment.title} />
       <div className="wohnung-card-body">
-        <h3>{apartment.title}</h3>
-        <p>{apartment.shortDescription}</p>
+        <div className="wohnung-card-copy">
+          <h3>{apartment.title}</h3>
+          <p>{apartment.shortDescription}</p>
+        </div>
         <PremiumButton component={RouterLink} to={`/immobilienverwaltung/wohnungen/${apartment.slug}`} endIcon={<ArrowForwardRoundedIcon />}>
           Anzeige öffnen
         </PremiumButton>

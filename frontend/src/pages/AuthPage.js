@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Tab, Tabs, TextField } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PremiumButton } from '../components/ui';
 import { useAuth } from '../auth/AuthContext';
+
+const initialForm = { name: '', email: '', password: '', passwordConfirm: '' };
 
 export default function AuthPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, register, user, logout } = useAuth();
   const [tab, setTab] = useState(0);
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState(initialForm);
   const [error, setError] = useState('');
 
   const destination = location.state?.from || '/immobilienverwaltung/wohnungen';
+
+  useEffect(() => {
+    setError('');
+    setForm(initialForm);
+  }, [tab]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,6 +28,9 @@ export default function AuthPage() {
       if (tab === 0) {
         await login(form.email, form.password);
       } else {
+        if (form.password !== form.passwordConfirm) {
+          throw new Error('Die beiden Passwörter stimmen nicht überein.');
+        }
         await register(form.name, form.email, form.password);
       }
       navigate(destination, { replace: true });
@@ -53,10 +63,25 @@ export default function AuthPage() {
               {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
               <form className="auth-form" onSubmit={handleSubmit}>
                 {tab === 1 ? (
-                  <TextField label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} fullWidth />
-                ) : null}
-                <TextField label="E-Mail" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} fullWidth />
-                <TextField label="Passwort" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} fullWidth />
+                  <>
+                    <TextField label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} fullWidth required />
+                    <TextField label="E-Mail" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} fullWidth required />
+                    <TextField label="Passwort" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} fullWidth required />
+                    <TextField
+                      label="Passwort wiederholen"
+                      type="password"
+                      value={form.passwordConfirm}
+                      onChange={(e) => setForm({ ...form, passwordConfirm: e.target.value })}
+                      fullWidth
+                      required
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TextField label="E-Mail" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} fullWidth required />
+                    <TextField label="Passwort" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} fullWidth required />
+                  </>
+                )}
                 <PremiumButton type="submit">{tab === 0 ? 'Anmelden' : 'Konto erstellen'}</PremiumButton>
               </form>
             </>

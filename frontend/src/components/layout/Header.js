@@ -1,25 +1,41 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { IconButton } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import BrandLogos from '../BrandLogos';
 import { useAuth } from '../../auth/AuthContext';
 
+function getUserInitials(name = '') {
+  return name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || '')
+    .join('');
+}
+
+function getFirstName(name = '') {
+  return name.trim().split(/\s+/).filter(Boolean)[0] || '';
+}
+
 export default function Header() {
   const navRef = useRef(null);
+  const menuRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [mobileBrandProgress, setMobileBrandProgress] = useState(0);
-  const { isAdmin, isAuthenticated, logout } = useAuth();
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { user, isAdmin, isAuthenticated, logout } = useAuth();
 
   const navItems = [
     { label: 'Start', to: '/', icon: <HomeRoundedIcon fontSize="small" /> },
@@ -27,6 +43,9 @@ export default function Header() {
     { label: 'Dienstleistungen', to: '/dienstleistungen', emphasis: true, icon: <ConstructionRoundedIcon fontSize="small" /> },
     { label: 'Kontakt', to: '/kontakt', icon: <MailOutlineRoundedIcon fontSize="small" /> },
   ];
+
+  const initials = useMemo(() => getUserInitials(user?.name), [user?.name]);
+  const firstName = useMemo(() => getFirstName(user?.name), [user?.name]);
 
   useEffect(() => {
     const node = navRef.current;
@@ -69,6 +88,26 @@ export default function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!userMenuOpen) return undefined;
+    const handlePointerDown = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [userMenuOpen]);
+
   const scrollNav = (direction) => {
     const node = navRef.current;
     if (!node) return;
@@ -102,17 +141,39 @@ export default function Header() {
               ))}
             </div>
             <div className="nav-cta-group nav-cta-group-compact">
-              {isAdmin ? (
-                <NavLink to="/admin" className="nav-link subtle">
-                  <span className="nav-link-icon"><DashboardRoundedIcon fontSize="small" /></span>
-                  <span className="nav-link-label">Admin</span>
-                </NavLink>
-              ) : null}
               {isAuthenticated ? (
-                <button type="button" className="nav-link subtle nav-link-button" onClick={logout}>
-                  <span className="nav-link-icon"><LogoutRoundedIcon fontSize="small" /></span>
-                  <span className="nav-link-label">Logout</span>
-                </button>
+                <div
+                  className={`user-menu ${userMenuOpen ? 'is-open' : ''}`}
+                  ref={menuRef}
+                  onMouseEnter={() => setUserMenuOpen(true)}
+                  onMouseLeave={() => setUserMenuOpen(false)}
+                >
+                  <button
+                    type="button"
+                    className="user-menu-trigger"
+                    onClick={() => setUserMenuOpen((current) => !current)}
+                    aria-haspopup="menu"
+                    aria-expanded={userMenuOpen}
+                  >
+                    <span className="user-avatar">{initials || 'U'}</span>
+                    <span className="user-menu-copy">
+                      <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
+                    </span>
+                    <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
+                  </button>
+                  <div className="user-menu-dropdown" role="menu" aria-label="Benutzermenü">
+                    {isAdmin ? (
+                      <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setUserMenuOpen(false)}>
+                        <DashboardRoundedIcon fontSize="small" />
+                        <span>Admin-Bereich</span>
+                      </NavLink>
+                    ) : null}
+                    <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setUserMenuOpen(false); logout(); }}>
+                      <LogoutRoundedIcon fontSize="small" />
+                      <span>Ausloggen</span>
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <NavLink to="/anmelden" className="nav-link subtle">
                   <span className="nav-link-icon"><LoginRoundedIcon fontSize="small" /></span>
