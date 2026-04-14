@@ -77,15 +77,25 @@ export default function WohnungDetailPage() {
   return (
     <section className="section">
       <div className="container compact-shell stack-gap">
-        <div className="wohnung-detail-top">
-          <div className="wohnung-detail-top-image-card">
-            <img className="wohnung-detail-title-image" src={assetUrl(apartment.titleImage)} alt={apartment.title} />
+        <div className="wohnung-detail-hero-shell">
+          <div className="wohnung-detail-top">
+            <div className="wohnung-detail-top-image-stage">
+              <img className="wohnung-detail-title-image" src={assetUrl(apartment.titleImage)} alt={apartment.title} />
+            </div>
+            <div className="wohnung-detail-top-copy">
+              <div className="wohnung-detail-top-copy-inner">
+                <h1>{apartment.title}</h1>
+                <p className="lead">{apartment.shortDescription}</p>
+                {feedback.error ? <Alert severity="error">{feedback.error}</Alert> : null}
+                {feedback.success ? <Alert severity="success">{feedback.success}</Alert> : null}
+              </div>
+            </div>
           </div>
-          <div className="wohnung-detail-top-copy admin-card">
-            <p className="eyebrow">Wohnungsanzeige</p>
-            <h1>{apartment.title}</h1>
-            <p className="lead">{apartment.shortDescription}</p>
-            <div className="wohnungen-cta-row">
+        </div>
+
+        <div className="wohnung-detail-content-grid">
+          <div className="wohnung-detail-description-column stack-gap">
+            <div className="wohnung-detail-action-row">
               {apartment.exchangeUrl ? (
                 <PremiumButton component="a" href={apartment.exchangeUrl} target="_blank" rel="noreferrer" endIcon={<OpenInNewRoundedIcon />}>
                   Externes Exposé öffnen
@@ -97,19 +107,7 @@ export default function WohnungDetailPage() {
                 <PremiumButton variant="outlined" onClick={() => navigate('/anmelden', { state: { from: location.pathname } })}>Anfrage senden</PremiumButton>
               )}
             </div>
-            {feedback.error ? <Alert severity="error">{feedback.error}</Alert> : null}
-            {feedback.success ? <Alert severity="success">{feedback.success}</Alert> : null}
-          </div>
-        </div>
-
-        <div className="wohnung-detail-content-grid">
-          <div className="admin-card wohnung-detail-description-column stack-gap">
-            <div>
-              <p className="eyebrow">Kurzbeschreibung</p>
-              <p>{apartment.shortDescription}</p>
-            </div>
-            <div>
-              <p className="eyebrow">Beschreibung</p>
+            <div className="wohnung-detail-description-card">
               <div
                 className="rich-content-display"
                 dangerouslySetInnerHTML={{ __html: apartment.fullDescription || `<p>${apartment.shortDescription}</p>` }}
@@ -118,12 +116,6 @@ export default function WohnungDetailPage() {
           </div>
 
           <aside className="wohnung-slideshow-card">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Weitere Bilder</p>
-                <h2>Slideshow</h2>
-              </div>
-            </div>
             {activeSlide ? (
               <>
                 <div className="wohnung-slideshow-stage">

@@ -13,9 +13,11 @@ export default function WohnungCard({ apartment }) {
           <h3>{apartment.title}</h3>
           <p>{apartment.shortDescription}</p>
         </div>
-        <PremiumButton component={RouterLink} to={`/immobilienverwaltung/wohnungen/${apartment.slug}`} endIcon={<ArrowForwardRoundedIcon />}>
-          Anzeige öffnen
-        </PremiumButton>
+        <div className="wohnung-card-actions">
+          <PremiumButton component={RouterLink} to={`/immobilienverwaltung/wohnungen/${apartment.slug}`} endIcon={<ArrowForwardRoundedIcon />}>
+            Anzeige öffnen
+          </PremiumButton>
+        </div>
       </div>
     </article>
   );
