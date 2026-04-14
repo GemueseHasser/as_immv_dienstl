@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
@@ -55,6 +56,8 @@ function ChoiceCard({ eyebrow, title, text, dark = false, icon, onClick }) {
 
 export default function ContactModal({ open, onClose, initialCategory = null, initialService = null }) {
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [category, setCategory] = useState(initialCategory);
   const [serviceType, setServiceType] = useState(initialService);
   const [formData, setFormData] = useState(initialForm);
@@ -235,61 +238,69 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
               <div className="contact-flow-badge">{detailLabel}</div>
             </div>
 
-            <Box component="form" className="contact-form contact-form-modern" onSubmit={handleSubmit}>
+            <Box component="form" className="contact-form contact-form-modern" onSubmit={handleSubmit} noValidate>
               <Stack spacing={2.2}>
                 {isAuthenticated ? (
-                  <Alert severity="info">Sie sind angemeldet. Die Anfrage wird mit Ihrer hinterlegten E-Mail-Adresse {user?.email} gesendet.</Alert>
-                ) : (
-                  <TextField
-                    type="email"
-                    name="email"
-                    label="E-Mail-Adresse"
-                    placeholder="ihre@email.de"
-                    value={formData.email}
-                    onChange={(event) => setField('email', event.target.value)}
-                    error={Boolean(errors.email)}
-                    helperText={errors.email || ' '}
-                    fullWidth
-                  />
-                )}
-                <TextField
-                  name="message"
-                  label="Nachricht"
-                  rows={3}
-                  multiline
-                  placeholder="Beschreiben Sie kurz Ihr Anliegen, das Objekt oder den gewünschten Einsatz."
-                  value={formData.message}
-                  onChange={(event) => setField('message', event.target.value)}
-                  error={Boolean(errors.message)}
-                  helperText={errors.message || ' '}
-                  fullWidth
-                />
-                <TextField
-                  type="text"
-                  name="website"
-                  label="Website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={formData.website}
-                  onChange={(event) => setField('website', event.target.value)}
-                  className="sr-honeypot"
-                  sx={{ display: 'none' }}
-                />
-                <div className="consent-wrap">
-                  <Box className="consent-field" onClick={() => setField('consent', !formData.consent)} role="checkbox" aria-checked={formData.consent} tabIndex={0} onKeyDown={(event) => { if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); setField('consent', !formData.consent); } }}>
-                    <Checkbox
-                      checked={formData.consent}
-                      onChange={(event) => setField('consent', event.target.checked)}
-                      onClick={(event) => event.stopPropagation()}
-                      sx={{ p: '4px 8px 4px 0', alignSelf: 'flex-start' }}
+                  <>
+                    <Alert severity="info">Sie sind angemeldet. Die Anfrage wird mit Ihrer hinterlegten E-Mail-Adresse {user?.email} gesendet.</Alert>
+                    <TextField
+                      name="message"
+                      label="Nachricht"
+                      rows={3}
+                      multiline
+                      placeholder="Beschreiben Sie kurz Ihr Anliegen, das Objekt oder den gewünschten Einsatz."
+                      value={formData.message}
+                      onChange={(event) => setField('message', event.target.value)}
+                      error={Boolean(errors.message)}
+                      helperText={errors.message || ' '}
+                      fullWidth
                     />
-                    <Typography component="span" className="consent-label">
-                      Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Anfrage zu.
-                    </Typography>
-                  </Box>
-                  {errors.consent ? <Typography className="form-error" component="small">{errors.consent}</Typography> : null}
-                </div>
-                {submitState === 'error' && submitMessage ? <Alert severity="error">{submitMessage}</Alert> : null}
+                    <TextField
+                      type="text"
+                      name="website"
+                      label="Website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formData.website}
+                      onChange={(event) => setField('website', event.target.value)}
+                      className="sr-honeypot"
+                      sx={{ display: 'none' }}
+                    />
+                    <div className="consent-wrap">
+                      <Box className="consent-field" onClick={() => setField('consent', !formData.consent)} role="checkbox" aria-checked={formData.consent} tabIndex={0} onKeyDown={(event) => { if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); setField('consent', !formData.consent); } }}>
+                        <Checkbox
+                          checked={formData.consent}
+                          onChange={(event) => setField('consent', event.target.checked)}
+                          onClick={(event) => event.stopPropagation()}
+                          sx={{ p: '4px 8px 4px 0', alignSelf: 'flex-start' }}
+                        />
+                        <Typography component="span" className="consent-label">
+                          Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Anfrage zu.
+                        </Typography>
+                      </Box>
+                      {errors.consent ? <Typography className="form-error" component="small">{errors.consent}</Typography> : null}
+                    </div>
+                    {submitState === 'error' && submitMessage ? <Alert severity="error">{submitMessage}</Alert> : null}
+                  </>
+                ) : (
+                  <Alert
+                    severity="warning"
+                    action={(
+                      <PremiumButton
+                        type="button"
+                        size="small"
+                        onClick={() => {
+                          onClose();
+                          navigate('/anmelden', { state: { from: location.pathname } });
+                        }}
+                      >
+                        Jetzt einloggen
+                      </PremiumButton>
+                    )}
+                  >
+                    Um eine Anfrage an die Immobilienverwaltung oder zu Dienstleistungen zu verfassen, müssen Sie angemeldet sein.
+                  </Alert>
+                )}
                 <div className="form-actions">
                   <PremiumButton
                     type="button"
@@ -302,9 +313,11 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
                   >
                     Zurück
                   </PremiumButton>
-                  <PremiumButton type="submit" endIcon={<SendRoundedIcon />} disabled={isSubmitting}>
-                    {isSubmitting ? 'Wird gesendet…' : 'Anfrage senden'}
-                  </PremiumButton>
+                  {isAuthenticated ? (
+                    <PremiumButton type="submit" endIcon={<SendRoundedIcon />} disabled={isSubmitting}>
+                      {isSubmitting ? 'Wird gesendet…' : 'Anfrage senden'}
+                    </PremiumButton>
+                  ) : null}
                 </div>
               </Stack>
             </Box>
