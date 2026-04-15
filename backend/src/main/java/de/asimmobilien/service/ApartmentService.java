@@ -76,13 +76,13 @@ public class ApartmentService {
         entity.setUser(user);
         entity.setMessage(message.trim());
         ApartmentMessage saved = messageRepository.save(entity);
-        mailService.send("Neue Kontaktanfrage zur Wohnungsanzeige: " + apartment.getTitle(),
-                "Typ: Immobilienverwaltung / Wohnungsanzeige\n"
-                        + "Wohnung: " + apartment.getTitle() + "\n"
-                        + "Slug: " + apartment.getSlug() + "\n"
-                        + "E-Mail: " + user.getEmail() + "\n"
-                        + "Name: " + user.getName() + "\n\n"
-                        + message.trim());
+        mailService.sendApartmentInquiryEmail(
+                apartment.getTitle(),
+                apartment.getSlug(),
+                user.getEmail(),
+                user.getName(),
+                message.trim()
+        );
         return saved;
     }
 }

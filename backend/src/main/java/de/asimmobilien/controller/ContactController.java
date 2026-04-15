@@ -29,13 +29,13 @@ public class ContactController {
             throw new IllegalArgumentException("Bitte eine gültige E-Mail-Adresse eingeben.");
         }
 
-        String subject = "Neue Kontaktanfrage: " + request.type();
-        String text = "Typ: " + request.type() + "\n"
-                + "Service: " + (request.service() == null ? "" : request.service()) + "\n"
-                + "E-Mail: " + senderEmail + "\n"
-                + "Name: " + (principal != null ? principal.getUser().getName() : "") + "\n\n"
-                + request.message().trim();
-        mailService.send(subject, text);
+        mailService.sendContactRequestEmail(
+                request.type(),
+                request.service(),
+                senderEmail,
+                principal != null ? principal.getUser().getName() : "",
+                request.message().trim()
+        );
         return Map.of("ok", true, "message", "Anfrage erfolgreich versendet.");
     }
 }

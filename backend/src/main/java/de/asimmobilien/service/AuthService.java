@@ -17,6 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AuthService {
@@ -115,36 +119,87 @@ public class AuthService {
     private void sendVerificationEmail(User user) {
         String verificationUrl = UriComponentsBuilder
                 .fromUriString(resolvePublicBaseUrl())
-                .path("/anmelden")
+                .path("/#/anmelden")
                 .queryParam("verify", user.getVerificationToken())
                 .build()
                 .toUriString();
-        String text = "Hallo " + user.getName() + ",\n\n"
-                + "bitte bestätigen Sie Ihre E-Mail-Adresse für Ihr Konto bei AS Immobilienverwaltung & Dienstleistungen:\n"
-                + verificationUrl + "\n\n"
-                + "Der Link ist 24 Stunden gültig.";
-        mailService.sendTo(user.getEmail(), "Bitte bestätigen Sie Ihre E-Mail-Adresse", text);
+        mailService.sendVerificationEmail(user.getEmail(), user.getName(), verificationUrl);
     }
 
     private void sendResetPasswordEmail(User user) {
         String resetUrl = UriComponentsBuilder
                 .fromUriString(resolvePublicBaseUrl())
-                .path("/anmelden")
+                .path("/#/anmelden")
                 .queryParam("reset", user.getResetPasswordToken())
                 .build()
                 .toUriString();
-        String text = "Hallo " + user.getName() + ",\n\n"
-                + "über den folgenden Link können Sie Ihr Passwort für AS Immobilienverwaltung & Dienstleistungen zurücksetzen:\n"
-                + resetUrl + "\n\n"
-                + "Der Link ist 2 Stunden gültig.";
-        mailService.sendTo(user.getEmail(), "Passwort zurücksetzen", text);
+        mailService.sendResetPasswordEmail(user.getEmail(), user.getName(), resetUrl);
     }
 
     private String resolvePublicBaseUrl() {
+        String requestBaseUrl = resolveCurrentRequestBaseUrl();
+        if (StringUtils.hasText(requestBaseUrl)) {
+            return requestBaseUrl;
+        }
         if (StringUtils.hasText(properties.getPublicBaseUrl())) {
             return properties.getPublicBaseUrl().replaceAll("/+$", "");
         }
-        return "http://localhost:3000";
+        return "http://localhost";
+    }
+
+    private String resolveCurrentRequestBaseUrl() {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if (!(attributes instanceof ServletRequestAttributes servletAttributes)) {
+            return null;
+        }
+        HttpServletRequest request = servletAttributes.getRequest();
+        String forwardedProto = trimToNull(request.getHeader("X-Forwarded-Proto"));
+        String forwardedHost = trimToNull(request.getHeader("X-Forwarded-Host"));
+        String forwardedPort = trimToNull(request.getHeader("X-Forwarded-Port"));
+
+        String scheme = forwardedProto != null ? forwardedProto : request.getScheme();
+        String hostHeader = forwardedHost != null ? forwardedHost : request.getHeader("Host");
+        if (!StringUtils.hasText(hostHeader)) {
+            hostHeader = request.getServerName();
+            int serverPort = request.getServerPort();
+            if (serverPort > 0 && !isDefaultPort(scheme, serverPort)) {
+                hostHeader = hostHeader + ":" + serverPort;
+            }
+        }
+
+        if (!StringUtils.hasText(hostHeader)) {
+            return null;
+        }
+
+        if (StringUtils.hasText(forwardedPort) && !hostHeader.contains(":")) {
+            int port = safeParsePort(forwardedPort);
+            if (port > 0 && !isDefaultPort(scheme, port)) {
+                hostHeader = hostHeader + ":" + port;
+            }
+        }
+
+        return scheme + "://" + hostHeader.replaceAll("/+$", "");
+    }
+
+    private boolean isDefaultPort(String scheme, int port) {
+        return ("http".equalsIgnoreCase(scheme) && port == 80)
+                || ("https".equalsIgnoreCase(scheme) && port == 443);
+    }
+
+    private int safeParsePort(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+    }
+
+    private String trimToNull(String value) {
+        if (!StringUtils.hasText(value)) {
+            return null;
+        }
+        String normalized = value.split(",")[0].trim();
+        return normalized.isEmpty() ? null : normalized;
     }
 
     private String newToken() {

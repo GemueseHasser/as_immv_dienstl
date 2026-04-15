@@ -9,6 +9,7 @@ public class AppProperties {
     private String uploadDir;
     private String publicUploadPrefix;
     private String publicBaseUrl;
+    private String mailAssetBaseUrl;
     private String mailFrom;
     private String contactReceiverEmail;
     private String adminName;
@@ -25,6 +26,8 @@ public class AppProperties {
     public void setPublicUploadPrefix(String publicUploadPrefix) { this.publicUploadPrefix = publicUploadPrefix; }
     public String getPublicBaseUrl() { return publicBaseUrl; }
     public void setPublicBaseUrl(String publicBaseUrl) { this.publicBaseUrl = publicBaseUrl; }
+    public String getMailAssetBaseUrl() { return mailAssetBaseUrl; }
+    public void setMailAssetBaseUrl(String mailAssetBaseUrl) { this.mailAssetBaseUrl = mailAssetBaseUrl; }
     public String getMailFrom() { return mailFrom; }
     public void setMailFrom(String mailFrom) { this.mailFrom = mailFrom; }
     public String getContactReceiverEmail() { return contactReceiverEmail; }
