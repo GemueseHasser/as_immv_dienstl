@@ -2,6 +2,7 @@ import React from 'react';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import { Link as RouterLink } from 'react-router-dom';
 
 export default function AdminDashboardPage() {
@@ -17,6 +18,12 @@ export default function AdminDashboardPage() {
       text: 'Wohnungsanzeigen erstellen, bearbeiten, veröffentlichen und die Bildgalerie verwalten.',
       to: '/admin/wohnungen',
       icon: <ApartmentRoundedIcon fontSize="large" />,
+    },
+    {
+      title: 'Chats',
+      text: 'Anfragen und Antworten getrennt nach Immobilienverwaltung und Dienstleistungen bearbeiten.',
+      to: '/admin/chats',
+      icon: <ForumRoundedIcon fontSize="large" />,
     },
   ];
 

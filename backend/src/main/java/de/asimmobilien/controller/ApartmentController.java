@@ -39,7 +39,7 @@ public class ApartmentController {
         Apartment apartment = apartmentService.getAdminById(id);
         if (!apartment.isPublished()) throw new IllegalArgumentException("Wohnung nicht gefunden.");
         var user = userRepository.findById(principal.getUser().getId()).orElseThrow();
-        apartmentService.addMessage(apartment, user, request.message());
-        return Map.of("ok", true, "message", "Nachricht versendet.");
+        var conversation = apartmentService.addMessage(apartment, user, request.message());
+        return Map.of("ok", true, "message", "Nachricht versendet.", "conversationId", conversation.getId());
     }
 }

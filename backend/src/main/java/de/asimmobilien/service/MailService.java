@@ -95,6 +95,65 @@ public class MailService {
         sendEmail(recipient, subject, plainText, html);
     }
 
+
+    public void sendAdminNotificationForChat(de.asimmobilien.model.ChatConversation conversation, de.asimmobilien.model.ChatMessage chatMessage) {
+        String recipient = conversation.getCategory() == de.asimmobilien.model.ChatCategory.DIENSTLEISTUNGEN
+                ? resolveDienstlRecipient()
+                : resolveImmvRecipient();
+        String subject = "Neue Nachricht über die Website: " + safeText(conversation.getSubject());
+        String chatUrl = buildAdminChatUrl(conversation);
+        String plainText = "Es ist eine neue Nachricht über die Website eingegangen.\n\n"
+                + "Thema: " + safeText(conversation.getSubject()) + "\n"
+                + (StringUtils.hasText(conversation.getServiceLabel()) ? "Leistung: " + safeText(conversation.getServiceLabel()) + "\n" : "")
+                + (conversation.getApartment() != null ? "Wohnung: " + safeText(conversation.getApartment().getTitle()) + "\n" : "")
+                + "Von: " + safeText(conversation.getUser().getName()) + " <" + safeText(conversation.getUser().getEmail()) + ">\n\n"
+                + safeText(chatMessage.getMessage())
+                + "\n\nBitte antworten Sie über die Chat-Funktion auf der Webseite:\n" + chatUrl;
+        String html = buildBrandedHtml(
+                "Neue Nachricht über die Website eingegangen.",
+                "Neue Anfrage auf der Webseite",
+                "Es ist eine neue Nachricht eingegangen. Bitte antworten Sie direkt über die Chat-Funktion auf der Webseite.",
+                java.util.List.of(
+                        infoRow("Thema", safeText(conversation.getSubject())),
+                        infoRow("Absender", safeText(conversation.getUser().getName())),
+                        infoRow("E-Mail", safeText(conversation.getUser().getEmail()))
+                ),
+                "Chat im Admin-Bereich öffnen",
+                chatUrl,
+                null,
+                null,
+                messageCard(chatMessage.getMessage()),
+                "Antworten Sie nicht per E-Mail, sondern direkt über die Chat-Funktion auf der Webseite."
+        );
+        sendEmail(recipient, subject, plainText, html);
+    }
+
+    public void sendUserNotificationForChat(de.asimmobilien.model.ChatConversation conversation, de.asimmobilien.model.ChatMessage chatMessage) {
+        String subject = "Neue Nachricht von AS Immobilienverwaltung & Dienstleistungen";
+        String chatUrl = buildUserChatUrl(conversation);
+        String plainText = "Hallo " + safeText(conversation.getUser().getName()) + ",\n\n"
+                + "Sie haben eine neue Nachricht von AS Immobilienverwaltung & Dienstleistungen erhalten.\n\n"
+                + "Thema: " + safeText(conversation.getSubject()) + "\n\n"
+                + safeText(chatMessage.getMessage())
+                + "\n\nBitte antworten Sie über die Chat-Funktion auf der Webseite:\n" + chatUrl;
+        String html = buildBrandedHtml(
+                "Neue Nachricht von AS Immobilienverwaltung & Dienstleistungen.",
+                "Neue Nachricht erhalten",
+                "Sie haben eine neue Nachricht von AS Immobilienverwaltung & Dienstleistungen erhalten. Bitte antworten Sie direkt über die Chat-Funktion auf der Webseite.",
+                java.util.List.of(
+                        infoRow("Thema", safeText(conversation.getSubject())),
+                        infoRow("Bereich", conversation.getCategory() == de.asimmobilien.model.ChatCategory.DIENSTLEISTUNGEN ? "Dienstleistungen" : "Immobilienverwaltung")
+                ),
+                "Chat öffnen",
+                chatUrl,
+                null,
+                null,
+                messageCard(chatMessage.getMessage()),
+                "Antworten Sie nicht per E-Mail, sondern direkt über die Chat-Funktion auf der Webseite."
+        );
+        sendEmail(conversation.getUser().getEmail(), subject, plainText, html);
+    }
+
     public void sendContactRequestEmail(String requestType, String service, String senderEmail, String senderName, String message) {
         String subject = "Neue Kontaktanfrage: " + safeText(requestType);
         String plainText = "Typ: " + safeText(requestType) + "\n"
@@ -333,6 +392,16 @@ public class MailService {
             return matcher.group(1).trim();
         }
         return configuredFrom.trim();
+    }
+
+
+    private String buildUserChatUrl(de.asimmobilien.model.ChatConversation conversation) {
+        return resolvePublicBaseUrl() + "/#/konto/nachrichten/" + conversation.getId();
+    }
+
+    private String buildAdminChatUrl(de.asimmobilien.model.ChatConversation conversation) {
+        String category = conversation.getCategory() == de.asimmobilien.model.ChatCategory.DIENSTLEISTUNGEN ? "dienstleistungen" : "immobilienverwaltung";
+        return resolvePublicBaseUrl() + "/#/admin/chats?category=" + category + "&chat=" + conversation.getId();
     }
 
     private String resolvePublicBaseUrl() {

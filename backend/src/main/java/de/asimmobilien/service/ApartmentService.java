@@ -4,6 +4,7 @@ import de.asimmobilien.dto.ApartmentAdminRequest;
 import de.asimmobilien.model.Apartment;
 import de.asimmobilien.model.ApartmentImage;
 import de.asimmobilien.model.ApartmentMessage;
+import de.asimmobilien.model.ChatConversation;
 import de.asimmobilien.model.User;
 import de.asimmobilien.repository.ApartmentMessageRepository;
 import de.asimmobilien.repository.ApartmentRepository;
@@ -18,13 +19,13 @@ public class ApartmentService {
     private final ApartmentRepository apartmentRepository;
     private final ApartmentMessageRepository messageRepository;
     private final SlugService slugService;
-    private final MailService mailService;
+    private final ChatService chatService;
 
-    public ApartmentService(ApartmentRepository apartmentRepository, ApartmentMessageRepository messageRepository, SlugService slugService, MailService mailService) {
+    public ApartmentService(ApartmentRepository apartmentRepository, ApartmentMessageRepository messageRepository, SlugService slugService, ChatService chatService) {
         this.apartmentRepository = apartmentRepository;
         this.messageRepository = messageRepository;
         this.slugService = slugService;
-        this.mailService = mailService;
+        this.chatService = chatService;
     }
 
     public List<Apartment> list(boolean includeDrafts) {
@@ -70,19 +71,12 @@ public class ApartmentService {
 
     public List<ApartmentMessage> messages(Long apartmentId) { return messageRepository.findByApartmentIdOrderByCreatedAtDesc(apartmentId); }
 
-    public ApartmentMessage addMessage(Apartment apartment, User user, String message) {
+    public ChatConversation addMessage(Apartment apartment, User user, String message) {
         ApartmentMessage entity = new ApartmentMessage();
         entity.setApartment(apartment);
         entity.setUser(user);
         entity.setMessage(message.trim());
-        ApartmentMessage saved = messageRepository.save(entity);
-        mailService.sendApartmentInquiryEmail(
-                apartment.getTitle(),
-                apartment.getSlug(),
-                user.getEmail(),
-                user.getName(),
-                message.trim()
-        );
-        return saved;
+        messageRepository.save(entity);
+        return chatService.createApartmentConversation(apartment, user, message.trim());
     }
 }

@@ -132,6 +132,10 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
       }
       setSubmitState('success');
       setSubmitMessage(payload.message || 'Anfrage erfolgreich versendet.');
+      if (payload.conversationId) {
+        navigate(`/konto/nachrichten/${payload.conversationId}`);
+        onClose();
+      }
     } catch (error) {
       setSubmitState('error');
       setSubmitMessage(error.message || 'Die Anfrage konnte nicht versendet werden.');

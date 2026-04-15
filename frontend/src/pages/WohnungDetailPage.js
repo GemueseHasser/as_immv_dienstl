@@ -46,12 +46,16 @@ export default function WohnungDetailPage() {
     event.preventDefault();
     setFeedback({ error: '', success: '' });
     try {
-      await apiFetch(`/apartments/${apartment.id}/messages`, {
+      const payload = await apiFetch(`/apartments/${apartment.id}/messages`, {
         method: 'POST',
         body: JSON.stringify({ message }),
       });
       setMessage('');
       setContactOpen(false);
+      if (payload.conversationId) {
+        navigate(`/konto/nachrichten/${payload.conversationId}`);
+        return;
+      }
       setFeedback({ error: '', success: 'Nachricht erfolgreich versendet.' });
     } catch (err) {
       setFeedback({ error: err.message, success: '' });

@@ -4330,3 +4330,133 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.chat-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.chat-sidebar,
+.chat-detail-card {
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(35,39,43,0.08);
+  border-radius: 28px;
+  box-shadow: 0 24px 64px rgba(16,24,40,0.08);
+}
+
+.chat-sidebar {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-list-item {
+  width: 100%;
+  border: 1px solid rgba(35,39,43,0.08);
+  background: #fff;
+  border-radius: 22px;
+  padding: 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.chat-list-item.is-active {
+  border-color: rgba(17,24,39,0.22);
+  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(246,242,232,0.95));
+}
+
+.chat-list-item span,
+.chat-list-item small,
+.chat-opener-message small,
+.chat-bubble small {
+  color: #667085;
+}
+
+.chat-detail-card {
+  padding: 22px;
+}
+
+.chat-topic-card {
+  border: 1px solid rgba(35,39,43,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(249,246,240,0.9));
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.chat-opener-message {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: #111827;
+  color: #fff;
+}
+
+.chat-opener-message p,
+.chat-bubble p {
+  white-space: pre-wrap;
+}
+
+.chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.chat-bubble {
+  max-width: 88%;
+  border-radius: 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(35,39,43,0.08);
+}
+
+.chat-bubble.is-user {
+  align-self: flex-start;
+  background: #fff;
+}
+
+.chat-bubble.is-admin {
+  align-self: flex-end;
+  background: rgba(17,24,39,0.95);
+  color: #fff;
+}
+
+.chat-reply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat-empty-card {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  color: #667085;
+  border: 1px dashed rgba(35,39,43,0.16);
+  border-radius: 24px;
+  padding: 24px;
+  background: rgba(255,255,255,0.8);
+}
+
+.chat-empty-card.compact {
+  min-height: 72px;
+}
+
+@media (max-width: 980px) {
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-bubble {
+    max-width: 100%;
+  }
+}

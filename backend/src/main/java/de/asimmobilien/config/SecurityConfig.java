@@ -38,11 +38,12 @@ public class SecurityConfig {
                 }))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/uploads/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/contact", "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/auth/verify-email").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/apartments", "/api/apartments/*").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/apartments/*/messages").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/contact", "/api/apartments/*/messages", "/api/chats/*/messages", "/api/admin/chats/*/messages").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/chats/my", "/api/chats/*").authenticated()
                 .requestMatchers("/api/auth/me").authenticated()
                 .anyRequest().permitAll())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

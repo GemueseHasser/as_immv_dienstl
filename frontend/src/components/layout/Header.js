@@ -7,6 +7,7 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { IconButton } from '@mui/material';
@@ -146,11 +147,21 @@ export default function Header() {
                   <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                 </button>
                 <div className="user-menu-dropdown mobile-user-menu-dropdown" role="menu" aria-label="Benutzermenü mobil">
+                  <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
+                    <ForumRoundedIcon fontSize="small" />
+                    <span>Nachrichten</span>
+                  </NavLink>
                   {isAdmin ? (
-                    <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
-                      <DashboardRoundedIcon fontSize="small" />
-                      <span>Admin-Bereich</span>
-                    </NavLink>
+                    <>
+                      <NavLink to="/admin/chats" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
+                        <ForumRoundedIcon fontSize="small" />
+                        <span>Admin-Chats</span>
+                      </NavLink>
+                      <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
+                        <DashboardRoundedIcon fontSize="small" />
+                        <span>Admin-Bereich</span>
+                      </NavLink>
+                    </>
                   ) : null}
                   <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setMobileUserMenuOpen(false); logout(); }}>
                     <LogoutRoundedIcon fontSize="small" />
@@ -211,11 +222,21 @@ export default function Header() {
                     <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                   </button>
                   <div className="user-menu-dropdown" role="menu" aria-label="Benutzermenü">
+                    <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
+                      <ForumRoundedIcon fontSize="small" />
+                      <span>Nachrichten</span>
+                    </NavLink>
                     {isAdmin ? (
-                      <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
-                        <DashboardRoundedIcon fontSize="small" />
-                        <span>Admin-Bereich</span>
-                      </NavLink>
+                      <>
+                        <NavLink to="/admin/chats" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
+                          <ForumRoundedIcon fontSize="small" />
+                          <span>Admin-Chats</span>
+                        </NavLink>
+                        <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
+                          <DashboardRoundedIcon fontSize="small" />
+                          <span>Admin-Bereich</span>
+                        </NavLink>
+                      </>
                     ) : null}
                     <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setDesktopUserMenuOpen(false); logout(); }}>
                       <LogoutRoundedIcon fontSize="small" />

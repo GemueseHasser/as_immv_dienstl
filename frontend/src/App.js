@@ -13,6 +13,8 @@ import AuthPage from './pages/AuthPage';
 import AdminWohnungenPage from './pages/AdminWohnungenPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminUsersPage from './pages/AdminUsersPage';
+import UserChatsPage from './pages/UserChatsPage';
+import AdminChatsPage from './pages/AdminChatsPage';
 import ContactModal from './components/ContactModal';
 import { AuthProvider } from './auth/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
@@ -56,8 +58,11 @@ export default function App() {
             <Route path="/wohnungen" element={<Navigate to="/immobilienverwaltung/wohnungen" replace />} />
             <Route path="/wohnungen/:slug" element={<LegacyWohnungRedirect />} />
             <Route path="/anmelden" element={<AuthPage />} />
+            <Route path="/konto/nachrichten" element={<ProtectedRoute><UserChatsPage /></ProtectedRoute>} />
+            <Route path="/konto/nachrichten/:id" element={<ProtectedRoute><UserChatsPage /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboardPage /></ProtectedRoute>} />
             <Route path="/admin/benutzer" element={<ProtectedRoute adminOnly><AdminUsersPage /></ProtectedRoute>} />
+            <Route path="/admin/chats" element={<ProtectedRoute adminOnly><AdminChatsPage /></ProtectedRoute>} />
             <Route path="/admin/wohnungen" element={<ProtectedRoute adminOnly><AdminWohnungenPage /></ProtectedRoute>} />
             <Route path="/admin/wohnungen/neu" element={<ProtectedRoute adminOnly><AdminWohnungenPage /></ProtectedRoute>} />
             <Route path="/admin/wohnungen/:id" element={<ProtectedRoute adminOnly><AdminWohnungenPage /></ProtectedRoute>} />
