@@ -147,21 +147,17 @@ export default function Header() {
                   <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                 </button>
                 <div className="user-menu-dropdown mobile-user-menu-dropdown" role="menu" aria-label="Benutzermenü mobil">
-                  <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
-                    <ForumRoundedIcon fontSize="small" />
-                    <span>Nachrichten</span>
-                  </NavLink>
+                  {!isAdmin ? (
+                    <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
+                      <ForumRoundedIcon fontSize="small" />
+                      <span>Nachrichten</span>
+                    </NavLink>
+                  ) : null}
                   {isAdmin ? (
-                    <>
-                      <NavLink to="/admin/chats" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
-                        <ForumRoundedIcon fontSize="small" />
-                        <span>Admin-Chats</span>
-                      </NavLink>
-                      <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
-                        <DashboardRoundedIcon fontSize="small" />
-                        <span>Admin-Bereich</span>
-                      </NavLink>
-                    </>
+                    <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
+                      <DashboardRoundedIcon fontSize="small" />
+                      <span>Admin-Bereich</span>
+                    </NavLink>
                   ) : null}
                   <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setMobileUserMenuOpen(false); logout(); }}>
                     <LogoutRoundedIcon fontSize="small" />
@@ -222,21 +218,17 @@ export default function Header() {
                     <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                   </button>
                   <div className="user-menu-dropdown" role="menu" aria-label="Benutzermenü">
-                    <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
-                      <ForumRoundedIcon fontSize="small" />
-                      <span>Nachrichten</span>
-                    </NavLink>
+                    {!isAdmin ? (
+                      <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
+                        <ForumRoundedIcon fontSize="small" />
+                        <span>Nachrichten</span>
+                      </NavLink>
+                    ) : null}
                     {isAdmin ? (
-                      <>
-                        <NavLink to="/admin/chats" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
-                          <ForumRoundedIcon fontSize="small" />
-                          <span>Admin-Chats</span>
-                        </NavLink>
-                        <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
-                          <DashboardRoundedIcon fontSize="small" />
-                          <span>Admin-Bereich</span>
-                        </NavLink>
-                      </>
+                      <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
+                        <DashboardRoundedIcon fontSize="small" />
+                        <span>Admin-Bereich</span>
+                      </NavLink>
                     ) : null}
                     <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setDesktopUserMenuOpen(false); logout(); }}>
                       <LogoutRoundedIcon fontSize="small" />

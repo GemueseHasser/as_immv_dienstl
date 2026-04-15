@@ -46,6 +46,7 @@ export default function UserChatsPage() {
 
   const openerMessage = useMemo(() => selectedConversation?.messages?.[0] || null, [selectedConversation]);
   const threadMessages = useMemo(() => (selectedConversation?.messages || []).slice(1), [selectedConversation]);
+  const openerBubbleClass = openerMessage?.senderRole === 'user' ? 'is-own' : 'is-other';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -96,13 +97,14 @@ export default function UserChatsPage() {
             {feedback.success ? <Alert severity="success" sx={{ mb: 2 }}>{feedback.success}</Alert> : null}
             {detailLoading ? <Stack alignItems="center" sx={{ py: 6 }}><CircularProgress /></Stack> : selectedConversation ? (
               <>
+                <div className="chat-scroll-area">
                 <div className="chat-topic-card">
                   <p className="eyebrow">Chat eröffnet mit</p>
                   <h2>{selectedConversation.subject}</h2>
                   {selectedConversation.serviceLabel ? <p><strong>Leistung:</strong> {selectedConversation.serviceLabel}</p> : null}
                   {selectedConversation.apartmentTitle ? <p><strong>Wohnung:</strong> {selectedConversation.apartmentTitle}</p> : null}
                   {openerMessage ? (
-                    <div className="chat-opener-message">
+                    <div className={`chat-opener-message ${openerBubbleClass}`}>
                       <strong>{openerMessage.senderName}</strong>
                       <p>{openerMessage.message}</p>
                       <small>{formatDate(openerMessage.createdAt)}</small>
@@ -111,7 +113,7 @@ export default function UserChatsPage() {
                 </div>
                 <div className="chat-thread">
                   {threadMessages.length ? threadMessages.map((entry) => (
-                    <div key={entry.id} className={`chat-bubble ${entry.senderRole === 'admin' ? 'is-admin' : 'is-user'}`}>
+                    <div key={entry.id} className={`chat-bubble ${entry.senderRole === 'user' ? 'is-own' : 'is-other'}`}>
                       <strong>{entry.senderName}</strong>
                       <p>{entry.message}</p>
                       <small>{formatDate(entry.createdAt)}</small>
@@ -119,6 +121,7 @@ export default function UserChatsPage() {
                   )) : (
                     <div className="chat-empty-card compact"><ForumRoundedIcon fontSize="small" /> Noch keine weitere Antwort vorhanden.</div>
                   )}
+                </div>
                 </div>
                 <form className="chat-reply-form" onSubmit={handleSubmit}>
                   <TextField

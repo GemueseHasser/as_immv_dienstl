@@ -24,19 +24,32 @@ export default function AdminChatsPage() {
 
   const refreshList = async (preferredChatId = chatId) => {
     const payload = await apiFetch(`/admin/chats?category=${category}`);
-    setConversations(payload.conversations || []);
-    if (!preferredChatId && payload.conversations?.length) {
-      setSearchParams({ category, chat: String(payload.conversations[0].id) }, { replace: true });
+    const nextConversations = payload.conversations || [];
+    setConversations(nextConversations);
+
+    if (!nextConversations.length) {
+      setSearchParams({ category }, { replace: true });
+      return;
+    }
+
+    const preferredExists = preferredChatId && nextConversations.some((entry) => entry.id === preferredChatId);
+    if (!preferredExists) {
+      setSearchParams({ category, chat: String(nextConversations[0].id) }, { replace: true });
     }
   };
 
   useEffect(() => {
+    setSelectedConversation(null);
+    setMessage('');
     setLoading(true);
-    refreshList().catch((err) => setFeedback({ error: err.message, success: '' })).finally(() => setLoading(false));
+    refreshList(null).catch((err) => setFeedback({ error: err.message, success: '' })).finally(() => setLoading(false));
   }, [category]);
 
   useEffect(() => {
-    if (!chatId) return;
+    if (!chatId) {
+      setSelectedConversation(null);
+      return;
+    }
     setDetailLoading(true);
     apiFetch(`/admin/chats/${chatId}`)
       .then((payload) => setSelectedConversation(payload.conversation))
@@ -46,6 +59,7 @@ export default function AdminChatsPage() {
 
   const openerMessage = useMemo(() => selectedConversation?.messages?.[0] || null, [selectedConversation]);
   const threadMessages = useMemo(() => (selectedConversation?.messages || []).slice(1), [selectedConversation]);
+  const openerBubbleClass = openerMessage?.senderRole === 'admin' ? 'is-own' : 'is-other';
 
   const handleReply = async (event) => {
     event.preventDefault();
@@ -96,6 +110,7 @@ export default function AdminChatsPage() {
             {feedback.success ? <Alert severity="success" sx={{ mb: 2 }}>{feedback.success}</Alert> : null}
             {detailLoading ? <Stack alignItems="center" sx={{ py: 6 }}><CircularProgress /></Stack> : selectedConversation ? (
               <>
+                <div className="chat-scroll-area">
                 <div className="chat-topic-card">
                   <p className="eyebrow">Chat eröffnet mit</p>
                   <h2>{selectedConversation.subject}</h2>
@@ -106,7 +121,7 @@ export default function AdminChatsPage() {
                     <p><strong>Anzeige:</strong> <a href={`/#/immobilienverwaltung/wohnungen/${selectedConversation.apartmentSlug}`}>öffnen</a></p>
                   ) : null}
                   {openerMessage ? (
-                    <div className="chat-opener-message">
+                    <div className={`chat-opener-message ${openerBubbleClass}`}>
                       <strong>{openerMessage.senderName}</strong>
                       <p>{openerMessage.message}</p>
                       <small>{formatDate(openerMessage.createdAt)}</small>
@@ -115,12 +130,13 @@ export default function AdminChatsPage() {
                 </div>
                 <div className="chat-thread">
                   {threadMessages.map((entry) => (
-                    <div key={entry.id} className={`chat-bubble ${entry.senderRole === 'admin' ? 'is-admin' : 'is-user'}`}>
+                    <div key={entry.id} className={`chat-bubble ${entry.senderRole === 'admin' ? 'is-own' : 'is-other'}`}>
                       <strong>{entry.senderName}</strong>
                       <p>{entry.message}</p>
                       <small>{formatDate(entry.createdAt)}</small>
                     </div>
                   ))}
+                </div>
                 </div>
                 <form className="chat-reply-form" onSubmit={handleReply}>
                   <TextField
