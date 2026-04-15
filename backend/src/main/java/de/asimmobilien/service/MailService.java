@@ -2,11 +2,14 @@ package de.asimmobilien.service;
 
 import de.asimmobilien.config.AppProperties;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,10 +18,14 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.mail.internet.InternetAddress;
 
 @Service
 public class MailService {
     private static final Logger log = LoggerFactory.getLogger(MailService.class);
+    private static final String LOGO_IMMOBILIEN_CID = "logo-immobilien";
+    private static final String LOGO_DIENSTLEISTUNGEN_CID = "logo-dienstleistungen";
+    private static final Pattern EMAIL_IN_ANGLE_BRACKETS = Pattern.compile("<([^>]+)>");
 
     private final JavaMailSender mailSender;
     private final AppProperties properties;
@@ -158,11 +165,13 @@ public class MailService {
         }
         try {
             var mimeMessage = mailSender.createMimeMessage();
-            var helper = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.name());
-            helper.setFrom(properties.getMailFrom());
+            var helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+            helper.setFrom(buildFromAddress());
             helper.setTo(recipient);
             helper.setSubject(subject);
             helper.setText(text, html);
+            helper.addInline(LOGO_IMMOBILIEN_CID, new ClassPathResource("mail-assets/as-immobilienverwaltung-schwarz.png"), "image/png");
+            helper.addInline(LOGO_DIENSTLEISTUNGEN_CID, new ClassPathResource("mail-assets/as-dienstleistungen-schwarz.png"), "image/png");
             mailSender.send(mimeMessage);
         } catch (Exception ex) {
             log.warn("E-Mail konnte nicht versendet werden: {}", ex.getMessage());
@@ -196,8 +205,8 @@ public class MailService {
                                     String customBodyHtml,
                                     String footerNote) {
         String logos = "<div style=\"text-align:center; margin-bottom:28px;\">"
-                + "<img src=\"" + HtmlUtils.htmlEscape(resolveMailAssetBaseUrl() + "/as-immobilienverwaltung-schwarz.png") + "\" alt=\"AS Immobilienverwaltung\" style=\"display:block; margin:0 auto 10px auto; max-width:260px; width:100%; height:auto;\">"
-                + "<img src=\"" + HtmlUtils.htmlEscape(resolveMailAssetBaseUrl() + "/as-dienstleistungen-schwarz.png") + "\" alt=\"AS Dienstleistungen\" style=\"display:block; margin:0 auto; max-width:220px; width:100%; height:auto;\">"
+                + "<img src=\"cid:" + LOGO_IMMOBILIEN_CID + "\" alt=\"AS Immobilienverwaltung\" style=\"display:block; margin:0 auto 10px auto; max-width:260px; width:100%; height:auto;\">"
+                + "<img src=\"cid:" + LOGO_DIENSTLEISTUNGEN_CID + "\" alt=\"AS Dienstleistungen\" style=\"display:block; margin:0 auto; max-width:220px; width:100%; height:auto;\">"
                 + "</div>";
 
         StringBuilder infoHtml = new StringBuilder();
@@ -275,15 +284,27 @@ public class MailService {
                 + "</div></div>";
     }
 
-    private String resolveMailAssetBaseUrl() {
-        String requestBaseUrl = resolveCurrentRequestBaseUrl();
-        if (StringUtils.hasText(properties.getMailAssetBaseUrl())) {
-            return properties.getMailAssetBaseUrl().replaceAll("/+$", "");
+
+    private InternetAddress buildFromAddress() throws Exception {
+        String configuredFrom = trimToNull(properties.getMailFrom());
+        if (configuredFrom == null) {
+            throw new IllegalStateException("MAIL_FROM ist nicht konfiguriert");
         }
-        if (StringUtils.hasText(requestBaseUrl)) {
-            return requestBaseUrl;
+
+        String email = extractEmailAddress(configuredFrom);
+        String displayName = trimToNull(properties.getMailFromName());
+        if (displayName == null) {
+            displayName = "AS Immobilienverwaltung & Dienstleistungen";
         }
-        return resolvePublicBaseUrl();
+        return new InternetAddress(email, displayName, StandardCharsets.UTF_8.name());
+    }
+
+    private String extractEmailAddress(String configuredFrom) {
+        Matcher matcher = EMAIL_IN_ANGLE_BRACKETS.matcher(configuredFrom);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+        return configuredFrom.trim();
     }
 
     private String resolvePublicBaseUrl() {

@@ -11,6 +11,7 @@ public class AppProperties {
     private String publicBaseUrl;
     private String mailAssetBaseUrl;
     private String mailFrom;
+    private String mailFromName;
     private String contactReceiverEmail;
     private String adminName;
     private String adminEmail;
@@ -30,6 +31,8 @@ public class AppProperties {
     public void setMailAssetBaseUrl(String mailAssetBaseUrl) { this.mailAssetBaseUrl = mailAssetBaseUrl; }
     public String getMailFrom() { return mailFrom; }
     public void setMailFrom(String mailFrom) { this.mailFrom = mailFrom; }
+    public String getMailFromName() { return mailFromName; }
+    public void setMailFromName(String mailFromName) { this.mailFromName = mailFromName; }
     public String getContactReceiverEmail() { return contactReceiverEmail; }
     public void setContactReceiverEmail(String contactReceiverEmail) { this.contactReceiverEmail = contactReceiverEmail; }
     public String getAdminName() { return adminName; }
