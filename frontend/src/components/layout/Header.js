@@ -160,9 +160,9 @@ export default function Header() {
                   <span className="user-menu-copy">
                     <span className="user-menu-name-row">
                       <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
-                      {unreadChatsCount > 0 ? <span className="menu-badge user-trigger-badge">{unreadChatsCount}</span> : null}
                     </span>
                   </span>
+                  {unreadChatsCount > 0 ? <span className="menu-badge user-trigger-badge">{unreadChatsCount}</span> : null}
                   <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                 </button>
                 <div className="user-menu-dropdown mobile-user-menu-dropdown" role="menu" aria-label="Benutzermenü mobil">
@@ -236,9 +236,9 @@ export default function Header() {
                     <span className="user-menu-copy">
                       <span className="user-menu-name-row">
                         <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
-                        {unreadChatsCount > 0 ? <span className="menu-badge user-trigger-badge">{unreadChatsCount}</span> : null}
                       </span>
                     </span>
+                    {unreadChatsCount > 0 ? <span className="menu-badge user-trigger-badge">{unreadChatsCount}</span> : null}
                     <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                   </button>
                   <div className="user-menu-dropdown" role="menu" aria-label="Benutzermenü">

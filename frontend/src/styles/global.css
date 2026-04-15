@@ -3853,6 +3853,7 @@ body {
 }
 
 .user-menu-trigger {
+  position: relative;
   display: inline-grid;
   grid-template-columns: auto auto auto;
   align-items: center;
@@ -4561,12 +4562,14 @@ body {
 }
 
 .user-trigger-badge {
+  position: absolute;
+  right: 24px;
+  bottom: 2px;
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
   font-size: 0.66rem;
-  align-self: flex-end;
-  transform: translateY(3px);
+  z-index: 1;
 }
 
 .user-menu-item {
