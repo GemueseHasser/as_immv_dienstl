@@ -21,11 +21,13 @@ export default function AdminChatsPage() {
   const [detailLoading, setDetailLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [feedback, setFeedback] = useState({ error: '', success: '' });
+  const [unreadSummary, setUnreadSummary] = useState({ unreadChats: 0, immobilienverwaltungUnreadChats: 0, dienstleistungenUnreadChats: 0 });
 
   const refreshList = async (preferredChatId = chatId) => {
     const payload = await apiFetch(`/admin/chats?category=${category}`);
     const nextConversations = payload.conversations || [];
     setConversations(nextConversations);
+    setUnreadSummary(payload.unread || { unreadChats: 0, immobilienverwaltungUnreadChats: 0, dienstleistungenUnreadChats: 0 });
 
     if (!nextConversations.length) {
       setSearchParams({ category }, { replace: true });
@@ -81,12 +83,12 @@ export default function AdminChatsPage() {
       <div className="container compact-shell stack-gap">
         <div className="admin-card">
           <p className="eyebrow">Admin</p>
-          <h1>Chats</h1>
+          <h1>Chats {unreadSummary.unreadChats > 0 ? <span className="inline-badge">{unreadSummary.unreadChats}</span> : null}</h1>
           <p>Alle Konversationen sind nach Immobilienverwaltung und Dienstleistungen getrennt.</p>
         </div>
         <Tabs value={category} onChange={(_e, value) => setSearchParams({ category: value })} sx={{ mb: 1 }}>
-          <Tab value="immobilienverwaltung" label="Immobilienverwaltung" />
-          <Tab value="dienstleistungen" label="Dienstleistungen" />
+          <Tab value="immobilienverwaltung" label={`Immobilienverwaltung${unreadSummary.immobilienverwaltungUnreadChats ? ` (${unreadSummary.immobilienverwaltungUnreadChats})` : ''}`} />
+          <Tab value="dienstleistungen" label={`Dienstleistungen${unreadSummary.dienstleistungenUnreadChats ? ` (${unreadSummary.dienstleistungenUnreadChats})` : ''}`} />
         </Tabs>
 
         <div className="chat-layout">
@@ -95,10 +97,13 @@ export default function AdminChatsPage() {
               <button
                 key={conversation.id}
                 type="button"
-                className={`chat-list-item ${conversation.id === chatId ? 'is-active' : ''}`}
+                className={`chat-list-item ${conversation.id === chatId ? 'is-active' : ''} ${conversation.adminHasUnread ? 'is-unread' : ''}`}
                 onClick={() => setSearchParams({ category, chat: String(conversation.id) })}
               >
-                <strong>{conversation.subject}</strong>
+                <div className="chat-list-item-top">
+                  <strong>{conversation.subject}</strong>
+                  {conversation.adminHasUnread ? <span className="chat-unread-dot" aria-label="Ungelesener Chat" /> : null}
+                </div>
                 <span>{conversation.userName} · {conversation.userEmail}</span>
                 <small>{formatDate(conversation.updatedAt)}</small>
               </button>

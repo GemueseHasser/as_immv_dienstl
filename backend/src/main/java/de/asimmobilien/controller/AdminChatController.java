@@ -22,11 +22,22 @@ public class AdminChatController {
 
     @GetMapping
     public Map<String, Object> list(@RequestParam(name = "category", defaultValue = "immobilienverwaltung") String category) {
-        return Map.of("ok", true, "conversations", chatService.listAdminConversations(category).stream().map(chatService::toConversationSummary).toList());
+        return Map.of(
+                "ok", true,
+                "conversations", chatService.listAdminConversations(category).stream().map(chatService::toConversationSummary).toList(),
+                "unread", chatService.getAdminUnreadSummary()
+        );
+    }
+
+    @GetMapping("/unread-summary")
+    public Map<String, Object> unreadSummary() {
+        return Map.of("ok", true, "unread", chatService.getAdminUnreadSummary());
     }
 
     @GetMapping("/{id}")
     public Map<String, Object> detail(@PathVariable Long id) {
+        var conversation = chatService.getConversationForAdmin(id);
+        chatService.markConversationReadForAdmin(conversation);
         return Map.of("ok", true, "conversation", chatService.toConversationDetail(chatService.getConversationForAdmin(id)));
     }
 

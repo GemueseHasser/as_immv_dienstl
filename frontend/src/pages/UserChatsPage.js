@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { Alert, CircularProgress, Stack, TextField } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { apiFetch } from '../api/client';
 import { PremiumButton } from '../components/ui';
+import { useAuth } from '../auth/AuthContext';
 
 function formatDate(value) {
   if (!value) return '';
@@ -14,17 +15,20 @@ function formatDate(value) {
 export default function UserChatsPage() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isAdmin } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [detailLoading, setDetailLoading] = useState(false);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [message, setMessage] = useState('');
   const [feedback, setFeedback] = useState({ error: '', success: '' });
+  const [unreadSummary, setUnreadSummary] = useState({ unreadChats: 0, unreadMessages: 0 });
   const activeId = id ? Number(id) : null;
 
   const refreshList = async (preferredId = activeId) => {
     const payload = await apiFetch('/chats/my');
     setConversations(payload.conversations || []);
+    setUnreadSummary(payload.unread || { unreadChats: 0, unreadMessages: 0 });
     if (!preferredId && payload.conversations?.length) {
       navigate(`/konto/nachrichten/${payload.conversations[0].id}`, { replace: true });
     }
@@ -63,6 +67,10 @@ export default function UserChatsPage() {
     }
   };
 
+  if (isAdmin) {
+    return <Navigate to="/admin/chats" replace />;
+  }
+
   if (loading) {
     return <Stack alignItems="center" sx={{ py: 8 }}><CircularProgress /></Stack>;
   }
@@ -72,7 +80,7 @@ export default function UserChatsPage() {
       <div className="container compact-shell stack-gap">
         <div className="admin-card">
           <p className="eyebrow">Persönlicher Bereich</p>
-          <h1>Nachrichten</h1>
+          <h1>Nachrichten {unreadSummary.unreadChats > 0 ? <span className="inline-badge">{unreadSummary.unreadChats}</span> : null}</h1>
           <p>Hier sehen Sie alle Anfragen und Antworten von AS Immobilienverwaltung &amp; Dienstleistungen.</p>
         </div>
 
@@ -82,10 +90,13 @@ export default function UserChatsPage() {
               <button
                 key={conversation.id}
                 type="button"
-                className={`chat-list-item ${conversation.id === activeId ? 'is-active' : ''}`}
+                className={`chat-list-item ${conversation.id === activeId ? 'is-active' : ''} ${conversation.userHasUnread ? 'is-unread' : ''}`}
                 onClick={() => navigate(`/konto/nachrichten/${conversation.id}`)}
               >
-                <strong>{conversation.subject}</strong>
+                <div className="chat-list-item-top">
+                  <strong>{conversation.subject}</strong>
+                  {conversation.userHasUnread ? <span className="chat-unread-dot" aria-label="Ungelesener Chat" /> : null}
+                </div>
                 <span>{conversation.lastMessage}</span>
                 <small>{formatDate(conversation.updatedAt)}</small>
               </button>

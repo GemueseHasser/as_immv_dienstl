@@ -23,12 +23,24 @@ public class ChatController {
     @GetMapping("/my")
     public Map<String, Object> myChats(@AuthenticationPrincipal SecurityUser principal) {
         var user = userRepository.findById(principal.getUser().getId()).orElseThrow();
-        return Map.of("ok", true, "conversations", chatService.listUserConversations(user).stream().map(chatService::toConversationSummary).toList());
+        return Map.of(
+                "ok", true,
+                "conversations", chatService.listUserConversations(user).stream().map(chatService::toConversationSummary).toList(),
+                "unread", chatService.getUserUnreadSummary(user)
+        );
+    }
+
+    @GetMapping("/unread-summary")
+    public Map<String, Object> unreadSummary(@AuthenticationPrincipal SecurityUser principal) {
+        var user = userRepository.findById(principal.getUser().getId()).orElseThrow();
+        return Map.of("ok", true, "unread", chatService.getUserUnreadSummary(user));
     }
 
     @GetMapping("/{id}")
     public Map<String, Object> myChatDetail(@PathVariable Long id, @AuthenticationPrincipal SecurityUser principal) {
         var user = userRepository.findById(principal.getUser().getId()).orElseThrow();
+        var conversation = chatService.getConversationForUser(id, user);
+        chatService.markConversationReadForUser(conversation);
         return Map.of("ok", true, "conversation", chatService.toConversationDetail(chatService.getConversationForUser(id, user)));
     }
 

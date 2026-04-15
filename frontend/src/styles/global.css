@@ -3882,6 +3882,12 @@ body {
   text-align: left;
 }
 
+.user-menu-name-row {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
 .user-menu-name {
   font-size: 0.84rem;
   color: var(--text);
@@ -4533,4 +4539,75 @@ body {
   .chat-scroll-area {
     max-height: 56vh;
   }
+}
+
+
+.menu-badge,
+.inline-badge,
+.card-badge,
+.chat-unread-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #1f2937;
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.user-trigger-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 0.66rem;
+  align-self: flex-end;
+  transform: translateY(3px);
+}
+
+.user-menu-item {
+  justify-content: space-between;
+}
+
+.user-menu-item span:first-of-type {
+  flex: 1 1 auto;
+}
+
+.inline-badge {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.admin-dashboard-card {
+  position: relative;
+}
+
+.card-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.chat-list-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chat-unread-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #1f2937;
+  box-shadow: 0 0 0 4px rgba(31,41,55,0.12);
+  flex: 0 0 auto;
+}
+
+.chat-list-item.is-unread {
+  border-color: rgba(31,41,55,0.18);
 }

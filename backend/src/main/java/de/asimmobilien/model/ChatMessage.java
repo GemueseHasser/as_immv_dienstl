@@ -27,6 +27,12 @@ public class ChatMessage {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    @Column(name = "read_by_user", nullable = false)
+    private boolean readByUser;
+
+    @Column(name = "read_by_admin", nullable = false)
+    private boolean readByAdmin;
+
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -42,5 +48,9 @@ public class ChatMessage {
     public void setSenderRole(String senderRole) { this.senderRole = senderRole; }
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
+    public boolean isReadByUser() { return readByUser; }
+    public void setReadByUser(boolean readByUser) { this.readByUser = readByUser; }
+    public boolean isReadByAdmin() { return readByAdmin; }
+    public void setReadByAdmin(boolean readByAdmin) { this.readByAdmin = readByAdmin; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 }

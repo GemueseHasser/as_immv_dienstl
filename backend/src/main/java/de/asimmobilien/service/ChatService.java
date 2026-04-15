@@ -5,6 +5,7 @@ import de.asimmobilien.repository.ChatConversationRepository;
 import de.asimmobilien.repository.ChatMessageRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -57,9 +58,7 @@ public class ChatService {
     }
 
     public List<ChatConversation> listAdminConversations(String categoryKey) {
-        ChatCategory category = "dienstleistungen".equalsIgnoreCase(categoryKey)
-                ? ChatCategory.DIENSTLEISTUNGEN
-                : ChatCategory.IMMOBILIENVERWALTUNG;
+        ChatCategory category = parseCategory(categoryKey);
         return conversationRepository.findByCategoryOrderByUpdatedAtDesc(category);
     }
 
@@ -93,6 +92,64 @@ public class ChatService {
         return savedMessage;
     }
 
+    @Transactional
+    public void markConversationReadForUser(ChatConversation conversation) {
+        boolean changed = false;
+        for (ChatMessage message : conversation.getMessages()) {
+            if (isUnreadForUser(message)) {
+                message.setReadByUser(true);
+                changed = true;
+            }
+        }
+        if (changed) {
+            messageRepository.saveAll(conversation.getMessages());
+        }
+    }
+
+    @Transactional
+    public void markConversationReadForAdmin(ChatConversation conversation) {
+        boolean changed = false;
+        for (ChatMessage message : conversation.getMessages()) {
+            if (isUnreadForAdmin(message)) {
+                message.setReadByAdmin(true);
+                changed = true;
+            }
+        }
+        if (changed) {
+            messageRepository.saveAll(conversation.getMessages());
+        }
+    }
+
+    public Map<String, Object> getUserUnreadSummary(User user) {
+        List<ChatConversation> conversations = listUserConversations(user);
+        long unreadChats = conversations.stream().filter(this::hasUnreadForUser).count();
+        long unreadMessages = conversations.stream().mapToLong(this::countUnreadMessagesForUser).sum();
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("unreadChats", unreadChats);
+        result.put("unreadMessages", unreadMessages);
+        return result;
+    }
+
+    public Map<String, Object> getAdminUnreadSummary() {
+        List<ChatConversation> immvConversations = conversationRepository.findByCategoryOrderByUpdatedAtDesc(ChatCategory.IMMOBILIENVERWALTUNG);
+        List<ChatConversation> dienstlConversations = conversationRepository.findByCategoryOrderByUpdatedAtDesc(ChatCategory.DIENSTLEISTUNGEN);
+
+        long immvUnreadChats = immvConversations.stream().filter(this::hasUnreadForAdmin).count();
+        long dienstlUnreadChats = dienstlConversations.stream().filter(this::hasUnreadForAdmin).count();
+        long immvUnreadMessages = immvConversations.stream().mapToLong(this::countUnreadMessagesForAdmin).sum();
+        long dienstlUnreadMessages = dienstlConversations.stream().mapToLong(this::countUnreadMessagesForAdmin).sum();
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("unreadChats", immvUnreadChats + dienstlUnreadChats);
+        result.put("unreadMessages", immvUnreadMessages + dienstlUnreadMessages);
+        result.put("immobilienverwaltungUnreadChats", immvUnreadChats);
+        result.put("dienstleistungenUnreadChats", dienstlUnreadChats);
+        result.put("immobilienverwaltungUnreadMessages", immvUnreadMessages);
+        result.put("dienstleistungenUnreadMessages", dienstlUnreadMessages);
+        return result;
+    }
+
     private ChatMessage addMessageInternal(ChatConversation conversation, User sender, String senderRole, String message) {
         if (!StringUtils.hasText(message) || message.trim().length() < 2) {
             throw new IllegalArgumentException("Bitte eine Nachricht mit mindestens 2 Zeichen eingeben.");
@@ -103,6 +160,8 @@ public class ChatService {
         entity.setSenderName(sender.getName());
         entity.setSenderRole(senderRole);
         entity.setMessage(message.trim());
+        entity.setReadByAdmin("admin".equalsIgnoreCase(senderRole));
+        entity.setReadByUser(!"admin".equalsIgnoreCase(senderRole));
         ChatMessage saved = messageRepository.save(entity);
         conversation.setUpdatedAt(LocalDateTime.now());
         conversationRepository.save(conversation);
@@ -110,10 +169,10 @@ public class ChatService {
     }
 
     public Map<String, Object> toConversationSummary(ChatConversation conversation) {
-        java.util.List<ChatMessage> messages = conversation.getMessages();
+        List<ChatMessage> messages = conversation.getMessages();
         ChatMessage lastMessage = messages != null && !messages.isEmpty() ? messages.get(messages.size() - 1) : null;
 
-        Map<String, Object> summary = new java.util.LinkedHashMap<>();
+        Map<String, Object> summary = new LinkedHashMap<>();
         summary.put("id", conversation.getId());
         summary.put("category", conversation.getCategory().name());
         summary.put("subject", conversation.getSubject());
@@ -125,33 +184,71 @@ public class ChatService {
         summary.put("createdAt", conversation.getCreatedAt());
         summary.put("updatedAt", conversation.getUpdatedAt());
         summary.put("lastMessage", lastMessage != null ? lastMessage.getMessage() : "");
+        summary.put("userHasUnread", hasUnreadForUser(conversation));
+        summary.put("adminHasUnread", hasUnreadForAdmin(conversation));
+        summary.put("userUnreadMessages", countUnreadMessagesForUser(conversation));
+        summary.put("adminUnreadMessages", countUnreadMessagesForAdmin(conversation));
         return summary;
     }
 
     public Map<String, Object> toConversationDetail(ChatConversation conversation) {
-        return Map.of(
-                "id", conversation.getId(),
-                "category", conversation.getCategory().name(),
-                "subject", conversation.getSubject(),
-                "serviceLabel", conversation.getServiceLabel() == null ? "" : conversation.getServiceLabel(),
-                "apartmentTitle", conversation.getApartment() != null ? conversation.getApartment().getTitle() : "",
-                "apartmentSlug", conversation.getApartment() != null ? conversation.getApartment().getSlug() : "",
-                "user", Map.of(
-                        "id", conversation.getUser().getId(),
-                        "name", conversation.getUser().getName(),
-                        "email", conversation.getUser().getEmail()
-                ),
-                "createdAt", conversation.getCreatedAt(),
-                "updatedAt", conversation.getUpdatedAt(),
-                "messages", conversation.getMessages().stream().map(message -> Map.of(
-                        "id", message.getId(),
-                        "senderName", message.getSenderName(),
-                        "senderRole", message.getSenderRole(),
-                        "message", message.getMessage(),
-                        "createdAt", message.getCreatedAt(),
-                        "isOwn", message.getSenderUser() != null && message.getSenderUser().getId().equals(conversation.getUser().getId())
-                )).toList()
-        );
+        Map<String, Object> detail = new LinkedHashMap<>();
+        detail.put("id", conversation.getId());
+        detail.put("category", conversation.getCategory().name());
+        detail.put("subject", conversation.getSubject());
+        detail.put("serviceLabel", conversation.getServiceLabel() == null ? "" : conversation.getServiceLabel());
+        detail.put("apartmentTitle", conversation.getApartment() != null ? conversation.getApartment().getTitle() : "");
+        detail.put("apartmentSlug", conversation.getApartment() != null ? conversation.getApartment().getSlug() : "");
+        detail.put("user", Map.of(
+                "id", conversation.getUser().getId(),
+                "name", conversation.getUser().getName(),
+                "email", conversation.getUser().getEmail()
+        ));
+        detail.put("createdAt", conversation.getCreatedAt());
+        detail.put("updatedAt", conversation.getUpdatedAt());
+        detail.put("userHasUnread", hasUnreadForUser(conversation));
+        detail.put("adminHasUnread", hasUnreadForAdmin(conversation));
+        detail.put("messages", conversation.getMessages().stream().map(message -> Map.of(
+                "id", message.getId(),
+                "senderName", message.getSenderName(),
+                "senderRole", message.getSenderRole(),
+                "message", message.getMessage(),
+                "createdAt", message.getCreatedAt(),
+                "readByUser", message.isReadByUser(),
+                "readByAdmin", message.isReadByAdmin(),
+                "isOwn", message.getSenderUser() != null && message.getSenderUser().getId().equals(conversation.getUser().getId())
+        )).toList());
+        return detail;
+    }
+
+    private ChatCategory parseCategory(String categoryKey) {
+        return "dienstleistungen".equalsIgnoreCase(categoryKey)
+                ? ChatCategory.DIENSTLEISTUNGEN
+                : ChatCategory.IMMOBILIENVERWALTUNG;
+    }
+
+    private boolean hasUnreadForUser(ChatConversation conversation) {
+        return countUnreadMessagesForUser(conversation) > 0;
+    }
+
+    private boolean hasUnreadForAdmin(ChatConversation conversation) {
+        return countUnreadMessagesForAdmin(conversation) > 0;
+    }
+
+    private long countUnreadMessagesForUser(ChatConversation conversation) {
+        return conversation.getMessages().stream().filter(this::isUnreadForUser).count();
+    }
+
+    private long countUnreadMessagesForAdmin(ChatConversation conversation) {
+        return conversation.getMessages().stream().filter(this::isUnreadForAdmin).count();
+    }
+
+    private boolean isUnreadForUser(ChatMessage message) {
+        return "admin".equalsIgnoreCase(message.getSenderRole()) && !message.isReadByUser();
+    }
+
+    private boolean isUnreadForAdmin(ChatMessage message) {
+        return !"admin".equalsIgnoreCase(message.getSenderRole()) && !message.isReadByAdmin();
     }
 
     private String roleLabel(User user) {

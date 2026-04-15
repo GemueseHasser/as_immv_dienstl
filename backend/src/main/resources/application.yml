@@ -41,6 +41,3 @@ app:
   contact-receiver-email: ${CONTACT_RECEIVER_EMAIL:info@example.com}
   immv-receiver-email: ${IMMV_RECEIVER_EMAIL:${CONTACT_RECEIVER_EMAIL:info@example.com}}
   dienstl-receiver-email: ${DIENSTL_RECEIVER_EMAIL:${CONTACT_RECEIVER_EMAIL:info@example.com}}
-  admin-name: ${ADMIN_NAME:AS Admin}
-  admin-email: ${ADMIN_EMAIL:admin@example.com}
-  admin-password: ${ADMIN_PASSWORD:BitteSicher123!}

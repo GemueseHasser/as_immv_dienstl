@@ -11,9 +11,10 @@ import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { IconButton } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import BrandLogos from '../BrandLogos';
 import { useAuth } from '../../auth/AuthContext';
+import { apiFetch } from '../../api/client';
 
 function getUserInitials(name = '') {
   return name
@@ -39,6 +40,8 @@ export default function Header() {
   const [desktopUserMenuOpen, setDesktopUserMenuOpen] = useState(false);
   const [mobileUserMenuOpen, setMobileUserMenuOpen] = useState(false);
   const { user, isAdmin, isAuthenticated, logout } = useAuth();
+  const location = useLocation();
+  const [unreadSummary, setUnreadSummary] = useState({ unreadChats: 0, unreadMessages: 0, immobilienverwaltungUnreadChats: 0, dienstleistungenUnreadChats: 0 });
 
   const navItems = [
     { label: 'Start', to: '/', icon: <HomeRoundedIcon fontSize="small" /> },
@@ -49,6 +52,7 @@ export default function Header() {
 
   const initials = useMemo(() => getUserInitials(user?.name), [user?.name]);
   const firstName = useMemo(() => getFirstName(user?.name), [user?.name]);
+  const unreadChatsCount = unreadSummary?.unreadChats || 0;
 
   useEffect(() => {
     const node = navRef.current;
@@ -90,6 +94,18 @@ export default function Header() {
       window.removeEventListener('resize', updateBrandVisibility);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setUnreadSummary({ unreadChats: 0, unreadMessages: 0, immobilienverwaltungUnreadChats: 0, dienstleistungenUnreadChats: 0 });
+      return;
+    }
+
+    const endpoint = isAdmin ? '/admin/chats/unread-summary' : '/chats/unread-summary';
+    apiFetch(endpoint)
+      .then((payload) => setUnreadSummary(payload.unread || { unreadChats: 0, unreadMessages: 0 }))
+      .catch(() => setUnreadSummary({ unreadChats: 0, unreadMessages: 0, immobilienverwaltungUnreadChats: 0, dienstleistungenUnreadChats: 0 }));
+  }, [isAuthenticated, isAdmin, location.pathname]);
 
   useEffect(() => {
     if (!desktopUserMenuOpen && !mobileUserMenuOpen) return undefined;
@@ -142,7 +158,10 @@ export default function Header() {
                 >
                   <span className="user-avatar">{initials || 'U'}</span>
                   <span className="user-menu-copy">
-                    <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
+                    <span className="user-menu-name-row">
+                      <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
+                      {unreadChatsCount > 0 ? <span className="menu-badge user-trigger-badge">{unreadChatsCount}</span> : null}
+                    </span>
                   </span>
                   <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                 </button>
@@ -151,12 +170,14 @@ export default function Header() {
                     <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
                       <ForumRoundedIcon fontSize="small" />
                       <span>Nachrichten</span>
+                      {unreadChatsCount > 0 ? <span className="menu-badge">{unreadChatsCount}</span> : null}
                     </NavLink>
                   ) : null}
                   {isAdmin ? (
                     <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setMobileUserMenuOpen(false)}>
                       <DashboardRoundedIcon fontSize="small" />
                       <span>Admin-Bereich</span>
+                      {unreadChatsCount > 0 ? <span className="menu-badge">{unreadChatsCount}</span> : null}
                     </NavLink>
                   ) : null}
                   <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setMobileUserMenuOpen(false); logout(); }}>
@@ -213,7 +234,10 @@ export default function Header() {
                   >
                     <span className="user-avatar">{initials || 'U'}</span>
                     <span className="user-menu-copy">
-                      <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
+                      <span className="user-menu-name-row">
+                        <span className="user-menu-name">{(firstName || 'Benutzer').toLowerCase()}</span>
+                        {unreadChatsCount > 0 ? <span className="menu-badge user-trigger-badge">{unreadChatsCount}</span> : null}
+                      </span>
                     </span>
                     <ArrowDropDownRoundedIcon className="user-menu-caret" fontSize="small" />
                   </button>
@@ -222,12 +246,14 @@ export default function Header() {
                       <NavLink to="/konto/nachrichten" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
                         <ForumRoundedIcon fontSize="small" />
                         <span>Nachrichten</span>
+                        {unreadChatsCount > 0 ? <span className="menu-badge">{unreadChatsCount}</span> : null}
                       </NavLink>
                     ) : null}
                     {isAdmin ? (
                       <NavLink to="/admin" className="user-menu-item" role="menuitem" onClick={() => setDesktopUserMenuOpen(false)}>
                         <DashboardRoundedIcon fontSize="small" />
                         <span>Admin-Bereich</span>
+                        {unreadChatsCount > 0 ? <span className="menu-badge">{unreadChatsCount}</span> : null}
                       </NavLink>
                     ) : null}
                     <button type="button" className="user-menu-item" role="menuitem" onClick={() => { setDesktopUserMenuOpen(false); logout(); }}>

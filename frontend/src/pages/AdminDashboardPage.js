@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import { Link as RouterLink } from 'react-router-dom';
+import { apiFetch } from '../api/client';
 
 export default function AdminDashboardPage() {
+  const [unreadChats, setUnreadChats] = useState(0);
+
+  useEffect(() => {
+    apiFetch('/admin/chats/unread-summary')
+      .then((payload) => setUnreadChats(payload.unread?.unreadChats || 0))
+      .catch(() => setUnreadChats(0));
+  }, []);
+
   const cards = [
     {
       title: 'Benutzerverwaltung',
@@ -24,6 +33,7 @@ export default function AdminDashboardPage() {
       text: 'Anfragen und Antworten getrennt nach Immobilienverwaltung und Dienstleistungen bearbeiten.',
       to: '/admin/chats',
       icon: <ForumRoundedIcon fontSize="large" />,
+      badge: unreadChats,
     },
   ];
 
@@ -39,6 +49,7 @@ export default function AdminDashboardPage() {
           {cards.map((card) => (
             <RouterLink key={card.to} to={card.to} className="admin-dashboard-card">
               <div className="admin-dashboard-icon" aria-hidden="true">{card.icon}</div>
+              {card.badge > 0 ? <span className="card-badge">{card.badge}</span> : null}
               <div className="stack-gap" style={{ gap: 12 }}>
                 <h2>{card.title}</h2>
                 <p>{card.text}</p>
