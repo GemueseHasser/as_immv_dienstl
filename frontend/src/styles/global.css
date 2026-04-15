@@ -2882,6 +2882,77 @@ body {
   background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(238,234,228,0.82));
 }
 
+
+
+.services-gallery-stack {
+  display: grid;
+  gap: 22px;
+  padding-bottom: 32px;
+}
+
+.services-gallery-stack-row {
+  --stack-top: calc(78px + (var(--stack-reverse-index) * 20px));
+  position: sticky;
+  top: var(--stack-top);
+  z-index: calc(10 + var(--stack-index));
+}
+
+.services-gallery-stack-shell {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  min-height: 640px;
+  padding: 24px;
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(31, 35, 39, 0.08);
+  box-shadow: 0 28px 80px rgba(16, 24, 40, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.services-gallery-stack-row.is-single {
+  max-width: calc(50% - 11px);
+}
+
+.services-gallery-stack-row.is-single .services-gallery-stack-shell {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.services-gallery-stack-row .gallery-card {
+  grid-column: auto;
+  min-height: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 320px 1fr;
+  border: 1px solid rgba(31, 35, 39, 0.06);
+  box-shadow: 0 18px 44px rgba(16, 24, 40, 0.1);
+}
+
+.services-gallery-stack-row .gallery-card:hover {
+  transform: translateY(-4px);
+}
+
+.services-gallery-stack-row .gallery-media-wrap {
+  height: 320px;
+}
+
+.services-gallery-stack-row .gallery-card img,
+.services-gallery-stack-row .gallery-card-tall img {
+  height: 320px;
+}
+
+.services-gallery-stack-row .gallery-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  min-height: 0;
+}
+
+.services-gallery-mobile-wrap {
+  display: none;
+}
+
 .services-gallery-mosaic .gallery-card {
   grid-column: span 4;
 }
@@ -2904,6 +2975,15 @@ body {
     justify-content: flex-start;
   }
 
+  .services-gallery-stack-shell {
+    min-height: 600px;
+    padding: 20px;
+  }
+
+  .services-gallery-stack-row.is-single {
+    max-width: 100%;
+  }
+
   .services-gallery-mosaic .gallery-card,
   .services-gallery-mosaic .gallery-card-wide {
     grid-column: span 6;
@@ -2911,6 +2991,14 @@ body {
 }
 
 @media (max-width: 720px) {
+  .services-gallery-stack {
+    display: none;
+  }
+
+  .services-gallery-mobile-wrap {
+    display: block;
+  }
+
   .services-gallery-mosaic .gallery-card,
   .services-gallery-mosaic .gallery-card-wide {
     grid-column: auto;
