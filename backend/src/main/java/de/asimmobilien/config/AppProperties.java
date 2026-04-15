@@ -13,6 +13,8 @@ public class AppProperties {
     private String mailFrom;
     private String mailFromName;
     private String contactReceiverEmail;
+    private String immvReceiverEmail;
+    private String dienstlReceiverEmail;
     private String adminName;
     private String adminEmail;
     private String adminPassword;
@@ -35,6 +37,10 @@ public class AppProperties {
     public void setMailFromName(String mailFromName) { this.mailFromName = mailFromName; }
     public String getContactReceiverEmail() { return contactReceiverEmail; }
     public void setContactReceiverEmail(String contactReceiverEmail) { this.contactReceiverEmail = contactReceiverEmail; }
+    public String getImmvReceiverEmail() { return immvReceiverEmail; }
+    public void setImmvReceiverEmail(String immvReceiverEmail) { this.immvReceiverEmail = immvReceiverEmail; }
+    public String getDienstlReceiverEmail() { return dienstlReceiverEmail; }
+    public void setDienstlReceiverEmail(String dienstlReceiverEmail) { this.dienstlReceiverEmail = dienstlReceiverEmail; }
     public String getAdminName() { return adminName; }
     public void setAdminName(String adminName) { this.adminName = adminName; }
     public String getAdminEmail() { return adminEmail; }

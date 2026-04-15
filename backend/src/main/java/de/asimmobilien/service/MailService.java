@@ -36,7 +36,7 @@ public class MailService {
     }
 
     public void send(String subject, String text) {
-        sendTo(properties.getContactReceiverEmail(), subject, text);
+        sendTo(resolveImmvRecipient(), subject, text);
     }
 
     public void sendTo(String recipient, String subject, String text) {
@@ -115,27 +115,26 @@ public class MailService {
                 "Neue Anfrage eingegangen",
                 "Über die Website wurde eine neue Anfrage für AS Immobilienverwaltung & Dienstleistungen eingereicht.",
                 infoRows,
+                "Direkt antworten",
+                buildReplyMailto(senderEmail),
                 null,
-                null,
-                "Nachricht",
                 null,
                 messageCard(message),
-                "Bitte zeitnah prüfen und direkt mit dem Interessenten Kontakt aufnehmen."
+                null
         );
-        sendEmail(properties.getContactReceiverEmail(), subject, plainText, html);
+        sendEmail(resolveContactRecipient(requestType), subject, plainText, html);
     }
 
     public void sendApartmentInquiryEmail(String apartmentTitle, String apartmentSlug, String senderEmail, String senderName, String message) {
         String subject = "Neue Kontaktanfrage zur Wohnungsanzeige: " + safeText(apartmentTitle);
         String plainText = "Typ: Immobilienverwaltung / Wohnungsanzeige\n"
                 + "Wohnung: " + safeText(apartmentTitle) + "\n"
-                + "Slug: " + safeText(apartmentSlug) + "\n"
                 + "E-Mail: " + safeText(senderEmail) + "\n"
                 + "Name: " + safeText(senderName) + "\n\n"
                 + safeText(message);
         String apartmentUrl = null;
         if (StringUtils.hasText(apartmentSlug)) {
-            apartmentUrl = resolvePublicBaseUrl() + "/wohnungen/" + apartmentSlug;
+            apartmentUrl = resolvePublicBaseUrl() + "/#/immobilienverwaltung/wohnungen/" + apartmentSlug;
         }
         String html = buildBrandedHtml(
                 "Neue Wohnungsanfrage über die Website eingegangen.",
@@ -144,18 +143,40 @@ public class MailService {
                 List.of(
                         infoRow("Bereich", "Immobilienverwaltung / Wohnungsanzeige"),
                         infoRow("Wohnung", safeText(apartmentTitle)),
-                        infoRow("Slug", safeText(apartmentSlug)),
                         infoRow("Absender", safeText(senderName)),
                         infoRow("E-Mail", safeText(senderEmail))
                 ),
+                "Direkt antworten",
+                buildReplyMailto(senderEmail),
                 apartmentUrl != null ? "Wohnungsanzeige öffnen" : null,
                 apartmentUrl,
-                "Nachricht",
-                null,
                 messageCard(message),
-                "Bitte prüfen Sie die Anfrage und melden Sie sich beim Interessenten zurück."
+                null
         );
-        sendEmail(properties.getContactReceiverEmail(), subject, plainText, html);
+        sendEmail(resolveImmvRecipient(), subject, plainText, html);
+    }
+
+
+    private String resolveContactRecipient(String requestType) {
+        String normalized = requestType == null ? "" : requestType.trim().toLowerCase();
+        if (normalized.contains("dienst")) {
+            return resolveDienstlRecipient();
+        }
+        return resolveImmvRecipient();
+    }
+
+    private String resolveImmvRecipient() {
+        if (StringUtils.hasText(properties.getImmvReceiverEmail())) {
+            return properties.getImmvReceiverEmail();
+        }
+        return properties.getContactReceiverEmail();
+    }
+
+    private String resolveDienstlRecipient() {
+        if (StringUtils.hasText(properties.getDienstlReceiverEmail())) {
+            return properties.getDienstlReceiverEmail();
+        }
+        return properties.getContactReceiverEmail();
     }
 
     private void sendEmail(String recipient, String subject, String text, String html) {
@@ -227,18 +248,16 @@ public class MailService {
         }
 
         String secondaryLinkHtml = "";
-        if (StringUtils.hasText(secondaryLabel)) {
-            secondaryLinkHtml = "<div style=\"margin-top:18px; color:#4b5563; font-size:14px; line-height:1.7;\">"
-                    + "<div style=\"font-weight:700; color:#111827; margin-bottom:6px;\">"
+        if (StringUtils.hasText(secondaryLabel) && StringUtils.hasText(secondaryUrl)) {
+            secondaryLinkHtml = "<div style=\"text-align:center; margin:12px 0 18px;\">"
+                    + "<a href=\"" + HtmlUtils.htmlEscape(secondaryUrl) + "\" style=\"display:inline-block; background:#ffffff; color:#111827; text-decoration:none; padding:14px 24px; border-radius:999px; font-weight:700; font-size:15px; border:1px solid #d1d5db;\">"
                     + HtmlUtils.htmlEscape(secondaryLabel)
-                    + "</div>"
-                    + (StringUtils.hasText(secondaryUrl)
-                    ? "<div style=\"word-break:break-all;\"><a href=\"" + HtmlUtils.htmlEscape(secondaryUrl) + "\" style=\"color:#111827;\">" + HtmlUtils.htmlEscape(secondaryUrl) + "</a></div>"
-                    : "")
-                    + "</div>";
+                    + "</a></div>"
+                    + "<div style=\"margin-top:12px; color:#4b5563; font-size:13px; line-height:1.7; text-align:center; word-break:break-all;\">"
+                    + "<a href=\"" + HtmlUtils.htmlEscape(secondaryUrl) + "\" style=\"color:#4b5563;\">" + HtmlUtils.htmlEscape(secondaryUrl) + "</a></div>";
         }
 
-        String introHtml = StringUtils.hasText(intro)
+                String introHtml = StringUtils.hasText(intro)
                 ? "<p style=\"margin:0 0 18px; color:#4b5563; font-size:16px; line-height:1.7;\">" + HtmlUtils.htmlEscape(intro) + "</p>"
                 : "";
 
@@ -282,6 +301,15 @@ public class MailService {
                 + "</div><div style=\"font-size:15px; color:#111827; line-height:1.6;\">"
                 + HtmlUtils.htmlEscape(safeText(value))
                 + "</div></div>";
+    }
+
+
+    private String buildReplyMailto(String senderEmail) {
+        String email = trimToNull(senderEmail);
+        if (email == null) {
+            return null;
+        }
+        return "mailto:" + email;
     }
 
 
