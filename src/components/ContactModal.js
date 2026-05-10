@@ -39,7 +39,7 @@ const CATEGORY_META = {
   },
 };
 
-const initialForm = { email: '', message: '', consent: false, website: '' };
+const initialForm = { email: '', phone: '', message: '', consent: false, website: '' };
 
 function ChoiceCard({ eyebrow, title, text, dark = false, icon, onClick }) {
   return (
@@ -91,8 +91,10 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
   const validate = () => {
     const nextErrors = {};
     const email = formData.email.trim();
+    const phone = formData.phone.trim();
     const message = formData.message.trim();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = 'Bitte eine gültige E-Mail-Adresse eingeben.';
+    if (phone.length < 4) nextErrors.phone = 'Bitte gib eine gültige Telefonnummer ein.'
     if (message.length < 10) nextErrors.message = 'Bitte eine Nachricht mit mindestens 10 Zeichen eingeben.';
     if (!formData.consent) nextErrors.consent = 'Bitte die Datenschutzerklärung bestätigen.';
     setErrors(nextErrors);
@@ -112,6 +114,7 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: formData.email.trim(),
+          phone: formData.phone.trim(),
           message: formData.message.trim(),
           type,
           service,
@@ -245,6 +248,16 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
                   error={Boolean(errors.email)}
                   helperText={errors.email || ' '}
                   fullWidth
+                />
+                <TextField
+                    name="phone"
+                    label="Telefonnummer"
+                    placeholder="+49 123 4567 89"
+                    value={formData.phone}
+                    onChange={(event) => setField('phone', event.target.value)}
+                    error={Boolean(errors.phone)}
+                    helperText={errors.phone || ' '}
+                    fullWidth
                 />
                 <TextField
                   name="message"

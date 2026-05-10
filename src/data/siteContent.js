@@ -13,19 +13,6 @@ export const company = {
 
 export const strandCards = [
   {
-    id: 'verwaltung',
-    eyebrow: 'Immobilienverwaltung',
-    title: 'Strukturierte Betreuung im laufenden Bestand',
-    intro:
-      'AS Immobilienverwaltung begleitet Eigentümer, Gemeinschaften und Bestände mit klaren Abläufen, persönlicher Erreichbarkeit und einem ruhigen Blick für das Wesentliche.',
-    to: '/immobilienverwaltung',
-    highlights: [
-      'Kaufmännische und organisatorische Begleitung im Alltag',
-      'Technische Abstimmung von Instandhaltung und Maßnahmen',
-      'Persönliche Betreuung mit klaren Zuständigkeiten',
-    ],
-  },
-  {
     id: 'dienstleistungen',
     eyebrow: 'Dienstleistungen',
     title: 'Maschinist, Maschine und digitale Lösungen aus einer Hand',
@@ -38,6 +25,19 @@ export const strandCards = [
       'Lösungen über den Tellerrand hinaus für komplexe Einsätze',
     ],
   },
+  {
+    id: 'verwaltung',
+    eyebrow: 'Immobilienverwaltung',
+    title: 'Strukturierte Betreuung im laufenden Bestand',
+    intro:
+        'AS Immobilienverwaltung begleitet Eigentümer, Gemeinschaften und Bestände mit klaren Abläufen, persönlicher Erreichbarkeit und einem ruhigen Blick für das Wesentliche.',
+    to: '/immobilienverwaltung',
+    highlights: [
+      'Kaufmännische und organisatorische Begleitung im Alltag',
+      'Technische Abstimmung von Instandhaltung und Maßnahmen',
+      'Persönliche Betreuung mit klaren Zuständigkeiten',
+    ],
+  },
 ];
 
 export const homeTeasers = [
@@ -47,15 +47,15 @@ export const homeTeasers = [
     text: 'AS Immobilienverwaltung & Dienstleistungen verbindet langjährige Erfahrung mit routinierter Ausführung, sauberer Organisation und einem sicheren Blick für praktikable Lösungen.',
   },
   {
-    tag: 'Zertifizierung',
-    title: 'IHK Düsseldorf zertifiziert',
-    text: 'Die fachliche Qualifikation ist durch die IHK Düsseldorf zertifiziert und unterstreicht den Anspruch an verlässliche Betreuung, strukturierte Abläufe und nachvollziehbare Qualität.',
-  },
-  {
     tag: 'Ganzheitliche Lösungen',
     title: 'Immobilienverwaltung und Dienstleistungen im Einklang',
     text: 'Wir verbinden kaufmännische Verwaltung mit operativer Umsetzung vor Ort. Von der Betreuung Ihrer Immobilie bis zum Einsatz moderner Technologien wie 3D-Scanning und BIM greifen analoge und digitale Leistungen nahtlos ineinander.',
   },
+  {
+    tag: 'Umfangreicher Maschinenpark',
+    title: 'Viele innovative Maschinen stehen zur Verfügung',
+    text: 'Zur Bewältigung aller Aufgaben - sowohl in der Immobilienverwaltung als auch im Dienstleistungs-Bereich - steht ein ausgereifter Maschinenpark mit kleinen und großen Maschinen zur Verfügung, um alle Aufgaben zu bewältigen.'
+  }
 ];
 
 export const verwaltungServices = [
@@ -205,17 +205,17 @@ export const dienstleistungsGallery = [
 
 export const references = [
   {
-    title: 'Flandersbach, Wülfrath',
+    title: 'Flandersbach 31, Wülfrath',
     image: publicAsset('/assets/references/flandersbach.jpg'),
     accent: 'warm',
   },
   {
-    title: 'Görtzheide, Wülfrath',
+    title: 'Görtzheide 10G & 12, Wülfrath',
     image: publicAsset('/assets/references/goertzheide.jpg'),
     accent: 'cool',
   },
   {
-    title: 'Goethestraße - Bovensiepen, Wülfrath',
+    title: 'Goethestraße 41 & 43-45, Wülfrath',
     image: publicAsset('/assets/references/bovensiepen-goethestrasse.png'),
     accent: 'cool',
   },
@@ -230,7 +230,7 @@ export const references = [
     accent: 'cool',
   },
   {
-    title: 'Südstraße, Wülfrath',
+    title: 'Südstraße 18, Wülfrath',
     image: publicAsset('/assets/references/suedstrasse.png'),
     accent: 'cool',
   },

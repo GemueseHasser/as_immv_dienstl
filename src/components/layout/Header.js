@@ -18,8 +18,8 @@ export default function Header() {
 
   const navItems = [
     { label: 'Start', to: '/', icon: <HomeRoundedIcon fontSize="small" /> },
-    { label: 'Immobilienverwaltung', to: '/immobilienverwaltung', emphasis: true, icon: <ApartmentRoundedIcon fontSize="small" /> },
     { label: 'Dienstleistungen', to: '/dienstleistungen', emphasis: true, icon: <ConstructionRoundedIcon fontSize="small" /> },
+    { label: 'Immobilienverwaltung', to: '/immobilienverwaltung', emphasis: true, icon: <ApartmentRoundedIcon fontSize="small" /> },
     { label: 'Kontakt', to: '/kontakt', icon: <MailOutlineRoundedIcon fontSize="small" /> },
   ];
 

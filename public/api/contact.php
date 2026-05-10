@@ -191,6 +191,7 @@ if (!is_array($data)) {
 }
 
 $email = trim((string)($data['email'] ?? ''));
+$phone = trim((string)($data['phone'] ?? ''));
 $type = trim((string)($data['type'] ?? ''));
 $service = trim((string)($data['service'] ?? ''));
 $message = trim((string)($data['message'] ?? ''));
@@ -282,6 +283,7 @@ $textBody = implode("\n", [
     'Bereich: ' . $type,
     'Leistungsart: ' . $service,
     'E-Mail: ' . $email,
+    'Telefonnummer: ' . $phone,
     '',
     'Nachricht:',
     normalize_line_breaks($message),
@@ -342,6 +344,10 @@ $htmlBody = '<!doctype html>
                     <td style="padding:14px 18px; font-size:15px; color:#1f2327;">
                       <a href="' . $replyMailTo . '" style="color:#2f353a; text-decoration:none; font-weight:700;">' . e($email) . '</a>
                     </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:14px 18px; width:165px; font-size:14px; font-weight:700; color:#5e6469; border-bottom:1px solid #e1ddd6;">Telefonnummer</td>
+                    <td style="padding:14px 18px; font-size:15px; color:#1f2327; border-bottom:1px solid #e1ddd6;">' . e($phone) . '</td>
                   </tr>
                 </table>
 

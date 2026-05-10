@@ -36,7 +36,7 @@ export default function HeroSplit({ onViewAreas }) {
               <p className="eyebrow">Übersicht</p>
               <h3>Immobilienverwaltung und Dienstleistungen auf einen Blick</h3>
               <p>
-                Über 25 Jahre Erfahrung und durch die IHK Düsseldorf zertifiziert. Scrollen Sie direkt zu den beiden
+                Über 25 Jahre Erfahrung. Scrollen Sie direkt zu den beiden
                 Bereichen und wählen Sie anschließend den passenden Schwerpunkt für Ihr Anliegen.
               </p>
             </div>
