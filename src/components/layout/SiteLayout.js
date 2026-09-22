@@ -9,11 +9,11 @@ export default function SiteLayout({ onOpenContact }) {
   return (
     <div className="site-shell">
       <Header onOpenContact={onOpenContact} />
+      <CookieConsentBanner />
       <main className="site-main">
         <Outlet />
       </main>
       <Footer />
-      <CookieConsentBanner />
       <QuickActions onOpenContact={onOpenContact} />
     </div>
   );

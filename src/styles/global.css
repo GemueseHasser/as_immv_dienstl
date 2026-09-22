@@ -3438,3 +3438,40 @@ body {
     line-height: 1.45;
   }
 }
+
+/* Floating privacy card; constrained height keeps every control reachable. */
+.privacy-banner {
+  position: fixed;
+  z-index: 1200;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(760px, calc(100% - 48px));
+  max-height: calc(100vh - 48px);
+  max-height: min(80dvh, calc(100dvh - 48px - env(safe-area-inset-bottom)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 26px 30px 20px;
+  border: 1px solid rgba(35, 39, 43, 0.14);
+  border-radius: 24px;
+  background: #fcfbf8;
+  box-shadow: 0 24px 80px rgba(17, 20, 24, 0.28), 0 4px 16px rgba(17, 20, 24, 0.12);
+}
+.privacy-banner h2 { font-size: clamp(1.25rem, 3vw, 1.6rem); line-height: 1.25; }
+.privacy-banner p { margin: 12px 0; font-size: 0.9rem; line-height: 1.6; }
+.privacy-banner .cookie-legal-links { margin-bottom: 0; }
+.privacy-banner .cookie-legal-links a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 480px) {
+  .privacy-banner {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: calc(100% - 24px);
+    padding: 20px;
+    border-radius: 20px;
+  }
+}
+.cookie-choice-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+.cookie-choice-actions button { width: 100%; }
+.cookie-legal-links { margin: 16px 0; }
+.privacy-settings-link { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; text-decoration: underline; }
+.privacy-settings-link:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+@media (max-width: 480px) { .cookie-choice-actions { grid-template-columns: 1fr; } }

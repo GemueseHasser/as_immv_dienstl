@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+header('X-Content-Type-Options: nosniff');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -47,23 +49,21 @@ function env_value(string $key, ?string $default = null): ?string {
     static $vars = null;
 
     if ($vars === null) {
-        $baseDir = dirname(__DIR__);
-        $vars = [];
-
-        $customEnvFile = getenv('ENV_FILE');
-        if ($customEnvFile && is_file($customEnvFile)) {
-            $vars = array_merge($vars, load_env_file($customEnvFile));
+        $apiDir = __DIR__;
+        $publicDir = dirname($apiDir);
+        $envFile = getenv('AS_CONTACT_ENV_FILE') ?: dirname($publicDir) . DIRECTORY_SEPARATOR . '.env';
+        // Never read a secrets file located inside the publicly served directory.
+        $documentRoot = realpath($_SERVER['DOCUMENT_ROOT'] ?? '');
+        $realEnvFile = realpath($envFile);
+        if ($documentRoot && $realEnvFile &&
+            strpos($realEnvFile, rtrim($documentRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) === 0) {
+            $envFile = '';
         }
 
-        $candidateFiles = [
-            $baseDir . DIRECTORY_SEPARATOR . '.env',
-            dirname($baseDir) . DIRECTORY_SEPARATOR . '.env',
-        ];
+        $vars = [];
 
-        foreach ($candidateFiles as $file) {
-            if (is_file($file)) {
-                $vars = array_merge($vars, load_env_file($file));
-            }
+        if (is_file($envFile)) {
+            $vars = load_env_file($envFile);
         }
     }
 
@@ -136,6 +136,9 @@ function smtp_send_mail(array $config, string $fromEmail, string $toEmail, strin
     $username = $config['username'] ?? '';
     $password = $config['password'] ?? '';
     $timeout = 20;
+    if (!in_array($encryption, ['tls', 'ssl'], true)) {
+        throw new RuntimeException('Verschlüsselte SMTP-Verbindung erforderlich.');
+    }
 
     $remoteHost = ($encryption === 'ssl' ? 'ssl://' : '') . $host;
     $socket = @stream_socket_client($remoteHost . ':' . $port, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT);
@@ -183,7 +186,10 @@ function smtp_send_mail(array $config, string $fromEmail, string $toEmail, strin
     }
 }
 
-$rawInput = file_get_contents('php://input');
+$rawInput = file_get_contents('php://input', false, null, 0, 32769);
+if ($rawInput === false || strlen($rawInput) > 32768) {
+    json_response(413, ['ok' => false, 'message' => 'Anfrage ist zu groß.']);
+}
 $data = json_decode($rawInput, true);
 
 if (!is_array($data)) {
@@ -196,7 +202,6 @@ $type = trim((string)($data['type'] ?? ''));
 $service = trim((string)($data['service'] ?? ''));
 $message = trim((string)($data['message'] ?? ''));
 $honeypot = trim((string)($data['website'] ?? ''));
-$consent = (bool)($data['consent'] ?? false);
 $startedAt = (int)($data['startedAt'] ?? 0);
 
 if ($honeypot !== '') {
@@ -234,8 +239,8 @@ if ($message === '' || mb_strlen($message) < 10 || mb_strlen($message) > 5000) {
     $errors['message'] = 'Bitte eine Nachricht mit mindestens 10 Zeichen eingeben.';
 }
 
-if (!$consent) {
-    $errors['consent'] = 'Die Datenschutzerklärung muss bestätigt werden.';
+if (mb_strlen($phone) > 50 || ($phone !== '' && mb_strlen($phone) < 4)) {
+    $errors['phone'] = 'Bitte eine gültige Telefonnummer eingeben oder das Feld leer lassen.';
 }
 
 if ($errors !== []) {
@@ -243,8 +248,8 @@ if ($errors !== []) {
 }
 
 $typeRecipients = [
-    'Immobilienverwaltung' => 'a.striemer@as-immobilienverwaltung.de',
-    'Dienstleistungen' => 'f.striemer@as-immobilienverwaltung.de',
+    'Immobilienverwaltung' => env_value('MAIL_TO_IMMOBILIENVERWALTUNG', ''),
+    'Dienstleistungen' => env_value('MAIL_TO_DIENSTLEISTUNGEN', ''),
 ];
 
 $config = [
@@ -418,6 +423,7 @@ try {
     smtp_send_mail($config, $fromAddress, $toAddress, $rawMessage);
     json_response(200, ['ok' => true, 'message' => 'Anfrage erfolgreich versendet.']);
 } catch (Throwable $e) {
-    error_log('Anfrageformular Mailfehler: ' . $e->getMessage());
+    // SMTP responses may contain personal data; keep them out of application logs.
+    error_log('Anfrageformular: SMTP-Versand fehlgeschlagen.');
     json_response(500, ['ok' => false, 'message' => 'Die E-Mail konnte momentan nicht versendet werden.']);
 }

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { openCookieSettings } from '../utils/consent';
 import PageHero from '../components/PageHero';
 import { company } from '../data/siteContent';
 
@@ -76,7 +77,7 @@ export default function DatenschutzPage() {
               <h2>3. Kontaktaufnahme</h2>
 
               <p>
-                Wenn Sie uns per E-Mail oder telefonisch kontaktieren,
+                Wenn Sie uns über das Kontaktformular, per E-Mail oder telefonisch kontaktieren,
                 werden die von Ihnen übermittelten personenbezogenen
                 Daten ausschließlich zur Bearbeitung Ihrer Anfrage
                 verarbeitet.
@@ -88,7 +89,7 @@ export default function DatenschutzPage() {
 
               <ul>
                 <li>Name</li>
-                <li>Telefonnummer</li>
+                <li>Telefonnummer (im Formular freiwillig)</li>
                 <li>E-Mail-Adresse</li>
                 <li>Inhalt Ihrer Nachricht</li>
               </ul>
@@ -101,6 +102,15 @@ export default function DatenschutzPage() {
               </p>
 
               <p>
+                Ihre Anfrage wird per verschlüsselter SMTP-Verbindung an das für den ausgewählten Bereich
+                zuständige E-Mail-Postfach übermittelt. Unser Hosting- und E-Mail-Dienstleister
+                verarbeitet die Daten zur Bereitstellung dieser Dienste. Die E-Mail-Adresse und
+                die Nachricht sind für die Beantwortung erforderlich; die Telefonnummer ist optional.
+                Ohne die erforderlichen Angaben kann das Formular nicht versendet werden.
+                Es erfolgt keine Nutzung zu Werbezwecken.
+              </p>
+
+              <p>
                 Ihre Daten werden gelöscht, sobald die Bearbeitung Ihrer
                 Anfrage abgeschlossen ist und keine gesetzlichen
                 Aufbewahrungspflichten bestehen.
@@ -108,29 +118,65 @@ export default function DatenschutzPage() {
             </div>
 
             <div>
-              <h2>4. Cookies und externe Inhalte</h2>
-
+              <h2>4. Datenschutzauswahl und Instagram</h2>
+              <h3>Speicherung Ihrer Auswahl</h3>
               <p>
-                Diese Website verwendet nur technisch notwendige Cookies,
-                soweit dies für den Betrieb der Website erforderlich ist.
+                Wir speichern Ihre Entscheidung zu Instagram unter dem Schlüssel
+                „as-site-cookie-consent“ im lokalen Speicher Ihres Browsers (Local Storage).
+                Der Eintrag enthält die Auswahl, die Version des Einwilligungstextes sowie
+                Entscheidungs- und Ablaufzeitpunkt, keine individuelle Nutzerkennung.
+                Er wird nicht an unseren Server gesendet. Zustimmung und Ablehnung gelten
+                jeweils 180 Tage; danach wird erneut gefragt. Abgelaufene Einträge werden
+                nicht mehr als Entscheidung verwendet und bei der nächsten Auswahl ersetzt.
+                Sie können den Eintrag auch über die Website-Daten Ihres Browsers löschen.
               </p>
-
               <p>
-                Auf einzelnen Seiten können Inhalte von Instagram bzw.
-                Meta Platforms eingebunden werden. Diese Inhalte werden
-                erst geladen, nachdem Sie Ihre Einwilligung erteilt haben.
+                Diese Speicherung dient ausschließlich dazu, Ihre Datenschutzauswahl zu beachten
+                (§ 25 Abs. 2 Nr. 2 TDDDG; soweit personenbezogene Daten verarbeitet werden,
+                Art. 6 Abs. 1 lit. f DSGVO). Bei blockiertem Browserspeicher gilt Ihre Auswahl
+                nur für die aktuell geöffnete Seite bis zum Neuladen.
               </p>
-
+              <h3>Freiwillige Instagram-Einbettung</h3>
               <p>
-                Durch das Laden externer Inhalte können personenbezogene
-                Daten, insbesondere Ihre IP-Adresse, an Meta Platforms
-                übertragen werden. Außerdem können Cookies durch den
-                Drittanbieter gesetzt werden.
+                Auf der Dienstleistungsseite können Sie Instagram-Inhalte aktivieren. Anbieter
+                ist Meta Platforms Ireland Limited, Irland. Vor Ihrer Zustimmung wird keine
+                Instagram-Einbettung geladen und durch diese Einbettung keine Verbindung zu Meta hergestellt.
+                Mit Ihrer Zustimmung werden insbesondere Ihre IP-Adresse, Browser- und Geräteinformationen
+                sowie Ihre Interaktion mit den Inhalten an Meta übermittelt. Meta kann Cookies
+                und ähnliche Technologien für Analyse, Profilbildung und personalisierte Werbung
+                einsetzen und die Daten einem bestehenden Instagram-Konto zuordnen.
               </p>
-
               <p>
-                Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. a DSGVO
-                (Einwilligung).
+                Grundlage für das optionale Speichern und Auslesen von Informationen auf Ihrem
+                Endgerät ist § 25 Abs. 1 TDDDG, für die mit der Einbettung verbundene Verarbeitung
+                personenbezogener Daten Art. 6 Abs. 1 lit. a DSGVO. Die übrige Website und das
+                Kontaktformular bleiben auch ohne diese Einwilligung nutzbar.
+              </p>
+              <p>
+                Meta kann Daten auch außerhalb der EU bzw. des EWR, insbesondere in den USA,
+                verarbeiten. Informationen zu Empfängern, Speicherfristen, internationalen
+                Übermittlungen und den von Meta beschriebenen Garantien finden Sie in der{' '}
+                <a href="https://privacycenter.instagram.com/policy/" target="_blank" rel="noopener noreferrer">
+                  Instagram-Datenschutzrichtlinie
+                </a>. Die Dauer der von Meta gesetzten Speicherungen wird durch Meta bestimmt;
+                unsere 180-Tage-Frist betrifft ausschließlich Ihre hier gespeicherte Auswahl.
+              </p>
+              <h3>Änderung und Widerruf</h3>
+              <p>
+                Über „Cookie-Einstellungen“ im Fußbereich jeder Seite können Sie Ihre Einwilligung
+                jederzeit durch „Alle ablehnen“ mit Wirkung für die Zukunft widerrufen.
+                Die geladene Einbettung wird dann entfernt. Die Rechtmäßigkeit der bisherigen
+                Verarbeitung bleibt unberührt. Bereits an Meta übermittelte Daten und von Meta
+                gesetzte Cookies werden dadurch nicht automatisch gelöscht. Website-Daten können
+                Sie in Ihrem Browser löschen; Rechte bezüglich der bei Meta gespeicherten Daten
+                können Sie gegenüber Meta geltend machen.
+              </p>
+              <button type="button" className="privacy-settings-link" onClick={openCookieSettings}>
+                Cookie-Einstellungen öffnen
+              </button>
+              <p>
+                Externe Instagram-Links stellen erst beim Anklicken eine Verbindung zum Ziel her.
+                Für die anschließend besuchte Plattform gelten deren Datenschutzhinweise.
               </p>
             </div>
 
@@ -207,8 +253,9 @@ export default function DatenschutzPage() {
               <h2>9. Automatisierte Entscheidungsfindung</h2>
 
               <p>
-                Eine automatisierte Entscheidungsfindung oder ein Profiling
-                gemäß Art. 22 DSGVO findet nicht statt.
+                Wir treffen anhand Ihrer Kontaktanfrage keine automatisierten Entscheidungen
+                gemäß Art. 22 DSGVO. Zur möglichen Profilbildung durch Meta nach Aktivierung
+                der Instagram-Einbettung beachten Sie Abschnitt 4.
               </p>
             </div>
 

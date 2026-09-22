@@ -8,7 +8,6 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import {
   Alert,
   Box,
-  Checkbox,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -17,6 +16,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 import { PremiumButton } from './ui';
 
 const SERVICE_LABELS = {
@@ -39,7 +39,7 @@ const CATEGORY_META = {
   },
 };
 
-const initialForm = { email: '', phone: '', message: '', consent: false, website: '' };
+const initialForm = { email: '', phone: '', message: '', website: '' };
 
 function ChoiceCard({ eyebrow, title, text, dark = false, icon, onClick }) {
   return (
@@ -94,9 +94,8 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
     const phone = formData.phone.trim();
     const message = formData.message.trim();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = 'Bitte eine gültige E-Mail-Adresse eingeben.';
-    if (phone.length < 4) nextErrors.phone = 'Bitte gib eine gültige Telefonnummer ein.'
+    if (phone && (phone.length < 4 || phone.length > 50)) nextErrors.phone = 'Bitte gib eine gültige Telefonnummer ein.'
     if (message.length < 10) nextErrors.message = 'Bitte eine Nachricht mit mindestens 10 Zeichen eingeben.';
-    if (!formData.consent) nextErrors.consent = 'Bitte die Datenschutzerklärung bestätigen.';
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -118,7 +117,6 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
           message: formData.message.trim(),
           type,
           service,
-          consent: formData.consent,
           website: formData.website,
           startedAt,
         }),
@@ -251,7 +249,7 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
                 />
                 <TextField
                     name="phone"
-                    label="Telefonnummer"
+                    label="Telefonnummer (optional)"
                     placeholder="+49 123 4567 89"
                     value={formData.phone}
                     onChange={(event) => setField('phone', event.target.value)}
@@ -282,20 +280,11 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
                   className="sr-honeypot"
                   sx={{ display: 'none' }}
                 />
-                <div className="consent-wrap">
-                  <Box className="consent-field" onClick={() => setField('consent', !formData.consent)} role="checkbox" aria-checked={formData.consent} tabIndex={0} onKeyDown={(event) => { if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); setField('consent', !formData.consent); } }}>
-                    <Checkbox
-                      checked={formData.consent}
-                      onChange={(event) => setField('consent', event.target.checked)}
-                      onClick={(event) => event.stopPropagation()}
-                      sx={{ p: '4px 8px 4px 0', alignSelf: 'flex-start' }}
-                    />
-                    <Typography component="span" className="consent-label">
-                      Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Anfrage zu.
-                    </Typography>
-                  </Box>
-                  {errors.consent ? <Typography className="form-error" component="small">{errors.consent}</Typography> : null}
-                </div>
+                <Typography component="p" className="consent-label">
+                  Wir verwenden Ihre Angaben zur Bearbeitung Ihrer Anfrage. Die Telefonnummer ist freiwillig.
+                  Informationen zu Rechtsgrundlagen, Empfängern und Ihren Rechten finden Sie in der{' '}
+                  <NavLink to="/datenschutz" onClick={onClose}>Datenschutzerklärung</NavLink>.
+                </Typography>
                 {submitState === 'error' && submitMessage ? <Alert severity="error">{submitMessage}</Alert> : null}
                 <div className="form-actions">
                   <PremiumButton

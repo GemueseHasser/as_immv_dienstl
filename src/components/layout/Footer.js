@@ -1,4 +1,5 @@
 import React from 'react';
+import { openCookieSettings } from '../../utils/consent';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
@@ -43,6 +44,7 @@ export default function Footer() {
           <div className="footer-links">
             <NavLink to="/impressum">Impressum</NavLink>
             <NavLink to="/datenschutz">Datenschutz</NavLink>
+            <button type="button" className="privacy-settings-link" onClick={openCookieSettings}>Cookie-Einstellungen</button>
           </div>
         </div>
 
