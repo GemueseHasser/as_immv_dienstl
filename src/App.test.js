@@ -102,6 +102,8 @@ test('contact request needs no Instagram consent or phone number', async () => {
     expect(document.querySelector('input[type="checkbox"]')).toBeNull();
     await act(async () => document.querySelector('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
     expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(global.fetch.mock.calls[0][1]).toMatchObject({ mode: 'same-origin',
+      credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer' });
     const payload = JSON.parse(global.fetch.mock.calls[0][1].body);
     expect(payload.phone).toBe('');
     expect(payload.consent).toBeUndefined();

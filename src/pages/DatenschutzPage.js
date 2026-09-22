@@ -24,7 +24,7 @@ export default function DatenschutzPage() {
               <p>
                 <strong>AS Immobilienverwaltung & Dienstleistungen</strong>
                 <br />
-                Inhaber: {company.owner}
+                Verantwortlich: {company.owner} (Inhaber)
                 <br />
                 {company.addressLine1}
                 <br />
@@ -42,8 +42,8 @@ export default function DatenschutzPage() {
               <h2>2. Hosting</h2>
 
               <p>
-                Diese Website wird bei STRATO AG gehostet.
-                Anbieter ist die STRATO AG, Otto-Ostrowski-Straße 7,
+                Diese Website wird bei STRATO GmbH gehostet.
+                Anbieter ist die STRATO GmbH, Otto-Ostrowski-Straße 7,
                 10249 Berlin.
               </p>
 
@@ -88,21 +88,22 @@ export default function DatenschutzPage() {
               </p>
 
               <ul>
-                <li>Name</li>
+                <li>Name, soweit Sie ihn freiwillig mitteilen</li>
                 <li>Telefonnummer (im Formular freiwillig)</li>
                 <li>E-Mail-Adresse</li>
-                <li>Inhalt Ihrer Nachricht</li>
+                <li>Inhalt Ihrer Nachricht sowie ausgewählter Geschäftsbereich und gegebenenfalls Leistungsart</li>
               </ul>
 
               <p>
-                Die Verarbeitung erfolgt auf Grundlage von
-                Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen)
-                bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse
-                an der Bearbeitung von Anfragen).
+                Geht es um einen Vertrag mit Ihnen oder um von Ihnen angefragte vorvertragliche
+                Maßnahmen, ist Art. 6 Abs. 1 lit. b DSGVO die Rechtsgrundlage. Sonstige Anfragen
+                bearbeiten wir auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes
+                Interesse ist die sachgerechte Beantwortung Ihrer Nachricht. Eine Einwilligung
+                in Instagram ist hierfür nicht erforderlich.
               </p>
 
               <p>
-                Ihre Anfrage wird per verschlüsselter SMTP-Verbindung an das für den ausgewählten Bereich
+                Anfragen über das Kontaktformular werden per verschlüsselter SMTP-Verbindung an das für den ausgewählten Bereich
                 zuständige E-Mail-Postfach übermittelt. Unser Hosting- und E-Mail-Dienstleister
                 verarbeitet die Daten zur Bereitstellung dieser Dienste. Die E-Mail-Adresse und
                 die Nachricht sind für die Beantwortung erforderlich; die Telefonnummer ist optional.
@@ -111,11 +112,27 @@ export default function DatenschutzPage() {
               </p>
 
               <p>
-                Ihre Daten werden gelöscht, sobald die Bearbeitung Ihrer
-                Anfrage abgeschlossen ist und keine gesetzlichen
-                Aufbewahrungspflichten bestehen.
+                Kontaktanfragen werden gelöscht, wenn das Anliegen abschließend geklärt ist und
+                die Angaben nicht mehr zur Vertragsabwicklung oder zur Geltendmachung, Ausübung
+                oder Verteidigung konkreter Rechtsansprüche benötigt werden. Soweit für einzelne
+                Unterlagen handels- oder steuerrechtliche Aufbewahrungspflichten bestehen,
+                bewahren wir diese auf Grundlage von Art. 6 Abs. 1 lit. c DSGVO bis zum Ablauf
+                der einschlägigen Frist auf. Diese Ausnahmen gelten nicht pauschal für jede Anfrage.
               </p>
             </div>
+
+              <div>
+                <h3>Schutz des Kontaktformulars vor automatisiertem Missbrauch</h3>
+                <p>
+                  Mit dem Absenden werden außerdem der Zeitpunkt des Öffnens des Formulars
+                  und der Wert eines für normale Besucher unsichtbaren Prüffeldes übertragen.
+                  Der Server prüft damit eine Mindest-Ausfüllzeit und erkennt automatisierte
+                  Eingaben. Diese Prüfwerte werden von der Formularanwendung nicht dauerhaft
+                  gespeichert und nicht in die Anfrage-E-Mail aufgenommen. Externe CAPTCHA-Dienste
+                  werden nicht eingesetzt. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO;
+                  unser Interesse ist der Schutz des Kontaktkanals vor Missbrauch.
+                </p>
+              </div>
 
             <div>
               <h2>4. Datenschutzauswahl und Instagram</h2>
@@ -126,15 +143,17 @@ export default function DatenschutzPage() {
                 Der Eintrag enthält die Auswahl, die Version des Einwilligungstextes sowie
                 Entscheidungs- und Ablaufzeitpunkt, keine individuelle Nutzerkennung.
                 Er wird nicht an unseren Server gesendet. Zustimmung und Ablehnung gelten
-                jeweils 180 Tage; danach wird erneut gefragt. Abgelaufene Einträge werden
-                nicht mehr als Entscheidung verwendet und bei der nächsten Auswahl ersetzt.
+                jeweils 180 Tage; danach wird erneut gefragt. Abgelaufene und ungültige Einträge
+                werden beim nächsten Zugriff der Website gelöscht, soweit der Browser dies zulässt.
                 Sie können den Eintrag auch über die Website-Daten Ihres Browsers löschen.
               </p>
               <p>
                 Diese Speicherung dient ausschließlich dazu, Ihre Datenschutzauswahl zu beachten
                 (§ 25 Abs. 2 Nr. 2 TDDDG; soweit personenbezogene Daten verarbeitet werden,
                 Art. 6 Abs. 1 lit. f DSGVO). Bei blockiertem Browserspeicher gilt Ihre Auswahl
-                nur für die aktuell geöffnete Seite bis zum Neuladen.
+                nur für die aktuell geöffnete Seite bis zum Neuladen. Falls Ihr Browser das
+                Ersetzen oder Löschen einer zuvor gespeicherten Auswahl verhindert, löschen Sie
+                für einen dauerhaften Widerruf bitte die Website-Daten in den Browsereinstellungen.
               </p>
               <h3>Freiwillige Instagram-Einbettung</h3>
               <p>
@@ -193,10 +212,28 @@ export default function DatenschutzPage() {
                 <li>gemäß Art. 17 DSGVO die Löschung Ihrer Daten zu verlangen,</li>
                 <li>gemäß Art. 18 DSGVO die Einschränkung der Verarbeitung zu verlangen,</li>
                 <li>gemäß Art. 20 DSGVO Datenübertragbarkeit zu verlangen,</li>
-                <li>gemäß Art. 21 DSGVO Widerspruch gegen die Verarbeitung einzulegen,</li>
+                <li>gemäß Art. 21 DSGVO Widerspruch unter den nachfolgend erläuterten Voraussetzungen einzulegen,</li>
                 <li>eine erteilte Einwilligung jederzeit mit Wirkung für die Zukunft zu widerrufen.</li>
               </ul>
             </div>
+
+            <aside className="privacy-rights-notice" aria-labelledby="privacy-objection-title">
+              <h3 id="privacy-objection-title">Ihr Widerspruchsrecht</h3>
+              <p>
+                Soweit wir Ihre Daten auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO verarbeiten,
+                können Sie aus Gründen, die sich aus Ihrer besonderen Situation ergeben,
+                jederzeit widersprechen. Wir verarbeiten die betroffenen Daten dann nicht weiter,
+                es sei denn, wir können zwingende schutzwürdige Gründe nachweisen, die Ihre
+                Interessen, Rechte und Freiheiten überwiegen, oder die Verarbeitung dient der
+                Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen.
+              </p>
+              <p>
+                Gegen eine Verarbeitung für Direktwerbung können Sie jederzeit ohne Angabe
+                solcher Gründe widersprechen. Zur Ausübung Ihrer Rechte genügt eine formlose
+                Mitteilung an die oben genannten Kontaktdaten, etwa an{' '}
+                <a href={`mailto:${company.email}`}>{company.email}</a>.
+              </p>
+            </aside>
 
             <div>
               <h2>6. Beschwerderecht bei der Aufsichtsbehörde</h2>
@@ -243,9 +280,10 @@ export default function DatenschutzPage() {
               <h2>8. SSL- bzw. TLS-Verschlüsselung</h2>
 
               <p>
-                Diese Website nutzt aus Sicherheitsgründen und zum Schutz
-                der Übertragung vertraulicher Inhalte eine SSL- bzw.
-                TLS-Verschlüsselung.
+                Beim Aufruf über HTTPS wird die Verbindung zwischen Ihrem Browser und unserem
+                Webserver mit TLS verschlüsselt. Die Formularanwendung versendet ihre E-Mail nur
+                über eine verschlüsselte Verbindung zum konfigurierten Mailserver. Dies ist eine
+                Transportverschlüsselung und keine Ende-zu-Ende-Verschlüsselung der E-Mail.
               </p>
             </div>
 

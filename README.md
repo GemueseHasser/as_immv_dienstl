@@ -24,3 +24,27 @@ HTTPS auf dem Server erzwingen. SMTP unterstützt `tls` (STARTTLS, üblicherweis
 Frontend und `api/contact.php` zusammen aktualisieren: Die frühere Pflichtbestätigung wurde auf beiden Seiten entfernt. Eine alte PHP-Datei würde neue Formularanfragen weiterhin ablehnen.
 
 Die Einstellungen sind jederzeit im Footer erreichbar. Eine Änderung an den optionalen Zwecken oder am maßgeblichen Einwilligungstext erfordert eine neue `CONSENT_VERSION` in `src/utils/consent.js`. Bei einem neuen optionalen Dienst die zweckbezogene Auswahl erweitern; die Instagram-Zustimmung darf ihn nicht automatisch freigeben.
+
+## Vertiefte Datenschutzprüfung
+
+Die aktuelle Prüfung umfasst auch Bildmetadaten, Datenschutzerklärung, Impressum,
+Formulartransport und Paketabhängigkeiten. Offene Betreiberangaben sind im Prüfbericht
+aufgeführt. `docs/dependency-audit.json` enthält die verbleibenden Paketmeldungen;
+insbesondere die ältere Build-Toolchain ist gesondert zu modernisieren.
+
+Formularanfragen werden im Browser nur an denselben Ursprung gesendet, ohne Cookies,
+ohne Referrer und ohne Weiterleitungen zu verfolgen. Öffentliche HTTP-Aufrufe dürfen
+keine Formularanfrage senden; lokale Entwicklung auf localhost/127.0.0.1 ist ausgenommen.
+Dies ersetzt keine serverseitige HTTPS-Erzwingung: Ein über HTTP geladenes Dokument
+ist schon vor der JavaScript-Prüfung nicht gegen Veränderungen auf dem Transportweg geschützt.
+
+Der PHP-Endpunkt erwartet `application/json` und akzeptiert Browseranfragen nur mit
+passendem Origin. Bei einem Reverse Proxy muss der Webserver HTTPS korrekt erkennen;
+ungeprüfte `X-Forwarded-*`-Header werden bewusst nicht als vertrauenswürdig verwendet.
+Das Formular besitzt Honeypot und Mindest-Ausfüllzeit, jedoch keinen belastbaren
+Rate-Limiter. Einen solchen bei Bedarf serverseitig mit kurzen Speicherfristen einrichten.
+
+Bericht, README und `docs/` sind interne Projektunterlagen. Sie liegen außerhalb von
+`public/`, werden nicht in `build/` kopiert und sind nicht auf der Website verlinkt.
+Auf den Webserver gehören nur die Build-Dateien; Konfiguration mit Zugangsdaten bleibt
+außerhalb des öffentlich erreichbaren Verzeichnisses.

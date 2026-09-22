@@ -20,6 +20,7 @@ export default function CookieConsentBanner() {
   };
   const content = (
     <>
+      <div className="cookie-information" tabIndex={0} role="region" aria-label="Informationen zu Instagram und Ihrer Auswahl">
       <p>Instagram ist optional und zunächst gesperrt. Mit „Instagram erlauben“ stimmen Sie
         zu, dass wir Beiträge von Meta Platforms Ireland Limited laden. Dabei erhält Meta
         insbesondere Ihre IP-Adresse und Browserdaten und kann Cookies oder ähnliche
@@ -30,6 +31,7 @@ export default function CookieConsentBanner() {
         über „Cookie-Einstellungen“ im Fußbereich ändern oder Ihre Zustimmung widerrufen.</p>
       <p>Notwendig: Speicherung Ihrer Datenschutzauswahl. Optional: ausschließlich Instagram.</p>
       {choice && <p role="status">Instagram ist derzeit {choice.instagram ? 'erlaubt' : 'gesperrt'}.</p>}
+      </div>
       <div className="cookie-choice-actions">
         <PremiumButton type="button" onClick={() => decide(false)}>Alle ablehnen</PremiumButton>
         <PremiumButton type="button" onClick={() => decide(true)}>Instagram erlauben</PremiumButton>
@@ -52,7 +54,8 @@ export default function CookieConsentBanner() {
         </section>
       )}
       <Dialog open={settingsOpen} onClose={() => setSettingsOpen(false)}
-        aria-labelledby="cookie-settings-title" fullWidth maxWidth="sm">
+        aria-labelledby="cookie-settings-title" fullWidth maxWidth="sm"
+        PaperProps={{ sx: { backgroundColor: '#fcfbf8', backgroundImage: 'none' } }}>
         <DialogTitle id="cookie-settings-title">Cookie-Einstellungen</DialogTitle>
         <DialogContent>
           {content}

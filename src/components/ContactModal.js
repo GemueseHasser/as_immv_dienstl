@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
@@ -53,6 +53,7 @@ function ChoiceCard({ eyebrow, title, text, dark = false, icon, onClick }) {
 }
 
 export default function ContactModal({ open, onClose, initialCategory = null, initialService = null }) {
+  const activeRequest = useRef(null);
   const [category, setCategory] = useState(initialCategory);
   const [serviceType, setServiceType] = useState(initialService);
   const [formData, setFormData] = useState(initialForm);
@@ -63,7 +64,15 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
   const [submitMessage, setSubmitMessage] = useState('');
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      activeRequest.current?.abort();
+      activeRequest.current = null;
+      setFormData(initialForm);
+      setErrors({});
+      setSubmitMessage('');
+      setIsSubmitting(false);
+      return;
+    }
     setCategory(initialCategory);
     setServiceType(initialService);
     setFormData(initialForm);
@@ -73,6 +82,8 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
     setSubmitState('idle');
     setSubmitMessage('');
   }, [open, initialCategory, initialService]);
+
+  useEffect(() => () => activeRequest.current?.abort(), []);
 
   const step = useMemo(() => {
     if (submitState === 'success') return 'success';
@@ -93,23 +104,34 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
     const email = formData.email.trim();
     const phone = formData.phone.trim();
     const message = formData.message.trim();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = 'Bitte eine gültige E-Mail-Adresse eingeben.';
+    if (!email || email.length > 190 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = 'Bitte eine gültige E-Mail-Adresse eingeben.';
     if (phone && (phone.length < 4 || phone.length > 50)) nextErrors.phone = 'Bitte gib eine gültige Telefonnummer ein.'
-    if (message.length < 10) nextErrors.message = 'Bitte eine Nachricht mit mindestens 10 Zeichen eingeben.';
+    if (message.length < 10 || message.length > 5000) nextErrors.message = 'Bitte eine Nachricht mit 10 bis 5000 Zeichen eingeben.';
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!validate()) return;
+    if (activeRequest.current || !validate()) return;
+    const request = new AbortController();
+    activeRequest.current = request;
     setIsSubmitting(true);
     setSubmitMessage('');
     try {
+      const localDevelopment = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+      if (window.location.protocol !== 'https:' && !localDevelopment) {
+        throw new Error('Bitte öffnen Sie diese Website über HTTPS, bevor Sie Ihre Anfrage senden.');
+      }
       const type = category === 'immobilienverwaltung' ? 'Immobilienverwaltung' : 'Dienstleistungen';
       const service = category === 'dienstleistungen' ? detailLabel : '';
       const response = await fetch(`${process.env.PUBLIC_URL || ''}/api/contact.php`, {
         method: 'POST',
+        mode: 'same-origin',
+        credentials: 'omit',
+        redirect: 'error',
+        referrerPolicy: 'no-referrer',
+        signal: request.signal,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: formData.email.trim(),
@@ -126,13 +148,19 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
         if (payload.errors) setErrors(payload.errors);
         throw new Error(payload.message || 'Die Anfrage konnte nicht versendet werden.');
       }
+      if (request.signal.aborted) return;
+      setFormData(initialForm);
       setSubmitState('success');
       setSubmitMessage(payload.message || 'Anfrage erfolgreich versendet.');
     } catch (error) {
+      if (request.signal.aborted) return;
       setSubmitState('error');
       setSubmitMessage(error.message || 'Die Anfrage konnte nicht versendet werden.');
     } finally {
-      setIsSubmitting(false);
+      if (activeRequest.current === request) {
+        activeRequest.current = null;
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -141,6 +169,7 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
       open={open}
       onClose={onClose}
       fullWidth
+      aria-labelledby="contact-modal-title"
       maxWidth="md"
       PaperProps={{
         className: `modal-panel contact-flow-modal step-${step}`,
@@ -240,6 +269,8 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
                   type="email"
                   name="email"
                   label="E-Mail-Adresse"
+                  required
+                  inputProps={{ maxLength: 190 }}
                   placeholder="ihre@email.de"
                   value={formData.email}
                   onChange={(event) => setField('email', event.target.value)}
@@ -250,6 +281,8 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
                 <TextField
                     name="phone"
                     label="Telefonnummer (optional)"
+                    type="tel"
+                    inputProps={{ maxLength: 50 }}
                     placeholder="+49 123 4567 89"
                     value={formData.phone}
                     onChange={(event) => setField('phone', event.target.value)}
@@ -260,6 +293,8 @@ export default function ContactModal({ open, onClose, initialCategory = null, in
                 <TextField
                   name="message"
                   label="Nachricht"
+                  required
+                  inputProps={{ maxLength: 5000 }}
                   rows={3}
                   multiline
                   placeholder="Beschreiben Sie kurz Ihr Anliegen, das Objekt oder den gewünschten Einsatz."

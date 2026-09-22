@@ -19,7 +19,14 @@ export function getConsent() {
   if (memoryChoice !== undefined) return validate(memoryChoice);
   try {
     // Legacy "accepted" is deliberately not treated as informed consent.
-    return validate(JSON.parse(window.localStorage.getItem(SITE_COOKIE_CONSENT_KEY)));
+    const raw = window.localStorage.getItem(SITE_COOKIE_CONSENT_KEY);
+    if (raw === null) return null;
+    let choice;
+    try { choice = validate(JSON.parse(raw)); } catch { choice = null; }
+    if (!choice) {
+      try { window.localStorage.removeItem(SITE_COOKIE_CONSENT_KEY); } catch { /* read-only storage */ }
+    }
+    return choice;
   } catch {
     return null;
   }

@@ -3475,3 +3475,22 @@ body {
 .privacy-settings-link { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; text-decoration: underline; }
 .privacy-settings-link:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 @media (max-width: 480px) { .cookie-choice-actions { grid-template-columns: 1fr; } }
+
+.privacy-rights-notice {
+  padding: 24px;
+  border: 1px solid var(--line-strong);
+  border-left: 4px solid var(--brand);
+  border-radius: 16px;
+  background: var(--bg-strong);
+}
+.privacy-rights-notice p { margin-top: 12px; }
+.privacy-rights-notice a { text-decoration: underline; }
+
+/* Keep both consent choices visible while long explanations can scroll. */
+.privacy-banner { display: flex; overflow: hidden; }
+.privacy-banner > .container { display: flex; flex-direction: column; min-height: 0; }
+.privacy-banner h2,
+.privacy-banner .cookie-choice-actions,
+.privacy-banner .cookie-legal-links { flex-shrink: 0; }
+.privacy-banner .cookie-information { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.cookie-information:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }

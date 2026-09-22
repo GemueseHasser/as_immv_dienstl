@@ -1,9 +1,12 @@
 <?php
+// Never expose PHP warnings or server paths in public API responses.
+ini_set('display_errors', '0');
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Allow: POST');
     http_response_code(405);
     echo json_encode(['ok' => false, 'message' => 'Methode nicht erlaubt.']);
     exit;
@@ -13,6 +16,22 @@ function json_response(int $status, array $payload): void {
     http_response_code($status);
     echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
+}
+
+// The frontend sends JSON from this origin. Reject cross-site browser submissions.
+$contentType = strtolower(trim(explode(';', $_SERVER['CONTENT_TYPE'] ?? '')[0]));
+if ($contentType !== 'application/json') {
+    json_response(415, ['ok' => false, 'message' => 'JSON-Anfrage erforderlich.']);
+}
+if (strtolower($_SERVER['HTTP_SEC_FETCH_SITE'] ?? '') === 'cross-site') {
+    json_response(403, ['ok' => false, 'message' => 'Anfrage nicht erlaubt.']);
+}
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    $https = !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off';
+    $expectedOrigin = ($https ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? '');
+    if (strtolower($_SERVER['HTTP_ORIGIN']) !== strtolower($expectedOrigin)) {
+        json_response(403, ['ok' => false, 'message' => 'Anfrage nicht erlaubt.']);
+    }
 }
 
 function load_env_file(string $path): array {
@@ -141,7 +160,14 @@ function smtp_send_mail(array $config, string $fromEmail, string $toEmail, strin
     }
 
     $remoteHost = ($encryption === 'ssl' ? 'ssl://' : '') . $host;
-    $socket = @stream_socket_client($remoteHost . ':' . $port, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT);
+    $context = stream_context_create(['ssl' => [
+        'verify_peer' => true,
+        'verify_peer_name' => true,
+        'allow_self_signed' => false,
+        'peer_name' => $host,
+        'SNI_enabled' => true,
+    ]]);
+    $socket = @stream_socket_client($remoteHost . ':' . $port, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context);
 
     if (!$socket) {
         throw new RuntimeException('SMTP-Verbindung fehlgeschlagen: ' . $errstr . ' (' . $errno . ')');
@@ -196,6 +222,15 @@ if (!is_array($data)) {
     json_response(400, ['ok' => false, 'message' => 'Ungültige Anfrage.']);
 }
 
+foreach (['email', 'phone', 'type', 'service', 'message', 'website'] as $field) {
+    if (isset($data[$field]) && !is_string($data[$field])) {
+        json_response(400, ['ok' => false, 'message' => 'Ungültiges Eingabeformat.']);
+    }
+}
+if (!isset($data['startedAt']) || !is_int($data['startedAt'])) {
+    json_response(400, ['ok' => false, 'message' => 'Ungültiger Formularzeitpunkt.']);
+}
+
 $email = trim((string)($data['email'] ?? ''));
 $phone = trim((string)($data['phone'] ?? ''));
 $type = trim((string)($data['type'] ?? ''));
@@ -217,7 +252,7 @@ if ($startedAt <= 0 || (($nowMillis - $startedAt) / 1000) < $minSeconds) {
 
 $errors = [];
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 190) {
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 190 || preg_match('/[\r\n]/', $email)) {
     $errors['email'] = 'Bitte eine gültige E-Mail-Adresse eingeben.';
 }
 
@@ -236,7 +271,7 @@ if ($type === 'Immobilienverwaltung') {
 }
 
 if ($message === '' || mb_strlen($message) < 10 || mb_strlen($message) > 5000) {
-    $errors['message'] = 'Bitte eine Nachricht mit mindestens 10 Zeichen eingeben.';
+    $errors['message'] = 'Bitte eine Nachricht mit 10 bis 5000 Zeichen eingeben.';
 }
 
 if (mb_strlen($phone) > 50 || ($phone !== '' && mb_strlen($phone) < 4)) {

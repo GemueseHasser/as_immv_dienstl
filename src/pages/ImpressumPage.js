@@ -11,13 +11,13 @@ export default function ImpressumPage() {
       <>
         <PageHero
             title="Impressum"
-            text="Rechtliche Angaben gemäß § 5 TMG"
+            text="Rechtliche Angaben gemäß § 5 DDG"
         />
 
         <section className="section">
           <div className="container legal-card">
 
-            <h2>Angaben gemäß § 5 TMG</h2>
+            <h2>Angaben gemäß § 5 DDG</h2>
 
             <p>
               <strong>AS Immobilienverwaltung & Dienstleistungen</strong>
@@ -76,25 +76,9 @@ export default function ImpressumPage() {
             <h2>Haftung für Inhalte</h2>
 
             <p>
-              Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene
-              Inhalte auf diesen Seiten nach den allgemeinen Gesetzen
-              verantwortlich.
-            </p>
-
-            <p>
-              Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht
-              verpflichtet, übermittelte oder gespeicherte fremde Informationen
-              zu überwachen oder nach Umständen zu forschen, die auf eine
-              rechtswidrige Tätigkeit hinweisen.
-            </p>
-
-            <p>
-              Verpflichtungen zur Entfernung oder Sperrung der Nutzung von
-              Informationen nach den allgemeinen Gesetzen bleiben hiervon
-              unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem
-              Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich.
-              Bei Bekanntwerden entsprechender Rechtsverletzungen werden wir
-              diese Inhalte umgehend entfernen.
+              Für eigene Inhalte auf diesen Seiten gelten die allgemeinen gesetzlichen
+              Vorschriften. Bei Bekanntwerden konkreter Rechtsverletzungen prüfen wir die
+              betroffenen Inhalte und entfernen rechtswidrige Inhalte, soweit erforderlich.
             </p>
 
             <h2>Haftung für Links</h2>

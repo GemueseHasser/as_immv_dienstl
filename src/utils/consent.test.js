@@ -15,6 +15,7 @@ test('missing, legacy, malformed, wrong version and expired choices do not allow
   invalid.forEach(value => {
     localStorage.setItem(consent.SITE_COOKIE_CONSENT_KEY, value);
     expect(consent.getConsent()).toBeNull();
+    expect(localStorage.getItem(consent.SITE_COOKIE_CONSENT_KEY)).toBeNull();
   });
 });
 
